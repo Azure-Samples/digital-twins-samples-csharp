@@ -9,11 +9,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
     public static partial class Actions
     {
-        public static async Task<IEnumerable<Models.Space>> GetSpaces(
-            HttpClient httpClient)
+        public static async Task<IEnumerable<Models.Space>> GetSpaces(HttpClient httpClient)
         {
-            var request = HttpHelper.MakeRequest(HttpMethod.Get, "spaces?includes=types&$top=10");
-            var response = await httpClient.SendAsync(request);
+            var response = await httpClient.GetAsync($"spaces?includes=types,values&$top=10");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();

@@ -16,23 +16,15 @@ What kind of change does this Pull Request introduce?
 ```
 
 ## How to Test
-*  Get the code
-
 ```
-git clone [repo-address]
-cd [repo-name]
-git checkout [branch-name]
+git clone https://github.com/Azure-Samples/digital-twins-samples-csharp.git
+cd digital-twins-samples-csharp
+git checkout <<branch-name>>
 dotnet restore
+dotnet test
 ```
 
-* Test the code
-<!-- Add steps to run the tests suite and/or manually test -->
-```
-```
-
-## What to Check
-Verify that the following are valid
-* ...
+Also verify anything you think is relevent by manually running the sample.
 
 ## Other Information
 <!-- Add any other helpful information that may be needed here. -->
