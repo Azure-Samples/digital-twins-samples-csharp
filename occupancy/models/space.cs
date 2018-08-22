@@ -4,7 +4,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
 namespace Models
 {
-    public class Space {
+    public class Space
+    {
         public string Id { get; set; }
         public string Name { get; set; }
         public string FriendlyName { get; set; }
