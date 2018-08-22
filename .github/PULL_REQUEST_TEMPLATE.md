@@ -6,12 +6,14 @@
 What kind of change does this Pull Request introduce?
 
 <!-- Please check the one that applies to this PR using "x". -->
-- [ ] Bugfix
-- [ ] New sample or new feature within a sample
-- [ ] Code style update (formatting, naming)
-- [ ] Refactoring (no functional changes)
-- [ ] Documentation content changes
-- [ ] Other... Please describe:
+```
+[ ] Bugfix
+[ ] New sample or new feature within a sample
+[ ] Code style update (formatting, naming)
+[ ] Refactoring (no functional changes)
+[ ] Documentation content changes
+[ ] Other... Please describe:
+```
 
 ## How to Test
 Get the code
