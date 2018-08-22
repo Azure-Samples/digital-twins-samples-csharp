@@ -61,3 +61,4 @@ ClientBin/
 *.pfx
 *.publishsettings
 orleans.codegen.cs
+UserSettings.json
