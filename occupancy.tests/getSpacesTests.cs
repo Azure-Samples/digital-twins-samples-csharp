@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Moq;
 
 namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 {
@@ -17,29 +18,31 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             StatusCode = HttpStatusCode.NotFound,
         };
 
-        private static Models.Space space1 = new Models.Space()
+        private static Models.Space _space1 = new Models.Space()
         {
             Name = "Space1",
             Type = "Space1Type",
         };
 
-        private static Models.Space space2 = new Models.Space()
+        private static Models.Space _space2 = new Models.Space()
         {
             Name = "Space2",
             Type = "Space2Type",
         };
 
+        private static Logger _silentLogger = new Mock<Logger>().Object;
+
         [Fact]
         public async Task GetSpacesWithFailedResponseReturnsEmptySpaceList()
         {
             var httpClient = FakeHttpHandler.CreateHttpClient(_notFoundResponse);
-            Assert.Equal(0, (await Actions.GetSpaces(httpClient)).Count());
+            Assert.Equal(0, (await Actions.GetSpaces(httpClient, _silentLogger)).Count());
         }
 
         [Fact]
         public async Task GetSpacesWithResponseReturnsSpaces()
         {
-            var expectedSpaces = new [] { space1, space2 };
+            var expectedSpaces = new [] { _space1, _space2 };
             var response = new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
@@ -49,7 +52,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 
             Assert.Equal(
                 expectedSpaces.Select(x => x.Name),
-                (await Actions.GetSpaces(httpClient)).Select(x => x.Name));
+                (await Actions.GetSpaces(httpClient, _silentLogger)).Select(x => x.Name));
         }
     }
 }

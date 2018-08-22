@@ -23,19 +23,21 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         static async Task MainAsync(string[] args)
         {
-            var actionName = ParseArgs(args);
-            if (actionName == null)
-                return;
-
             try
             {
                 var appSettings = AppSettings.Load();
-                var httpClient = await SetupHttpClient(appSettings);
+                var logger = new ConsoleLogger();
+
+                var actionName = ParseArgs(args);
+                if (actionName == null)
+                    return;
+
+                var httpClient = await SetupHttpClient(appSettings, logger);
 
                 switch (actionName)
                 {
                     case ActionName.GetSpaces:
-                        await Actions.GetSpaces(httpClient);
+                        await Actions.GetSpaces(httpClient, logger);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -63,9 +65,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
-        private static async Task<HttpClient> SetupHttpClient(AppSettings appSettings)
+        private static async Task<HttpClient> SetupHttpClient(AppSettings appSettings, Logger logger)
         {
-            var httpClient = new HttpClient(new LoggingHttpHandler())
+            var httpClient = new HttpClient(new LoggingHttpHandler(logger))
             {
                 BaseAddress = new Uri(appSettings.BaseUrl),
             };
