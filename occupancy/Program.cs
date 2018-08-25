@@ -45,7 +45,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Exception! {e}");
+                Console.WriteLine($"Exception: {e}");
             }
         }
 

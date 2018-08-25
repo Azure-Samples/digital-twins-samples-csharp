@@ -24,15 +24,15 @@ cd digital-twins-samples-csharp
 
 Run the tests
 ```
-dotnet restore <<folder>>
-dotnet build <<folder>>
-dotnet restore <<folder>>.tests
-dotnet test <<folder>>.tests
+dotnet restore <folder>
+dotnet build <folder>
+dotnet restore <folder>.tests
+dotnet test <folder>.tests
 ```
 
 Also verify anything you think is relevent by manually running the sample(s)
 ```
-cd <<folder>>
+cd <folder>
 dotnet run
 ```
 
