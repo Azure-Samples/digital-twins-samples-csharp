@@ -21,7 +21,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
             else
             {
-                return new Models.Space[0];
+                return Array.Empty<Models.Space>();
             }
         }
     }
