@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 
-namespace Microsoft.Azure.DigitalTwins.Samples
-{
-namespace Models
+namespace Microsoft.Azure.DigitalTwins.Samples.Models
 {
     public class Space
     {
@@ -16,8 +14,6 @@ namespace Models
         public int SubtypeId { get; set; }
         public string Status { get; set; }
         public int StatusId { get; set; }
-
-        public List<Space> Children{ get; set; }
+        public List<Space> Children { get; set; }
     }
-}
 }

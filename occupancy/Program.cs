@@ -57,6 +57,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
             else
             {
+                // Generate the list of available action names from the enum
+                // and output them in the usage string
                 var actionNames = Enum.GetNames(typeof(ActionName))
                     .Aggregate((string acc, string s) => acc + " | " + s);
                 Console.WriteLine($"Usage: dotnet run [{actionNames}]");
