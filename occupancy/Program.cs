@@ -8,30 +8,27 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
 using YamlDotNet.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
 {
     class Program
     {
-        static void Main(string[] args)
-        {
-            MainAsync(args).GetAwaiter().GetResult();
-        }
-
-        static async Task MainAsync(string[] args)
+        static async Task Main(string[] args)
         {
             try
             {
                 var appSettings = AppSettings.Load();
-                var logger = new ConsoleLogger();
 
                 var actionName = ParseArgs(args);
                 if (actionName == null)
                     return;
 
+                var loggerFactory = new Microsoft.Extensions.Logging.LoggerFactory()
+                    .AddConsole(LogLevel.Trace);
+                var logger = loggerFactory.CreateLogger("DigitalTwinsQuickstart");
                 var httpClient = await SetupHttpClient(appSettings, logger);
 
                 switch (actionName)
@@ -47,6 +44,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 Console.WriteLine($"Exception: {e}");
             }
+
+
         }
 
         private static ActionName? ParseArgs(string[] args)
@@ -67,7 +66,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
-        private static async Task<HttpClient> SetupHttpClient(AppSettings appSettings, Logger logger)
+        private static async Task<HttpClient> SetupHttpClient(AppSettings appSettings, ILogger logger)
         {
             var httpClient = new HttpClient(new LoggingHttpHandler(logger))
             {
@@ -78,10 +77,10 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return httpClient;
         }
 
-        private static Task<AuthenticationResult> Authenticate(AppSettings appSettings) =>
-            new AuthenticationContext(appSettings.Authority)
+        private static Task<Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult> Authenticate(AppSettings appSettings) =>
+            new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(appSettings.Authority)
                 .AcquireTokenAsync(
                     resource: appSettings.Resource,
-                    clientCredential: new ClientCredential(appSettings.ClientId, appSettings.ClientSecret));
+                    clientCredential: new Microsoft.IdentityModel.Clients.ActiveDirectory.ClientCredential(appSettings.ClientId, appSettings.ClientSecret));
     }
 }
