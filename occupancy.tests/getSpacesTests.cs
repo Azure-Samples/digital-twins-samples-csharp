@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Xunit;
 using Microsoft.Azure.DigitalTwins.Samples;
+using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             Type = "Space2Type",
         };
 
-        private static Logger _silentLogger = new Mock<Logger>().Object;
+        private static ILogger _silentLogger = new Mock<ILogger>().Object;
 
         [Fact]
         public async Task GetSpacesWithFailedResponseReturnsEmptySpaceList()
