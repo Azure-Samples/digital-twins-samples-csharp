@@ -2,12 +2,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build-occupancy",
+            "label": "build",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "test",
-                "${workspaceFolder}/occupancy.tests"
+                "${workspaceFolder}/tests"
             ],
             "problemMatcher": "$msCompile"
         }
