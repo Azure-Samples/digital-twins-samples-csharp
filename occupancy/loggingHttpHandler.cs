@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+
+namespace Microsoft.Azure.DigitalTwins.Samples
+{
+    public class LoggingHttpHandler : DelegatingHandler
+    {
+        private ILogger logger;
+
+        public LoggingHttpHandler(ILogger logger)
+            : base(new HttpClientHandler())
+        {
+            this.logger = logger;
+        }
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            LogRequest(request);
+
+            var response = await base.SendAsync(request, cancellationToken);
+
+            await LogResponse(response);
+
+            return response;
+        }
+
+        private void LogRequest(HttpRequestMessage request)
+        {
+            logger.LogTrace($"Request: {request.Method} {request.RequestUri}");
+
+            // logger.LogDebug($"More Info: {Serialize(request)}");
+        }
+
+        private async Task LogResponse(HttpResponseMessage response)
+        {
+            const int maxContentLength = 200;
+            var content = await response.Content?.ReadAsStringAsync();
+            var contentMaxLength = content == null || content.Length < maxContentLength
+                ? content
+                : content.Substring(0, maxContentLength - 3) + "...";
+            var contentDisplay = contentMaxLength == null ? "" : $", {contentMaxLength}";
+            logger.LogTrace($"Response Status: {(int)response.StatusCode}, {response.StatusCode}{contentDisplay}");
+
+            // logger.LogTrace($"More Info: {Serialize(response)}");
+            // var content = await response.Content?.ReadAsStringAsync();
+            // logger.LogTrace($"Response Content: {content}");
+        }
+
+        private static string Serialize(object o)
+            => JsonConvert.SerializeObject(o, Formatting.Indented);
+    }
+}
