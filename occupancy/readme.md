@@ -5,10 +5,7 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 ## Building and Running
 
 ### Using terminal
-1. `dotnet restore`
-1. [Update appsettings.json](#configuring-appsettings.json)
-1. `dotnet run` to see usage
-1. `dotnet test` to build and run tests
+TODO
 
 ### Using VSCode
 1. Open the 'occupancy' folder in vscode
