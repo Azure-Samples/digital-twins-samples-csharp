@@ -6,6 +6,16 @@
             "command": "dotnet",
             "type": "process",
             "args": [
+                "build",
+                "${workspaceFolder}/src"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
                 "test",
                 "${workspaceFolder}/tests"
             ],
