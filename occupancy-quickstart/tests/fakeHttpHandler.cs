@@ -34,23 +34,23 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public FakeHttpHandler()
             : base(new HttpClientHandler())
         {
-            _requests[HttpMethod.Post] = new List<HttpRequestMessage>();
-            _requests[HttpMethod.Get] = new List<HttpRequestMessage>();
+            requests[HttpMethod.Post] = new List<HttpRequestMessage>();
+            requests[HttpMethod.Get] = new List<HttpRequestMessage>();
         }
 
-        public IReadOnlyList<HttpRequestMessage> PostRequests => _requests[HttpMethod.Post];
-        public IReadOnlyList<HttpRequestMessage> GetRequests => _requests[HttpMethod.Get];
-        private Dictionary<HttpMethod, List<HttpRequestMessage>> _requests = new Dictionary<HttpMethod, List<HttpRequestMessage>>();
+        public IReadOnlyList<HttpRequestMessage> PostRequests => requests[HttpMethod.Post];
+        public IReadOnlyList<HttpRequestMessage> GetRequests => requests[HttpMethod.Get];
+        private Dictionary<HttpMethod, List<HttpRequestMessage>> requests = new Dictionary<HttpMethod, List<HttpRequestMessage>>();
 
         public IEnumerable<HttpResponseMessage> PostResponses { get; set; }
-        private IEnumerator<HttpResponseMessage> _enumeratePostResponses;
+        private IEnumerator<HttpResponseMessage> enumeratePostResponses;
 
         public IEnumerable<HttpResponseMessage> GetResponses { get; set; }
-        private IEnumerator<HttpResponseMessage> _enumerateGetResponses;
+        private IEnumerator<HttpResponseMessage> enumerateGetResponses;
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            _requests[request.Method].Add(request);
+            requests[request.Method].Add(request);
 
             return Task.FromResult(GetNextResponse(ChooseResponseEnumerator(request)));
         }
@@ -66,15 +66,15 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             if (request.Method == HttpMethod.Get)
             {
-                if (_enumerateGetResponses == null)
-                    _enumerateGetResponses = GetResponses.GetEnumerator();
-                return _enumerateGetResponses;
+                if (enumerateGetResponses == null)
+                    enumerateGetResponses = GetResponses.GetEnumerator();
+                return enumerateGetResponses;
             }
             else if (request.Method == HttpMethod.Post)
             {
-                if (_enumeratePostResponses == null)
-                    _enumeratePostResponses = PostResponses.GetEnumerator();
-                return _enumeratePostResponses;
+                if (enumeratePostResponses == null)
+                    enumeratePostResponses = PostResponses.GetEnumerator();
+                return enumeratePostResponses;
             }
             else
             {

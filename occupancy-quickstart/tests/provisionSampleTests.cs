@@ -17,19 +17,19 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 {
     public class ProvisionSampleTests
     {
-        private static ILogger _silentLogger = new Mock<ILogger>().Object;
-        private static Serializer _yamlSerializer = new Serializer();
-        private static HttpResponseMessage _notFoundResponse = new HttpResponseMessage()
+        private static ILogger silentLogger = new Mock<ILogger>().Object;
+        private static Serializer yamlSerializer = new Serializer();
+        private static HttpResponseMessage notFoundResponse = new HttpResponseMessage()
         {
             StatusCode = HttpStatusCode.NotFound,
         };
-        private static Guid _guid1 = new Guid("00000000-0000-0000-0000-000000000001");
-        private static Guid _guid2 = new Guid("00000000-0000-0000-0000-000000000002");
-        private static Guid _guid3 = new Guid("00000000-0000-0000-0000-000000000003");
-        private static Models.Space _space1 = new Models.Space()
+        private static Guid guid1 = new Guid("00000000-0000-0000-0000-000000000001");
+        private static Guid guid2 = new Guid("00000000-0000-0000-0000-000000000002");
+        private static Guid guid3 = new Guid("00000000-0000-0000-0000-000000000003");
+        private static Models.Space space1 = new Models.Space()
         {
             Name = "Space1",
-            Id = _guid1.ToString(),
+            Id = guid1.ToString(),
             Type = "Space1Type",
         };
 
@@ -58,7 +58,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     }},
             }};
             var actualDescriptions = await Actions.GetProvisionSampleTopology(new StringReader(yaml));
-            Assert.Equal(_yamlSerializer.Serialize(expectedDescriptions), _yamlSerializer.Serialize(actualDescriptions));
+            Assert.Equal(yamlSerializer.Serialize(expectedDescriptions), yamlSerializer.Serialize(actualDescriptions));
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         {
             (var httpClient, var httpHandler) = FakeHttpHandler.CreateHttpClient();
 
-            var createdIds = await Actions.CreateSpaces(httpClient, _silentLogger, new SpaceDescription[0], Guid.Empty);
+            var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, new SpaceDescription[0], Guid.Empty);
 
             Assert.Equal(0, createdIds.Count());
             Assert.Equal(0, httpHandler.PostRequests.Count);
@@ -77,15 +77,15 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         public async Task CreateSpacesWithSingleSpaceMakesRequestsAndReturnsRootId()
         {
             (var httpClient, var httpHandler) = FakeHttpHandler.CreateHttpClient(
-                postResponses: CreateGuidResponses(new [] { _guid1 }),
-                getResponses: Enumerable.Repeat(_notFoundResponse, 1000));
+                postResponses: CreateGuidResponses(new [] { guid1 }),
+                getResponses: Enumerable.Repeat(notFoundResponse, 1000));
             var descriptions = new [] { new SpaceDescription()
             {
                 name = "Test1",
             }};
 
-            var createdIds = await Actions.CreateSpaces(httpClient, _silentLogger, descriptions, Guid.Empty);
-            Assert.Equal(_guid1, createdIds.Single());
+            var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
+            Assert.Equal(guid1, createdIds.Single());
             Assert.Equal(1, httpHandler.PostRequests.Count);
             Assert.Equal(1, httpHandler.GetRequests.Count);
         }
@@ -96,18 +96,18 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             var getResponse = new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(JsonConvert.SerializeObject(new [] { _space1 })),
+                Content = new StringContent(JsonConvert.SerializeObject(new [] { space1 })),
             };
             (var httpClient, var httpHandler) = FakeHttpHandler.CreateHttpClient(
-                postResponses: CreateGuidResponses(new [] { _guid1 }),
+                postResponses: CreateGuidResponses(new [] { guid1 }),
                 getResponses: new [] { getResponse });
             var descriptions = new [] { new SpaceDescription()
             {
-                name = _space1.Name,
+                name = space1.Name,
             }};
 
-            var createdIds = await Actions.CreateSpaces(httpClient, _silentLogger, descriptions, Guid.Empty);
-            Assert.Equal(_guid1, createdIds.Single());
+            var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
+            Assert.Equal(guid1, createdIds.Single());
             Assert.Equal(0, httpHandler.PostRequests.Count);
             Assert.Equal(1, httpHandler.GetRequests.Count);
         }
@@ -116,8 +116,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         public async Task CreateSpacesWithSingleRootAndChildrenMakesRequestsAndReturnsRootId()
         {
             (var httpClient, var httpHandler) = FakeHttpHandler.CreateHttpClient(
-                postResponses: CreateGuidResponses(new [] { _guid1, _guid2, _guid3 }),
-                getResponses: Enumerable.Repeat(_notFoundResponse, 1000));
+                postResponses: CreateGuidResponses(new [] { guid1, guid2, guid3 }),
+                getResponses: Enumerable.Repeat(notFoundResponse, 1000));
             var descriptions = new [] { new SpaceDescription()
             {
                 name = "Test1",
@@ -132,8 +132,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     }},
             }};
 
-            var createdIds = await Actions.CreateSpaces(httpClient, _silentLogger, descriptions, Guid.Empty);
-            Assert.Equal(_guid1, createdIds.Single());
+            var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
+            Assert.Equal(guid1, createdIds.Single());
             Assert.Equal(3, httpHandler.PostRequests.Count);
             Assert.Equal(3, httpHandler.GetRequests.Count);
         }
@@ -142,8 +142,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         public async Task CreateSpacesWithMultipleRootsMakesRequestsAndReturnsAllRootIds()
         {
             (var httpClient, var httpHandler) = FakeHttpHandler.CreateHttpClient(
-                postResponses: CreateGuidResponses(new [] { _guid1, _guid2 }),
-                getResponses: Enumerable.Repeat(_notFoundResponse, 1000));
+                postResponses: CreateGuidResponses(new [] { guid1, guid2 }),
+                getResponses: Enumerable.Repeat(notFoundResponse, 1000));
             var descriptions = new [] {
                 new SpaceDescription()
                 {
@@ -154,8 +154,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     name = "Test2",
                 }};
 
-            var createdIds = await Actions.CreateSpaces(httpClient, _silentLogger, descriptions, Guid.Empty);
-            Assert.Equal(new [] { _guid1, _guid2 }, createdIds);
+            var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
+            Assert.Equal(new [] { guid1, guid2 }, createdIds);
             Assert.Equal(2, httpHandler.PostRequests.Count);
             Assert.Equal(2, httpHandler.GetRequests.Count);
         }

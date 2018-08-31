@@ -14,38 +14,38 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 {
     public class GetSpacesTests
     {
-        private static HttpResponseMessage _notFoundResponse = new HttpResponseMessage()
+        private static HttpResponseMessage notFoundResponse = new HttpResponseMessage()
         {
             StatusCode = HttpStatusCode.NotFound,
         };
 
-        private static Models.Space _space1 = new Models.Space()
+        private static Models.Space space1 = new Models.Space()
         {
             Name = "Space1",
             Type = "Space1Type",
         };
 
-        private static Models.Space _space2 = new Models.Space()
+        private static Models.Space space2 = new Models.Space()
         {
             Name = "Space2",
             Type = "Space2Type",
         };
 
-        private static ILogger _silentLogger = new Mock<ILogger>().Object;
+        private static ILogger silentLogger = new Mock<ILogger>().Object;
 
         [Fact]
         public async Task GetSpacesWithFailedResponseReturnsEmptySpaceList()
         {
             (var httpClient, var _) = FakeHttpHandler.CreateHttpClient(
-                postResponses: Enumerable.Repeat(_notFoundResponse, 1000),
-                getResponses: Enumerable.Repeat(_notFoundResponse, 1000));
-            Assert.Equal(0, (await Actions.GetSpaces(httpClient, _silentLogger)).Count());
+                postResponses: Enumerable.Repeat(notFoundResponse, 1000),
+                getResponses: Enumerable.Repeat(notFoundResponse, 1000));
+            Assert.Equal(0, (await Actions.GetSpaces(httpClient, silentLogger)).Count());
         }
 
         [Fact]
         public async Task GetSpacesWithResponseReturnsSpaces()
         {
-            var expectedSpaces = new [] { _space1, _space2 };
+            var expectedSpaces = new [] { space1, space2 };
             var response = new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
@@ -56,7 +56,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 
             Assert.Equal(
                 expectedSpaces.Select(x => x.Name),
-                (await Actions.GetSpaces(httpClient, _silentLogger)).Select(x => x.Name));
+                (await Actions.GetSpaces(httpClient, silentLogger)).Select(x => x.Name));
         }
     }
 }
