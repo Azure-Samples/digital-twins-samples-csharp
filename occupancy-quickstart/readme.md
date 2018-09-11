@@ -2,6 +2,24 @@
 
 Sample code to provision and read resources in a Digital Twins topology via management apis. It also creates an exmaple function that runs within the Digital Twins which computes motion from a sensor in a room inorder to determine the occupancy.
 
+## Building and Running
+
+### Using terminal
+1. `dotnet restore`
+1. [Update appsettings.json](#configuring-appsettings.json)
+1. `cd src`
+1. `dotnet run` to build and see usage
+1. `dotnet test ../tests` to build and run tests
+
+### Using VSCode
+1. Open the 'occupancy-quickstart' folder in vscode
+1. [Update appsettings.json](#configuring-appsettings.json)
+1. Run the app by using F5.  You can change the commandline parameters in launch.json
+1. To build and run tests use the 'Run Task' command in vscode and choose 'test'
+
+## Configuring appsettings.json
+TODO
+
 ## Walkthrough
 
 * See [TODO: add docs quickstart link] for how to configure your Digitial Twins resource and configure this app to be able to call it
