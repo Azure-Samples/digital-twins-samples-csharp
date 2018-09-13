@@ -36,6 +36,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     case ActionName.GetSpaces:
                         await Actions.GetSpaces(httpClient, logger);
                         break;
+                    case ActionName.ProvisionSample:
+                        await Actions.ProvisionSample(httpClient, logger);
+                        break;
                     default:
                         throw new NotImplementedException();
                 }

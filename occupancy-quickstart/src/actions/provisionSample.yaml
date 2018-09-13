@@ -1,0 +1,14 @@
+- name: Quickstart Building
+  type: Venue
+  spaces:
+  - name: Floor 1
+    type: Floor
+    spaces:
+    - name: Area A
+      type: Area
+    - name: Conference Room 11
+      type: Room
+      subType: ConferenceRoom
+    - name: Focus Room A1
+      type: Room
+      subType: FocusRoom
