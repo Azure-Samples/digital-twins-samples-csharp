@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 {
-    public class ProvisionSampleTests
+    public class ProvisionSampleSpacesTests
     {
         private static ILogger silentLogger = new Mock<ILogger>().Object;
         private static Serializer yamlSerializer = new Serializer();
@@ -144,7 +144,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             (var httpClient, var httpHandler) = FakeHttpHandler.CreateHttpClient(
                 postResponses: CreateGuidResponses(new [] { guid1, guid2 }),
                 getResponses: Enumerable.Repeat(notFoundResponse, 1000));
-            var descriptions = new [] {
+            var descriptions = new []
+            {
                 new SpaceDescription()
                 {
                     name = "Test1",
@@ -152,7 +153,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 new SpaceDescription()
                 {
                     name = "Test2",
-                }};
+                }
+            };
 
             var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
             Assert.Equal(new [] { guid1, guid2 }, createdIds);
