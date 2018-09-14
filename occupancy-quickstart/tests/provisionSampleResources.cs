@@ -19,17 +19,16 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
     {
         private static ILogger silentLogger = new Mock<ILogger>().Object;
         private static Serializer yamlSerializer = new Serializer();
-        private static HttpResponseMessage notFoundResponse = new HttpResponseMessage()
-        {
-            StatusCode = HttpStatusCode.NotFound,
-        };
-        private static Guid guid1 = new Guid("00000000-0000-0000-0000-000000000001");
-        private static Guid guid2 = new Guid("00000000-0000-0000-0000-000000000002");
-        private static Guid guid3 = new Guid("00000000-0000-0000-0000-000000000003");
+        private static Guid resource1Guid = new Guid("00000000-0000-0000-0000-000000000001");
         private static Models.Resource resource1 = new Models.Resource()
         {
-            Id = guid1.ToString(),
+            Id = resource1Guid.ToString(),
             Status = "Something",
+        };
+        private static HttpResponseMessage resource1GetResponse = new HttpResponseMessage()
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonConvert.SerializeObject(resource1)),
         };
 
         [Fact]
@@ -66,15 +65,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         [Fact]
         public async Task CreateSingleResource()
         {
-            var getResourceResponse = new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(JsonConvert.SerializeObject(resource1)),
-            };
-
             (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(
-                postResponseGuids: new [] { guid1 },
-                getResponses: new [] { getResourceResponse });
+                postResponseGuids: new [] { resource1Guid },
+                getResponses: new [] { resource1GetResponse });
 
             var descriptions = new [] { new SpaceDescription()
             {
@@ -85,7 +78,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 }},
             }};
 
-            var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
+            await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
             Assert.Equal(1, httpHandler.PostRequests["resources"].Count);
             Assert.Equal(1, httpHandler.GetRequests["resources"].Count);
         }
