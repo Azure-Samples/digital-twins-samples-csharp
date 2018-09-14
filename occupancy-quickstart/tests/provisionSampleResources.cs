@@ -38,9 +38,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 - name: Test1
                   resources:
                   - type: Type1
-                    region: Region1
                   - type: Type2
-                    region: Region2
                 ";
             var expectedDescriptions = new [] { new SpaceDescription()
             {
@@ -48,12 +46,10 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 resources = new [] {
                     new ResourceDescription()
                     {
-                        region = "Region1",
                         type = "Type1",
                     },
                     new ResourceDescription()
                     {
-                        region = "Region2",
                         type = "Type2",
                     },
                 },

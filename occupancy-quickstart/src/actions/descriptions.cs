@@ -8,7 +8,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
     public class ResourceDescription
     {
-        public string region { get; set; }
         public string type { get; set; }
     }
 

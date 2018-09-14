@@ -17,7 +17,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public static Models.ResourceCreate ToResourceCreate(this ResourceDescription description, Guid spaceId)
             => new Models.ResourceCreate()
             {
-                Region = description.region,
                 SpaceId = spaceId.ToString(),
                 Type = description.type,
             };

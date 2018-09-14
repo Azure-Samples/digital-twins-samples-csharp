@@ -1,5 +1,7 @@
 - name: Quickstart Building
   type: Venue
+  resources:
+  - type: IoTHub
   spaces:
   - name: Floor 1
     type: Floor
