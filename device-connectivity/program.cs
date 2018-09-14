@@ -20,31 +20,32 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     class Program
     {
         private static Random rnd = new Random();
-        public static Device DeviceInfo { get; set; }
-        public static IConfiguration Configuration { get; set; }
+        private static string connectionString;
+        private static string hardwareId;
+        private static IConfigurationSection settings;
         static void Main(string[] args)
         {
-            Configuration = new ConfigurationBuilder()
+            settings = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.dev.json", optional: true)
-                .Build();
+                .Build()
+                .GetSection("Settings");
 
-            var hardwareId = GetMacAddress();
+            hardwareId = GetMacAddress();
 
             Console.WriteLine($"Your hardware ID is: {hardwareId}");
 
-            var topologyClient = new TopologyClient(Configuration["ManagementApiUrl"], Configuration["SasToken"]);
-            DeviceInfo = topologyClient.GetDeviceForHardwareId(hardwareId).Result;
-            if (DeviceInfo == null)
+            var topologyClient = new TopologyClient(settings["ManagementApiUrl"], settings["SasToken"]);
+            connectionString = topologyClient.GetDeviceForHardwareId(hardwareId).Result.ConnectionString;
+            if (string.IsNullOrEmpty(connectionString))
             {
-                Console.WriteLine("ERROR: Could not retrieve device information.");
+                Console.WriteLine("ERROR: Could not retrieve connection string.");
                 return;
             }
 
             try
             {
-                DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(DeviceInfo.ConnectionString);
+                DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(connectionString);
 
                 if (deviceClient == null)
                 {
@@ -82,27 +83,17 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             var serializer = new DataContractJsonSerializer(typeof(TelemetryMessage));
 
-            var sensorDataTypes = Configuration["SensorDataTypes"].Split(',');
+            var sensorDataTypes = settings["SensorDataTypes"].Split(',');
 
             while (true)
             {
+                var eventMessages = new List<Message>();
                 foreach (var sensorDataType in sensorDataTypes)
                 {
                     var getRandomSensorReading = CreateGetRandomSensorReading(sensorDataType);
-
-                    var sensor = DeviceInfo.Sensors.FirstOrDefault(x => (x.DataType == sensorDataType));
-                    if (sensor == null)
-                    {
-                        throw new Exception($"No preconfigured Sensor for DataType '{sensorDataType}' found.");
-                    }
-
                     var telemetryMessage = new TelemetryMessage()
                     {
-                        SensorId=sensor.Id,
-                        SensorReading=getRandomSensorReading(),
-                        EventTimestamp=DateTime.UtcNow.ToString("o"),
-                        SensorType=sensor.Type,
-                        SensorDataType=sensor.DataType
+                        SensorValue = getRandomSensorReading(),
                     };
 
                     using (var stream = new MemoryStream())
@@ -110,16 +101,19 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         serializer.WriteObject(stream, telemetryMessage);
                         var binaryMessage = stream.ToArray();
                         Message eventMessage = new Message(binaryMessage);
-                        eventMessage.Properties.Add("Sensor", "");
-                        eventMessage.Properties.Add("MessageVersion", "1.0");
-                        eventMessage.Properties.Add("x-ms-flighting-udf-execution-manually-enabled", "true");
-                        Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.ASCII.GetString(binaryMessage)}");
+                        eventMessage.Properties.Add("DigitalTwins-Telemetry", "1.0");
+                        eventMessage.Properties.Add("DigitalTwins-SensorHardwareId", $"{hardwareId}-{sensorDataType}");
+                        eventMessage.Properties.Add("CreationTimeUtc", DateTime.UtcNow.ToString("o"));
+                        eventMessage.Properties.Add("CorrelationId", Guid.NewGuid().ToString());
 
-                        await deviceClient.SendEventAsync(eventMessage).ConfigureAwait(false);
+                        eventMessages.Add(eventMessage);
+
+                        Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.UTF8.GetString(eventMessage.GetBytes())} Properties: {{ {eventMessage.Properties.Aggregate(new StringBuilder(), (sb, x) => sb.Append($"'{x.Key}': '{x.Value}',"), sb => sb.ToString())} }}");
                     }
                 }
+                await deviceClient.SendEventBatchAsync(eventMessages).ConfigureAwait(false);
 
-                Thread.Sleep(int.Parse(Configuration["MessageIntervalInMilliSeconds"]));
+                Thread.Sleep(int.Parse(settings["MessageIntervalInMilliSeconds"]));
             }
         }
 
@@ -127,10 +121,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             foreach(var nic in NetworkInterface.GetAllNetworkInterfaces())
             {
-                var physAddress = nic.GetPhysicalAddress().ToString();
-                if (physAddress.Length > 0)
+                if (nic.OperationalStatus == OperationalStatus.Up && nic.Speed > 0)
                 {
-                    return physAddress;
+                    var physAddress = nic.GetPhysicalAddress().ToString();
+                    if (physAddress.Length > 0)
+                    {
+                        return physAddress;
+                    }
                 }
             }
 

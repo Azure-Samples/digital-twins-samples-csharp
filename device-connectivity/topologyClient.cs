@@ -15,7 +15,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         private HttpClient httpClient = new HttpClient();
         private readonly string ApiPath = "api/v1.0/";
         private readonly string DevicesPath = "Devices";
-        private readonly string DevicesIncludeArgument = "includes=Sensors,ConnectionString,Types,SensorsTypes";
+        private readonly string DevicesIncludeArgument = "includes=ConnectionString,Sensors,SensorsTypes,Types";
         public TopologyClient(string managementBaseUrl, string sasToken)
         {
             this.httpClient.BaseAddress = new Uri(managementBaseUrl);
@@ -29,13 +29,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             try
             {
                 var response = this.httpClient.GetStreamAsync($"{ApiPath}{DevicesPath}?hardwareIds={hardwareId}&{DevicesIncludeArgument}");
-                device = (serializer.ReadObject(await response) as List<Device>).FirstOrDefault(x => x.HardwareId == hardwareId);
+                device = (serializer.ReadObject(await response) as List<Device>).FirstOrDefault(x => x.HardwareId.ToLowerInvariant() == hardwareId.ToLowerInvariant());
             }
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-
+            
             return device;
         }
     }

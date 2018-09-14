@@ -9,17 +9,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Models
     [DataContract(Name="TelemetryMessage")]
     public class TelemetryMessage
     {
-        [DataMember(Name="SensorId")]
-        public string SensorId { get; set; }
-        [DataMember(Name="SensorReading")]
-        public string SensorReading { get; set; }
-        [DataMember(Name="EventTimestamp")]
-        public string EventTimestamp { get; set; }
-        [DataMember(Name="SensorType")]
-        public string SensorType { get; set; }
-        [DataMember(Name="SensorDataType")]
-        public string SensorDataType { get; set; }
-        [DataMember(Name="MessageType")]
-        public readonly string MessageType = "sensor";
+        [DataMember(Name="SensorValue")]
+        public string SensorValue { get; set; }
     }
 }
