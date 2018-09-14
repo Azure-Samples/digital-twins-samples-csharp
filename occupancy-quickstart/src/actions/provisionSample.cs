@@ -46,12 +46,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 {
                     spaceIds.Add(spaceId);
 
-                    if (description.spaces != null)
-                        await CreateSpaces(httpClient, logger, description.spaces, spaceId);
-
-                    // This must happen before devices or the device create will fail because
+                    // This must happen before devices (or anyhting that could have devices like other spaces)
+                    // or the device create will fail because a resource is required on an ancestor space
                     if (description.resources != null)
                         await CreateResources(httpClient, logger, description.resources, spaceId);
+
+                    if (description.spaces != null)
+                        await CreateSpaces(httpClient, logger, description.spaces, spaceId);
                 }
             }
 

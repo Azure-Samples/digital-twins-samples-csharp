@@ -30,7 +30,7 @@ dotnet restore <folder>.tests
 dotnet test <folder>.tests
 ```
 
-Also verify anything you think is relevent by manually running the sample(s)
+Also verify anything you think is relevant by manually running the sample(s)
 ```
 cd <folder>
 dotnet run
