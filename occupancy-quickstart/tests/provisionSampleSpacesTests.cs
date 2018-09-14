@@ -93,14 +93,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         [Fact]
         public async Task CreateSpacesWithAlreadyCreatedSpaceUsesIt()
         {
-            var getResponse = new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(JsonConvert.SerializeObject(new [] { space1 })),
-            };
-            (var httpClient, var httpHandler) = FakeHttpHandler.CreateHttpClient(
-                postResponses: CreateGuidResponses(new [] { guid1 }),
-                getResponses: new [] { getResponse });
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(new [] { guid1 }, space1);
+            
             var descriptions = new [] { new SpaceDescription()
             {
                 name = space1.Name,
