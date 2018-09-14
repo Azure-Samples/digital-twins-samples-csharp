@@ -26,11 +26,10 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         private static Guid guid1 = new Guid("00000000-0000-0000-0000-000000000001");
         private static Guid guid2 = new Guid("00000000-0000-0000-0000-000000000002");
         private static Guid guid3 = new Guid("00000000-0000-0000-0000-000000000003");
-        private static Models.Space space1 = new Models.Space()
+        private static Models.Resource resource1 = new Models.Resource()
         {
-            Name = "Space1",
             Id = guid1.ToString(),
-            Type = "Space1Type",
+            Status = "Something",
         };
 
         [Fact]
@@ -67,8 +66,16 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         [Fact]
         public async Task CreateSingleResource()
         {
-            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(new [] { guid1 });
-               
+            var getResourceResponse = new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(JsonConvert.SerializeObject(resource1)),
+            };
+
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(
+                postResponseGuids: new [] { guid1 },
+                getResponses: new [] { getResourceResponse });
+
             var descriptions = new [] { new SpaceDescription()
             {
                 name = FakeDigitalTwinsHttpClient.RootSpace.Name,
@@ -79,8 +86,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             }};
 
             var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
-            Assert.Equal(1, httpHandler.PostRequests.Count); // post Resource
-            Assert.Equal(1, httpHandler.GetRequests.Count); // get Space
+            Assert.Equal(1, httpHandler.PostRequests["resources"].Count);
+            Assert.Equal(1, httpHandler.GetRequests["resources"].Count);
         }
     }
 }

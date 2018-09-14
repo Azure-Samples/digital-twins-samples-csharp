@@ -16,18 +16,22 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             Type = "Space1Type",
         };
 
-        static public (HttpClient, FakeHttpHandler) CreateWithRootSpace(Guid[] postResponses, Models.Space rootSpace = null)
+        static public (HttpClient, FakeHttpHandler) CreateWithRootSpace(
+            Guid[] postResponseGuids,
+            HttpResponseMessage[] getResponses = null,
+            Models.Space rootSpace = null)
         {
+            getResponses = getResponses ?? Array.Empty<HttpResponseMessage>();
             rootSpace = rootSpace ?? RootSpace;
-            
-            var getResponse = new HttpResponseMessage()
+
+            var getRootSpaceResponse = new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(JsonConvert.SerializeObject(new [] { rootSpace })),
             };
             return FakeHttpHandler.CreateHttpClient(
-                postResponses: CreateGuidResponses(postResponses),
-                getResponses: new [] { getResponse });
+                postResponses: CreateGuidResponses(postResponseGuids),
+                getResponses: new [] { getRootSpaceResponse }.Concat(getResponses) );
         }
 
         static private IEnumerable<HttpResponseMessage> CreateGuidResponses(IEnumerable<Guid> guids)

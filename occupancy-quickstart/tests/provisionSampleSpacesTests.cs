@@ -69,8 +69,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, new SpaceDescription[0], Guid.Empty);
 
             Assert.Equal(0, createdIds.Count());
-            Assert.Equal(0, httpHandler.PostRequests.Count);
-            Assert.Equal(0, httpHandler.GetRequests.Count);
+            Assert.False(httpHandler.PostRequests.ContainsKey("spaces"));
+            Assert.False(httpHandler.GetRequests.ContainsKey("spaces"));
         }
 
         [Fact]
@@ -86,15 +86,17 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 
             var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
             Assert.Equal(guid1, createdIds.Single());
-            Assert.Equal(1, httpHandler.PostRequests.Count);
-            Assert.Equal(1, httpHandler.GetRequests.Count);
+            Assert.Equal(1, httpHandler.PostRequests["spaces"].Count);
+            Assert.Equal(1, httpHandler.GetRequests["spaces"].Count);
         }
 
         [Fact]
         public async Task CreateSpacesWithAlreadyCreatedSpaceUsesIt()
         {
-            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(new [] { guid1 }, space1);
-            
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(
+                postResponseGuids: new [] { guid1 },
+                rootSpace: space1);
+
             var descriptions = new [] { new SpaceDescription()
             {
                 name = space1.Name,
@@ -102,8 +104,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 
             var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
             Assert.Equal(guid1, createdIds.Single());
-            Assert.Equal(0, httpHandler.PostRequests.Count);
-            Assert.Equal(1, httpHandler.GetRequests.Count);
+            Assert.False(httpHandler.PostRequests.ContainsKey("spaces"));
+            Assert.Equal(1, httpHandler.GetRequests["spaces"].Count);
         }
 
         [Fact]
@@ -128,8 +130,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 
             var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
             Assert.Equal(guid1, createdIds.Single());
-            Assert.Equal(3, httpHandler.PostRequests.Count);
-            Assert.Equal(3, httpHandler.GetRequests.Count);
+            Assert.Equal(3, httpHandler.PostRequests["spaces"].Count);
+            Assert.Equal(3, httpHandler.GetRequests["spaces"].Count);
         }
 
         [Fact]
@@ -152,8 +154,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 
             var createdIds = await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
             Assert.Equal(new [] { guid1, guid2 }, createdIds);
-            Assert.Equal(2, httpHandler.PostRequests.Count);
-            Assert.Equal(2, httpHandler.GetRequests.Count);
+            Assert.Equal(2, httpHandler.PostRequests["spaces"].Count);
+            Assert.Equal(2, httpHandler.GetRequests["spaces"].Count);
         }
 
         private IEnumerable<HttpResponseMessage> CreateGuidResponses(IEnumerable<Guid> guids)

@@ -34,13 +34,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public FakeHttpHandler()
             : base(new HttpClientHandler())
         {
-            requests[HttpMethod.Post] = new List<HttpRequestMessage>();
-            requests[HttpMethod.Get] = new List<HttpRequestMessage>();
+            requests[HttpMethod.Post] = new Dictionary<string, List<HttpRequestMessage>>();
+            requests[HttpMethod.Get] = new Dictionary<string, List<HttpRequestMessage>>();
         }
 
-        public IReadOnlyList<HttpRequestMessage> PostRequests => requests[HttpMethod.Post];
-        public IReadOnlyList<HttpRequestMessage> GetRequests => requests[HttpMethod.Get];
-        private Dictionary<HttpMethod, List<HttpRequestMessage>> requests = new Dictionary<HttpMethod, List<HttpRequestMessage>>();
+        public IReadOnlyDictionary<string, List<HttpRequestMessage>> PostRequests => requests[HttpMethod.Post];
+        public IReadOnlyDictionary<string, List<HttpRequestMessage>> GetRequests => requests[HttpMethod.Get];
+        private Dictionary<HttpMethod, Dictionary<string, List<HttpRequestMessage>>> requests = new Dictionary<HttpMethod, Dictionary<string, List<HttpRequestMessage>>>();
 
         public IEnumerable<HttpResponseMessage> PostResponses { get; set; }
         private IEnumerator<HttpResponseMessage> enumeratePostResponses;
@@ -50,7 +50,10 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            requests[request.Method].Add(request);
+            var requestName = request.RequestUri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries)[0];
+            if (!requests[request.Method].ContainsKey(requestName))
+                requests[request.Method].Add(requestName, new List<HttpRequestMessage>());
+            requests[request.Method][requestName].Add(request);
 
             return Task.FromResult(GetNextResponse(ChooseResponseEnumerator(request)));
         }
