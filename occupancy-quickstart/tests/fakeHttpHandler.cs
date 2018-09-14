@@ -14,7 +14,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     // See https://github.com/dotnet/corefx/issues/1624 for an example of non trivial discussion around this
     public class FakeHttpHandler : DelegatingHandler
     {
-        static public (HttpClient, FakeHttpHandler) CreateHttpClient(
+        public static (HttpClient, FakeHttpHandler) CreateHttpClient(
             IEnumerable<HttpResponseMessage> postResponses = null,
             IEnumerable<HttpResponseMessage> getResponses = null)
         {

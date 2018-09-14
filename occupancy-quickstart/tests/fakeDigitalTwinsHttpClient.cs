@@ -9,14 +9,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 {
     public static class FakeDigitalTwinsHttpClient
     {
-        static public Models.Space RootSpace = new Models.Space()
+        public static Models.Space RootSpace = new Models.Space()
         {
             Name = "Space1",
             Id = new Guid("90000000-0000-0000-0000-000000000001").ToString(),
             Type = "Space1Type",
         };
 
-        static public (HttpClient, FakeHttpHandler) Create(
+        public static (HttpClient, FakeHttpHandler) Create(
             IEnumerable<Guid> postResponseGuids = null,
             IEnumerable<HttpResponseMessage> getResponses = null)
         {
@@ -25,7 +25,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 getResponses: getResponses);
         }
 
-        static public (HttpClient, FakeHttpHandler) CreateWithRootSpace(
+        public static (HttpClient, FakeHttpHandler) CreateWithRootSpace(
             IEnumerable<Guid> postResponseGuids,
             IEnumerable<HttpResponseMessage> getResponses = null,
             Models.Space rootSpace = null)
@@ -43,7 +43,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 getResponses: new [] { getRootSpaceResponse }.Concat(getResponses) );
         }
 
-        static private IEnumerable<HttpResponseMessage> CreateGuidResponses(IEnumerable<Guid> guids)
+        private static IEnumerable<HttpResponseMessage> CreateGuidResponses(IEnumerable<Guid> guids)
             => guids.Select(guid => new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
