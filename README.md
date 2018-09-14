@@ -10,4 +10,4 @@ This repo contains dotnet core projects that demonstrate using the Azure Digitia
 1. The repo is composed of several standalone projects.  [Occupancy](./occupancy-quickstart/readme.md) sample is the suggested starting sample.
 
 ### Visual Studio Code
-We recommend using [Visual Studio Code](https://code.visualstudio.com/)and include a [workspace](./digital-twins-samples.code-workspace) file you can use to load all samples. Alternatively, each folder can be opened individually.
+If using [Visual Studio Code](https://code.visualstudio.com/) we have included a [visual studio code workspace file](./digital-twins-samples.code-workspace) that will load all samples. Alternatively, each folder can be opened individually.
