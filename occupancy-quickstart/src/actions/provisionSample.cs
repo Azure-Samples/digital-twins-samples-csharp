@@ -98,13 +98,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             foreach (var description in descriptions)
             {
-                var resourceCreate = new Models.ResourceCreate()
-                {
-                    Region = description.region,
-                    SpaceId = spaceId.ToString(),
-                    Type = description.type,
-                };
-                var createdId = await CreateResource(httpClient, logger, resourceCreate);
+                var createdId = await CreateResource(httpClient, logger, description.ToResourceCreate(spaceId));
                 if (createdId != Guid.Empty)
                 {
                     // After creation resources might take time to be ready to use so we need
