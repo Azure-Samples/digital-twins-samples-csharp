@@ -46,6 +46,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 {
                     spaceIds.Add(spaceId);
 
+                    // This must happen before devices (or anyhting that could have devices like other spaces)
+                    // or the device create will fail because a resource is required on an ancestor space
+                    if (description.resources != null)
+                        await CreateResources(httpClient, logger, description.resources, spaceId);
+
                     if (description.spaces != null)
                         await CreateSpaces(httpClient, logger, description.spaces, spaceId);
                 }
@@ -54,66 +59,38 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return spaceIds;
         }
 
-        // Returns a space with same name and parentId if there is exactly one
-        // that maches that criteria. Otherwise returns null.
-        private static async Task<Models.Space> GetExistingSpace(
+        private static async Task CreateResources(
             HttpClient httpClient,
             ILogger logger,
-            string name,
-            Guid parentId)
+            IEnumerable<ResourceDescription> descriptions,
+            Guid spaceId)
         {
-            var filterName = $"Name eq '{name}'";
-            var filterParentSpaceId = parentId != Guid.Empty
-                ? $"ParentSpaceId eq guid'{parentId}'"
-                : $"ParentSpaceId eq null";
-            var odataFilter = $"$filter={filterName} and {filterParentSpaceId}";
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("Resources must have a spaceId");
 
-            var response = await httpClient.GetAsync($"spaces?{odataFilter}");
-            if (response.IsSuccessStatusCode)
+            foreach (var description in descriptions)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var spaces = JsonConvert.DeserializeObject<IReadOnlyCollection<Models.Space>>(content);
-                var matchingSpace = spaces.SingleOrDefault();
-                if (matchingSpace != null)
+                var createdId = await Api.CreateResource(httpClient, logger, description.ToResourceCreate(spaceId));
+                if (createdId != Guid.Empty)
                 {
-                    logger.LogInformation($"Retrieved Unique Space using 'name' and 'parentSpaceId': {JsonConvert.SerializeObject(matchingSpace, Formatting.Indented)}");
-                    return matchingSpace;
+                    // After creation resources might take time to be ready to use so we need
+                    // to poll until it is done since downstream operations (like device creation)
+                    // may depend on it
+                    logger.LogInformation("Polling until resource is no longer in 'Provisioning' state...");
+                    while (await Api.IsResourceProvisioning(httpClient, logger, createdId))
+                    {
+                        await Task.Delay(5000);
+                    }
                 }
             }
-            return null;
         }
 
         private static async Task<Guid> GetExistingSpaceOrCreate(HttpClient httpClient, ILogger logger, Guid parentId, SpaceDescription description)
         {
-            var existingSpace = await GetExistingSpace(httpClient, logger, description.name, parentId);
+            var existingSpace = await Api.FindSpace(httpClient, logger, description.name, parentId);
             return existingSpace?.Id != null
                 ? Guid.Parse(existingSpace.Id)
-                : await CreateSpace(httpClient, logger, description.ToSpaceCreate(parentId));
-        }
-
-        private static async Task<Guid> CreateSpace(HttpClient httpClient, ILogger logger, Models.SpaceCreate spaceCreate)
-        {
-            logger.LogInformation($"Creating Space: {JsonConvert.SerializeObject(spaceCreate, Formatting.Indented)}");
-            var content = JsonConvert.SerializeObject(spaceCreate);
-            var response = await httpClient.PostAsync("spaces", new StringContent(content, Encoding.UTF8, "application/json"));
-            return await GetIdFromResponse(response, logger);
-        }
-
-        private static async Task<Guid> GetIdFromResponse(HttpResponseMessage response, ILogger logger)
-        {
-            if (!response.IsSuccessStatusCode)
-                return Guid.Empty;
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            // strip out the double quotes that come in the response and parse into a guid
-            if (!Guid.TryParse(content.Substring(1, content.Length - 2), out var createdId))
-            {
-                logger.LogError($"ERROR: Returned value from POST did not parse into a guid: {content}");
-                return Guid.Empty;
-            }
-
-            return createdId;
+                : await Api.CreateSpace(httpClient, logger, description.ToSpaceCreate(parentId));
         }
     }
 }

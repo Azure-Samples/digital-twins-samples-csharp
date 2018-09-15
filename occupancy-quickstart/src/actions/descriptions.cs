@@ -6,11 +6,19 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
 {
+    public class ResourceDescription
+    {
+        public string type { get; set; }
+    }
+
     public class SpaceDescription
     {
         public string name { get; set; }
         public string type { get; set; }
         public string subType { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<ResourceDescription> resources { get; set; }
 
         [JsonIgnore]
         public IEnumerable<SpaceDescription> spaces { get; set; }

@@ -5,13 +5,20 @@ using System;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
 {
-    public static class SpaceDescriptionExtensions
+    public static class DescriptionExtensions
     {
         public static Models.SpaceCreate ToSpaceCreate(this SpaceDescription description, Guid parentId)
             => new Models.SpaceCreate()
             {
                 Name = description.name,
                 ParentSpaceId = parentId != Guid.Empty ? parentId.ToString() : "",
+            };
+
+        public static Models.ResourceCreate ToResourceCreate(this ResourceDescription description, Guid spaceId)
+            => new Models.ResourceCreate()
+            {
+                SpaceId = spaceId.ToString(),
+                Type = description.type,
             };
     }
 }
