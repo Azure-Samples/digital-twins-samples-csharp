@@ -17,7 +17,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 {
     public class ProvisionSampleResourcesTests
     {
-        private static ILogger silentLogger = new Mock<ILogger>().Object;
         private static Serializer yamlSerializer = new Serializer();
         private static Guid resource1Guid = new Guid("00000000-0000-0000-0000-000000000001");
         private static Models.Resource resource1 = new Models.Resource()
@@ -74,7 +73,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 }},
             }};
 
-            await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
+            await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.Equal(1, httpHandler.PostRequests["resources"].Count);
             Assert.Equal(1, httpHandler.GetRequests["resources"].Count);
         }

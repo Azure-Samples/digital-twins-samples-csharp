@@ -14,11 +14,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 {
     public class GetSpacesTests
     {
-        private static HttpResponseMessage notFoundResponse = new HttpResponseMessage()
-        {
-            StatusCode = HttpStatusCode.NotFound,
-        };
-
         private static Models.Space space1 = new Models.Space()
         {
             Name = "Space1",
@@ -31,15 +26,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             Type = "Space2Type",
         };
 
-        private static ILogger silentLogger = new Mock<ILogger>().Object;
-
         [Fact]
         public async Task GetSpacesWithFailedResponseReturnsEmptySpaceList()
         {
             (var httpClient, var _) = FakeHttpHandler.CreateHttpClient(
-                postResponses: Enumerable.Repeat(notFoundResponse, 1000),
-                getResponses: Enumerable.Repeat(notFoundResponse, 1000));
-            Assert.Equal(0, (await Actions.GetSpaces(httpClient, silentLogger)).Count());
+                postResponses: Enumerable.Repeat(Responses.NotFound, 1000),
+                getResponses: Enumerable.Repeat(Responses.NotFound, 1000));
+            Assert.Equal(0, (await Actions.GetSpaces(httpClient, Loggers.SilentLogger)).Count());
         }
 
         [Fact]
@@ -56,7 +49,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 
             Assert.Equal(
                 expectedSpaces.Select(x => x.Name),
-                (await Actions.GetSpaces(httpClient, silentLogger)).Select(x => x.Name));
+                (await Actions.GetSpaces(httpClient, Loggers.SilentLogger)).Select(x => x.Name));
         }
     }
 }

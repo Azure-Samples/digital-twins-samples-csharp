@@ -14,3 +14,8 @@
     - name: Focus Room A1
       type: Room
       subType: FocusRoom
+      devices:
+      - name: Device A1
+        hardwareId: 1234_A1
+
+

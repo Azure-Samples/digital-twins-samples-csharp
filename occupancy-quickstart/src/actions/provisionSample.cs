@@ -51,12 +51,39 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.resources != null)
                         await CreateResources(httpClient, logger, description.resources, spaceId);
 
+                    if (description.devices != null)
+                        await CreateDevices(httpClient, logger, description.devices, spaceId);
+
                     if (description.spaces != null)
                         await CreateSpaces(httpClient, logger, description.spaces, spaceId);
                 }
             }
 
             return spaceIds;
+        }
+
+        private static async Task CreateDevices(HttpClient httpClient, ILogger logger, IEnumerable<DeviceDescription> descriptions, Guid spaceId)
+        {
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("Devices must have a spaceId");
+
+            foreach (var description in descriptions)
+            {
+                var deviceCreate = new Models.DeviceCreate()
+                {
+                    Name = description.name,
+                    HardwareId = description.hardwareId,
+                    SpaceId = spaceId.ToString(),
+                };
+
+                var deviceId = await GetExistingDeviceOrCreate(httpClient, logger, spaceId, description);
+
+                if (deviceId != Guid.Empty)
+                {
+                    // if (description.sensors != null)
+                    //     await CreateSensors(httpClient, logger, description.sensors, deviceId);
+                }
+            }
         }
 
         private static async Task CreateResources(
@@ -83,6 +110,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     }
                 }
             }
+        }
+
+        private static async Task<Guid> GetExistingDeviceOrCreate(HttpClient httpClient, ILogger logger, Guid spaceId, DeviceDescription description)
+        {
+            var existingDevice = await Api.FindDevice(httpClient, logger, description.hardwareId, spaceId);
+            return existingDevice?.Id != null
+                ? Guid.Parse(existingDevice.Id)
+                : await Api.CreateDevice(httpClient, logger, description.ToDeviceCreate(spaceId));
         }
 
         private static async Task<Guid> GetExistingSpaceOrCreate(HttpClient httpClient, ILogger logger, Guid parentId, SpaceDescription description)

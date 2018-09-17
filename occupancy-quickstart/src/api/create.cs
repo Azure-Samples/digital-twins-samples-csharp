@@ -9,6 +9,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
     public partial class Api
     {
+        public static async Task<Guid> CreateDevice(HttpClient httpClient, ILogger logger, Models.DeviceCreate deviceCreate)
+        {
+            logger.LogInformation($"Creating Device: {JsonConvert.SerializeObject(deviceCreate, Formatting.Indented)}");
+            var content = JsonConvert.SerializeObject(deviceCreate);
+            var response = await httpClient.PostAsync("devices", new StringContent(content, Encoding.UTF8, "application/json"));
+            return await GetIdFromResponse(response, logger);
+        }
+
         public static async Task<Guid> CreateResource(HttpClient httpClient, ILogger logger, Models.ResourceCreate resourceCreate)
         {
             logger.LogInformation($"Creating Resource: {JsonConvert.SerializeObject(resourceCreate, Formatting.Indented)}");
