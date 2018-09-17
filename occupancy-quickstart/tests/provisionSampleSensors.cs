@@ -83,7 +83,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 },
             }};
 
-            await Actions.CreateSpaces(httpClient, Loggers.ConsoleLogger, descriptions, Guid.Empty);
+            await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.Equal(2, httpHandler.PostRequests["sensors"].Count);
             Assert.False(httpHandler.GetRequests.ContainsKey("sensors"));
         }

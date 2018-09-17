@@ -17,5 +17,8 @@
       devices:
       - name: Device A1
         hardwareId: 1234_A1
+        sensors:
+        - hardwareId: 1234_MotionSensor
+        - hardwareId: 1234_TemperatureSensor
 
 
