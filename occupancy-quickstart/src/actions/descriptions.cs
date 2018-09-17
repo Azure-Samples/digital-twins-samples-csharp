@@ -10,11 +10,19 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     {
         public string hardwareId { get; set; }
         public string name { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<SensorDescription> sensors { get; set; }
     }
 
     public class ResourceDescription
     {
         public string type { get; set; }
+    }
+
+    public class SensorDescription
+    {
+        public string hardwareId { get; set; }
     }
 
     public class SpaceDescription

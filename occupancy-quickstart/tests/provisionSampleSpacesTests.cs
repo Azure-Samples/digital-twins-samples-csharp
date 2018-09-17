@@ -89,9 +89,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         [Fact]
         public async Task CreateSpacesWithAlreadyCreatedSpaceUsesIt()
         {
-            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
                 postResponseGuids: new [] { guid1 },
-                rootSpace: space1);
+                space: space1);
 
             var descriptions = new [] { new SpaceDescription()
             {

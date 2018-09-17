@@ -26,7 +26,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(content);
                 var devices = JsonConvert.DeserializeObject<IReadOnlyCollection<Models.Device>>(content);
                 var matchingDevice = devices.SingleOrDefault();
                 if (matchingDevice != null)

@@ -25,6 +25,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return await GetIdFromResponse(response, logger);
         }
 
+        public static async Task<Guid> CreateSensor(HttpClient httpClient, ILogger logger, Models.SensorCreate sensorCreate)
+        {
+            logger.LogInformation($"Creating Sensor: {JsonConvert.SerializeObject(sensorCreate, Formatting.Indented)}");
+            var content = JsonConvert.SerializeObject(sensorCreate);
+            var response = await httpClient.PostAsync("sensors", new StringContent(content, Encoding.UTF8, "application/json"));
+            return await GetIdFromResponse(response, logger);
+        }
+
         public static async Task<Guid> CreateSpace(HttpClient httpClient, ILogger logger, Models.SpaceCreate spaceCreate)
         {
             logger.LogInformation($"Creating Space: {JsonConvert.SerializeObject(spaceCreate, Formatting.Indented)}");

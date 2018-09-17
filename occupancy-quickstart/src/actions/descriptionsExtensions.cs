@@ -22,6 +22,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 Type = description.type,
             };
 
+        public static Models.SensorCreate ToSensorCreate(this SensorDescription description, Guid deviceId)
+            => new Models.SensorCreate()
+            {
+                HardwareId = description.hardwareId,
+                DeviceId = deviceId.ToString(),
+            };
+
         public static Models.SpaceCreate ToSpaceCreate(this SpaceDescription description, Guid parentId)
             => new Models.SpaceCreate()
             {

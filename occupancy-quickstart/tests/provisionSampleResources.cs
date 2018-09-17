@@ -60,13 +60,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         [Fact]
         public async Task CreateSingleResource()
         {
-            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
                 postResponseGuids: new [] { resource1Guid },
                 getResponses: new [] { resource1GetResponse });
 
             var descriptions = new [] { new SpaceDescription()
             {
-                name = FakeDigitalTwinsHttpClient.RootSpace.Name,
+                name = FakeDigitalTwinsHttpClient.Space.Name,
                 resources = new [] { new ResourceDescription()
                 {
                     type = "ResourceType",

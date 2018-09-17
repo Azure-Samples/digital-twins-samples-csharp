@@ -69,20 +69,24 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             foreach (var description in descriptions)
             {
-                var deviceCreate = new Models.DeviceCreate()
-                {
-                    Name = description.name,
-                    HardwareId = description.hardwareId,
-                    SpaceId = spaceId.ToString(),
-                };
-
                 var deviceId = await GetExistingDeviceOrCreate(httpClient, logger, spaceId, description);
 
                 if (deviceId != Guid.Empty)
                 {
-                    // if (description.sensors != null)
-                    //     await CreateSensors(httpClient, logger, description.sensors, deviceId);
+                    if (description.sensors != null)
+                        await CreateSensors(httpClient, logger, description.sensors, deviceId);
                 }
+            }
+        }
+
+        private static async Task CreateSensors(HttpClient httpClient, ILogger logger, IEnumerable<SensorDescription> descriptions, Guid deviceId)
+        {
+            if (deviceId == Guid.Empty)
+                throw new ArgumentException("Sensors must have a deviceId");
+
+            foreach (var description in descriptions)
+            {
+                await Api.CreateSensor(httpClient, logger, description.ToSensorCreate(deviceId));
             }
         }
 

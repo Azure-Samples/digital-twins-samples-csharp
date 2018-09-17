@@ -37,11 +37,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(JsonConvert.SerializeObject(new [] { device1 })),
         };
-        private static HttpResponseMessage device2GetResponse = new HttpResponseMessage()
-        {
-            StatusCode = HttpStatusCode.OK,
-            Content = new StringContent(JsonConvert.SerializeObject(new [] { device2 })),
-        };
 
         [Fact]
         public async Task GetProvisionSampleCreatesDescriptions()
@@ -77,14 +72,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         [Fact]
         public async Task CreateTwoDevices()
         {
-            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
                 postResponseGuids: new [] { device1Guid, device2Guid },
                 getResponses: Enumerable.Repeat(Responses.NotFound, 2)
             );
 
             var descriptions = new [] { new SpaceDescription()
             {
-                name = FakeDigitalTwinsHttpClient.RootSpace.Name,
+                name = FakeDigitalTwinsHttpClient.Space.Name,
                 devices = new [] {
                     new DeviceDescription()
                     {
@@ -98,7 +93,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     }},
             }};
 
-            await Actions.CreateSpaces(httpClient, Loggers.ConsoleLogger, descriptions, Guid.Empty);
+            await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.Equal(2, httpHandler.PostRequests["devices"].Count);
             Assert.Equal(2, httpHandler.GetRequests["devices"].Count);
         }
@@ -106,14 +101,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         [Fact]
         public async Task CreateDeviceReusesMatchingPreexistingDevice()
         {
-            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(
-                postResponseGuids: new [] { device1Guid, device2Guid },
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
+                postResponseGuids: null,
                 getResponses: new [] { device1GetResponse }
             );
 
             var descriptions = new [] { new SpaceDescription()
             {
-                name = FakeDigitalTwinsHttpClient.RootSpace.Name,
+                name = FakeDigitalTwinsHttpClient.Space.Name,
                 devices = new [] {
                     new DeviceDescription()
                     {
@@ -122,7 +117,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     }},
             }};
 
-            await Actions.CreateSpaces(httpClient, Loggers.ConsoleLogger, descriptions, Guid.Empty);
+            await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.False(httpHandler.PostRequests.ContainsKey("devices"));
             Assert.Equal(1, httpHandler.GetRequests["devices"].Count);
         }
