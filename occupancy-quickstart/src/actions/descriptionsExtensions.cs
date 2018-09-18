@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 // These extensions translate the descriptions (which are in memory representations
 // of the sample yaml file) to Digital Twins models.
@@ -50,6 +52,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 Name = description.name,
                 ParentSpaceId = parentId != Guid.Empty ? parentId.ToString() : "",
+            };
+
+        public static Models.UserDefinedFunctionCreate ToUserDefinedFunctionCreate(this UserDefinedFunctionDescription description, Guid spaceId, IEnumerable<string> matcherIds)
+            => new Models.UserDefinedFunctionCreate()
+            {
+                Name = description.name,
+                SpaceId = spaceId.ToString(),
+                Matchers = matcherIds,
             };
     }
 }

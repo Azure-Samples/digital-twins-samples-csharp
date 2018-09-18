@@ -10,7 +10,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
     public partial class Api
     {
-        // Returns a device with same hardwareId and parentId if there is one.
+        // Returns a device with same hardwareId and spaceId if there is exactly one.
         // Otherwise returns null.
         public static async Task<Models.Device> FindDevice(
             HttpClient httpClient,
@@ -30,8 +30,35 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 var matchingDevice = devices.SingleOrDefault();
                 if (matchingDevice != null)
                 {
-                    logger.LogInformation($"Retrieved Unique Device using 'name' and 'hardwareId': {JsonConvert.SerializeObject(matchingDevice, Formatting.Indented)}");
+                    logger.LogInformation($"Retrieved Unique Device using 'hardwareId' and 'spaceId': {JsonConvert.SerializeObject(matchingDevice, Formatting.Indented)}");
                     return matchingDevice;
+                }
+            }
+            return null;
+        }
+
+        // Returns a matcher with same name and spaceId if there is exactly one.
+        // Otherwise returns null.
+        public static async Task<Models.Matcher> FindMatcher(
+            HttpClient httpClient,
+            ILogger logger,
+            string name,
+            Guid spaceId)
+        {
+            var filterHardwareIds = $"names={name}";
+            var filterSpaceId = $"&spaceIds={spaceId.ToString()}";
+            var filter = $"{filterHardwareIds}{filterSpaceId}";
+
+            var response = await httpClient.GetAsync($"matchers?{filter}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var matchers = JsonConvert.DeserializeObject<IReadOnlyCollection<Models.Matcher>>(content);
+                var matcher = matchers.SingleOrDefault();
+                if (matcher != null)
+                {
+                    logger.LogInformation($"Retrieved Unique Matcher using 'name' and 'spaceId': {JsonConvert.SerializeObject(matcher, Formatting.Indented)}");
+                    return matcher;
                 }
             }
             return null;

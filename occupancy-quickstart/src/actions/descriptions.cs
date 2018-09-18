@@ -31,6 +31,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public string dataType { get; set; }
     }
 
+    public class UserDefinedFunctionDescription
+    {
+        public string name { get; set; }
+        public string matcher { get; set; }
+        public string script { get; set; }
+    }
+
     public class SpaceDescription
     {
         public string name { get; set; }
@@ -48,5 +55,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         [JsonIgnore]
         public IEnumerable<SpaceDescription> spaces { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<UserDefinedFunctionDescription> userdefinedfunctions { get; set; }
     }
 }

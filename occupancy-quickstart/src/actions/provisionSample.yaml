@@ -23,6 +23,9 @@
       matchers:
       - name: Matcher Motion A1
         dataTypeValue: Motion
-
+      userdefinedfunctions:
+      - name: Motion Processor
+        matcher: Matcher Motion A1
+        script: actions/userDefinedFunctions/placeholder.js
 
 

@@ -57,6 +57,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.matchers != null)
                         await CreateMatchers(httpClient, logger, description.matchers, spaceId);
 
+                    if (description.userdefinedfunctions != null)
+                        await CreateUserDefinedFunctions(httpClient, logger, description.userdefinedfunctions, spaceId);
+
                     if (description.spaces != null)
                         await CreateSpaces(httpClient, logger, description.spaces, spaceId);
                 }
@@ -131,6 +134,38 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             foreach (var description in descriptions)
             {
                 await Api.CreateSensor(httpClient, logger, description.ToSensorCreate(deviceId));
+            }
+        }
+
+        private static async Task CreateUserDefinedFunctions(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<UserDefinedFunctionDescription> descriptions,
+            Guid spaceId)
+        {
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("UserDefinedFunctions must have a spaceId");
+
+            foreach (var description in descriptions)
+            {
+                var matcher = await Api.FindMatcher(httpClient, logger, description.matcher, spaceId);
+
+                using (var r = new StreamReader(description.script))
+                {
+                    var js = await r.ReadToEndAsync();
+                    if (String.IsNullOrWhiteSpace(js))
+                    {
+                        logger.LogError($"Error creating user defined function: Couldn't read from {description.script}");
+                    }
+                    else
+                    {
+                        await Api.CreateUserDefinedFunction(
+                            httpClient,
+                            logger,
+                            description.ToUserDefinedFunctionCreate(spaceId, new [] { matcher.Id }),
+                            js);
+                    }
+                }
             }
         }
 

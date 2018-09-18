@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -46,6 +47,27 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             logger.LogInformation($"Creating Space: {JsonConvert.SerializeObject(spaceCreate, Formatting.Indented)}");
             var content = JsonConvert.SerializeObject(spaceCreate);
             var response = await httpClient.PostAsync("spaces", new StringContent(content, Encoding.UTF8, "application/json"));
+            return await GetIdFromResponse(response, logger);
+        }
+
+        public static async Task<Guid> CreateUserDefinedFunction(
+            HttpClient httpClient,
+            ILogger logger,
+            Models.UserDefinedFunctionCreate userDefinedFunctionCreate,
+            string js)
+        {
+            logger.LogInformation($"Creating UserDefinedFunction with Metadata: {JsonConvert.SerializeObject(userDefinedFunctionCreate, Formatting.Indented)}");
+            var displayContent = js.Length > 100 ? js.Substring(0, 100) + "..." : js;
+            logger.LogInformation($"Creating UserDefinedFunction with Content: {displayContent}");
+
+            var metadataContent = new StringContent(JsonConvert.SerializeObject(userDefinedFunctionCreate), Encoding.UTF8, "application/json");
+            metadataContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+
+            var multipartContent = new MultipartFormDataContent("userDefinedFunctionBoundary");
+            multipartContent.Add(metadataContent, "metadata");
+            multipartContent.Add(new StringContent(js), "contents");
+
+            var response = await httpClient.PostAsync("userdefinedfunctions", multipartContent);
             return await GetIdFromResponse(response, logger);
         }
 
