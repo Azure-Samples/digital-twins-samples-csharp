@@ -52,5 +52,5 @@ Under `./bin/Debug/netcoreapp2.0/<runtime identifier>/publish` or `.\bin\Debug\n
 ### Linux
 
 1. Install [Linux](https://www.raspberrypi.org/downloads/) on your Pi.
-2. Install the [platform dependencies from your distro's package manager](https://github.com/dotnet/core/blob/master/Documentation/prereqs.md) for .NET Core.
+2. Install the [platform dependencies](https://github.com/dotnet/core/blob/master/Documentation/prereqs.md) for .NET Core through your distribution's package manager.
 3. Run the `chmod 755 ./device-connectivity` command.
