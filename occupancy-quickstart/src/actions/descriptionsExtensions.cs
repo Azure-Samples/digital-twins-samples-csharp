@@ -15,6 +15,22 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 SpaceId = spaceId.ToString(),
             };
 
+        public static Models.MatcherCreate ToMatcherCreate(this MatcherDescription description, Guid spaceId)
+            => new Models.MatcherCreate()
+            {
+                Name = description.name,
+                SpaceId = spaceId.ToString(),
+                Conditions = new [] {
+                    new Models.ConditionCreate()
+                    {
+                        Target = "Sensor",
+                        Path = "$.dataType",
+                        Value = description.dataTypeValue,
+                        Comparison = "Equals",
+                    }
+                }
+            };
+
         public static Models.ResourceCreate ToResourceCreate(this ResourceDescription description, Guid spaceId)
             => new Models.ResourceCreate()
             {

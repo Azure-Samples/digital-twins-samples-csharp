@@ -93,22 +93,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             foreach (var description in descriptions)
             {
-                var matcherCreate = new Models.MatcherCreate()
-                {
-                    Name = description.name,
-                    SpaceId = spaceId.ToString(),
-                    Conditions = new [] {
-                        new Models.ConditionCreate()
-                        {
-                            Target = "Sensor",
-                            Path = "$.dataType",
-                            Value = description.dataTypeValue,
-                            Comparison = "Equals",
-                        }
-                    }
-                };
-
-                await Api.CreateMatcher(httpClient, logger, matcherCreate);
+                await Api.CreateMatcher(httpClient, logger, description.ToMatcherCreate(spaceId));
             }
         }
 
