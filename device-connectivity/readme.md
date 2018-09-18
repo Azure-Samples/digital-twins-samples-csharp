@@ -9,13 +9,19 @@ Edit [appsettings.json](./appsettings.json) and supply the following values:
 1. `ManagementApiUrl`
 2. `SasToken`
 
->Note: You have already generated a SAS Token from a configured Key on the Keystore API. To generate a valid token, you will need to
-know your device's MAC address. Remove all columns (:) from the address and capitalize the value. E.g.: If your MAC address is `18:36:ba:0c:85:13`, the expected value would be `1836BA0C8513`. Please ensure this value is also reflected on the `HardwareId` property of your Topology Device.  If you need to override the hardwareId you can simply edit Program.cs and manually set the hardwareId.
+> Note: You must have already generated a SAS Token using the Keystore API. 
+
+To generate a valid token:
+
+1. You will need to know your device's MAC address.
+2. Remove all columns (:) from the address and capitalize the value. If your MAC address is `18:36:ba:0c:85:13`, the expected value would be `1836BA0C8513`.
+3. Please ensure this value corresponds to the `HardwareId` property of your Topology Device.  To override the `hardwareId` you can simply edit `Program.cs` and manually set the `hardwareId`.
 
 Example configurations:
 
 ```json
-"ManagementApiUrl": "https://name.westcentralus.azuresmartspaces.net/management/","SasToken": "SharedAccessSignature id=1836BA0C8519&se=31556995200&kv=1&sig=nDBUdQcEXkaRgx3Jy3ntwEJ08uP9KxkjoKR2Wa7lCfs%3D"
+"ManagementApiUrl": "https://name.westcentralus.azuresmartspaces.net/management/",
+"SasToken": "SharedAccessSignature id=1836BA0C8519&se=31556995200&kv=1&sig=nDBUdQcEXkaRgx3Jy3ntwEJ08uP9KxkjoKR2Wa7lCfs%3D"
 ```  
 
 ## Build the app
