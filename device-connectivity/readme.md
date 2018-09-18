@@ -15,27 +15,27 @@ know your device's MAC address. Remove all columns (:) from the address and capi
 Example configurations:
 
 ```json
-"ManagementApiUrl": "https://name.westcentralus.azuresmartspaces.net/management/","SasToken": "SharedAccessSignature id=1836BA0C8519&se=31556995200&kv=1&sig=nDBUdQcEXkaRgx3Jy3ntwEJ08uP9KxkjoKR2Wa7lCfs%3D",
+"ManagementApiUrl": "https://name.westcentralus.azuresmartspaces.net/management/","SasToken": "SharedAccessSignature id=1836BA0C8519&se=31556995200&kv=1&sig=nDBUdQcEXkaRgx3Jy3ntwEJ08uP9KxkjoKR2Wa7lCfs%3D"
 ```  
 
 ## Build the app
 
 1. [Install .NET Core SDK](https://www.microsoft.com/net/core) on your execution platform.
-2. Run `dotnet restore`
-3. Run `dotnet build`
+2. Run the `dotnet restore` command.
+3. Run the `dotnet build` command.
 
 ## Execute the app
 
-* Run `dotnet run`
+* Run the `dotnet run` command.
 
->Note: Here is how you can run this app on a Raspberry Pi
+>Note: Here is how you can run this app on a Raspberry Pi.
 
 ## Run your app on a Raspberry Pi
 
 ### Build the app
 
 Choose `win-arm` or `linux-arm` for your platform:
-* Run `dotnet publish -r <platform>`
+* Run the `dotnet publish -r <platform>` command.
 
 Under `./bin/Debug/netcoreapp2.0/<runtime identifier>/publish` or `.\bin\Debug\netcoreapp2.0\<runtime identifier>\publish` you will see the whole self contained app that you need to copy to your Raspberry Pi.
 
@@ -47,4 +47,4 @@ Under `./bin/Debug/netcoreapp2.0/<runtime identifier>/publish` or `.\bin\Debug\n
 
 1. Install [Linux](https://www.raspberrypi.org/downloads/) on your Pi.
 2. Install the [platform dependencies from your distro's package manager](https://github.com/dotnet/core/blob/master/Documentation/prereqs.md) for .NET Core.
-3. `chmod 755 ./device-connectivity`
+3. Run the `chmod 755 ./device-connectivity` command.
