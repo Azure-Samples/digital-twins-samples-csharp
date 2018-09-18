@@ -17,6 +17,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return await GetIdFromResponse(response, logger);
         }
 
+        public static async Task<Guid> CreateMatcher(HttpClient httpClient, ILogger logger, Models.MatcherCreate matcherCreate)
+        {
+            logger.LogInformation($"Creating Matcher: {JsonConvert.SerializeObject(matcherCreate, Formatting.Indented)}");
+            var content = JsonConvert.SerializeObject(matcherCreate);
+            var response = await httpClient.PostAsync("matchers", new StringContent(content, Encoding.UTF8, "application/json"));
+            return await GetIdFromResponse(response, logger);
+        }
+
         public static async Task<Guid> CreateResource(HttpClient httpClient, ILogger logger, Models.ResourceCreate resourceCreate)
         {
             logger.LogInformation($"Creating Resource: {JsonConvert.SerializeObject(resourceCreate, Formatting.Indented)}");

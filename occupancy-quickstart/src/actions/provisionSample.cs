@@ -54,6 +54,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.devices != null)
                         await CreateDevices(httpClient, logger, description.devices, spaceId);
 
+                    if (description.matchers != null)
+                        await CreateMatchers(httpClient, logger, description.matchers, spaceId);
+
                     if (description.spaces != null)
                         await CreateSpaces(httpClient, logger, description.spaces, spaceId);
                 }
@@ -79,14 +82,33 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
-        private static async Task CreateSensors(HttpClient httpClient, ILogger logger, IEnumerable<SensorDescription> descriptions, Guid deviceId)
+        private static async Task CreateMatchers(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<MatcherDescription> descriptions,
+            Guid spaceId)
         {
-            if (deviceId == Guid.Empty)
-                throw new ArgumentException("Sensors must have a deviceId");
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("Matchers must have a spaceId");
 
             foreach (var description in descriptions)
             {
-                await Api.CreateSensor(httpClient, logger, description.ToSensorCreate(deviceId));
+                var matcherCreate = new Models.MatcherCreate()
+                {
+                    Name = description.name,
+                    SpaceId = spaceId.ToString(),
+                    Conditions = new [] {
+                        new Models.ConditionCreate()
+                        {
+                            Target = "Sensor",
+                            Path = "$.dataType",
+                            Value = description.dataTypeValue,
+                            Comparison = "Equals",
+                        }
+                    }
+                };
+
+                await Api.CreateMatcher(httpClient, logger, matcherCreate);
             }
         }
 
@@ -113,6 +135,17 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         await Task.Delay(5000);
                     }
                 }
+            }
+        }
+
+        private static async Task CreateSensors(HttpClient httpClient, ILogger logger, IEnumerable<SensorDescription> descriptions, Guid deviceId)
+        {
+            if (deviceId == Guid.Empty)
+                throw new ArgumentException("Sensors must have a deviceId");
+
+            foreach (var description in descriptions)
+            {
+                await Api.CreateSensor(httpClient, logger, description.ToSensorCreate(deviceId));
             }
         }
 

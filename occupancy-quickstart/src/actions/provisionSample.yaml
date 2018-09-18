@@ -20,5 +20,9 @@
         sensors:
         - dataType: Motion
         - dataType: Temperature
+      matchers:
+      - name: Matcher Motion A1
+        dataTypeValue: Motion
+
 
 
