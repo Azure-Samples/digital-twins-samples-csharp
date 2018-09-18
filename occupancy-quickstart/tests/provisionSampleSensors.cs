@@ -30,7 +30,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                   - name: Device1
                     hardwareId: DeviceHardwareId1
                     sensors:
-                    - hardwareId: SensorHardwareId1
+                    - dataType: SensorType1
                 ";
             var expectedDescriptions = new [] { new SpaceDescription()
             {
@@ -43,7 +43,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                         sensors = new [] {
                             new SensorDescription()
                             {
-                                hardwareId = "SensorHardwareId1",
+                                dataType = "SensorType1",
                             }
                         },
                     },
@@ -72,11 +72,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                         sensors = new [] {
                             new SensorDescription()
                             {
-                                hardwareId = "SensorHardwareId1",
+                                dataType = "SensorType1",
                             },
                             new SensorDescription()
                             {
-                                hardwareId = "SensorHardwareId2",
+                                dataType = "SensorType2",
                             }
                         }
                     }

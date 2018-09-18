@@ -25,7 +25,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public static Models.SensorCreate ToSensorCreate(this SensorDescription description, Guid deviceId)
             => new Models.SensorCreate()
             {
-                HardwareId = description.hardwareId,
+                DataType = description.dataType,
                 DeviceId = deviceId.ToString(),
             };
 
