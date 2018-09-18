@@ -15,8 +15,8 @@
       type: Room
       subType: FocusRoom
       devices:
-      - name: Device A1
-        hardwareId: 1234_A1
+      - name: Raspberry Pi 3 A1
+        hardwareId: 1234567890AB
         sensors:
         - dataType: Motion
         - dataType: Temperature
