@@ -19,10 +19,9 @@ To generate a valid token:
 
 Example configurations:
 
-```json
+```
 "ManagementApiUrl": "https://name.westcentralus.azuresmartspaces.net/management/",
-"SasToken": "SharedAccessSignature id=1836BA0C8519&se=31556995200&kv=1
-&sig=nDBUdQcEXkaRgx3Jy3ntwEJ08uP9KxkjoKR2Wa7lCfs%3D"
+"SasToken": "SharedAccessSignature id=1836BA0C8519&se=31556995200&kv=1&sig=nDBUdQkaRgx3Jy3n..."
 ```  
 
 ## Build the app
