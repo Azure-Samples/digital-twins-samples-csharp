@@ -1,6 +1,8 @@
 # Digital Twins Samples
 
-This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separateNET Core app.  See the `readme` in each sub-folder for specific details about each app.
+This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app.  
+
+See the `readme` in each sub-folder for specific details about each app.
 
 ## Get Started
 
