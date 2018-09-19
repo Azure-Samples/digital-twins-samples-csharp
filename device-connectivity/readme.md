@@ -9,7 +9,8 @@ Edit [appsettings.json](./appsettings.json) and supply the following values:
 1. `ManagementApiUrl`
 2. `SasToken`
 
-> Note: You must have already generated a SAS Token using the Keystore API.
+//TODO Add the SAS Token
+> Note: You must have already generated a SAS Token using the [Key Store]() API.
 
 To generate a valid token:
 

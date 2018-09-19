@@ -12,7 +12,7 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 4. Run the `dotnet run` command to build and see usage.
 5. Run the `dotnet test ../tests` command to build and run tests.
 
-### Use VSCode
+### Use Visual Studio Code
 
 1. Open the 'occupancy-quickstart' folder in Visual Studio Code.
 2. [Update appsettings.json](#configuring-appsettings.json).
