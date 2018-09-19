@@ -54,6 +54,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.devices != null)
                         await CreateDevices(httpClient, logger, description.devices, spaceId);
 
+                    if (description.matchers != null)
+                        await CreateMatchers(httpClient, logger, description.matchers, spaceId);
+
+                    if (description.userdefinedfunctions != null)
+                        await CreateUserDefinedFunctions(httpClient, logger, description.userdefinedfunctions, spaceId);
+
                     if (description.spaces != null)
                         await CreateSpaces(httpClient, logger, description.spaces, spaceId);
                 }
@@ -79,14 +85,18 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
-        private static async Task CreateSensors(HttpClient httpClient, ILogger logger, IEnumerable<SensorDescription> descriptions, Guid deviceId)
+        private static async Task CreateMatchers(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<MatcherDescription> descriptions,
+            Guid spaceId)
         {
-            if (deviceId == Guid.Empty)
-                throw new ArgumentException("Sensors must have a deviceId");
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("Matchers must have a spaceId");
 
             foreach (var description in descriptions)
             {
-                await Api.CreateSensor(httpClient, logger, description.ToSensorCreate(deviceId));
+                await Api.CreateMatcher(httpClient, logger, description.ToMatcherCreate(spaceId));
             }
         }
 
@@ -111,6 +121,49 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     while (await Api.IsResourceProvisioning(httpClient, logger, createdId))
                     {
                         await Task.Delay(5000);
+                    }
+                }
+            }
+        }
+
+        private static async Task CreateSensors(HttpClient httpClient, ILogger logger, IEnumerable<SensorDescription> descriptions, Guid deviceId)
+        {
+            if (deviceId == Guid.Empty)
+                throw new ArgumentException("Sensors must have a deviceId");
+
+            foreach (var description in descriptions)
+            {
+                await Api.CreateSensor(httpClient, logger, description.ToSensorCreate(deviceId));
+            }
+        }
+
+        private static async Task CreateUserDefinedFunctions(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<UserDefinedFunctionDescription> descriptions,
+            Guid spaceId)
+        {
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("UserDefinedFunctions must have a spaceId");
+
+            foreach (var description in descriptions)
+            {
+                var matcher = await Api.FindMatcher(httpClient, logger, description.matcher, spaceId);
+
+                using (var r = new StreamReader(description.script))
+                {
+                    var js = await r.ReadToEndAsync();
+                    if (String.IsNullOrWhiteSpace(js))
+                    {
+                        logger.LogError($"Error creating user defined function: Couldn't read from {description.script}");
+                    }
+                    else
+                    {
+                        await Api.CreateUserDefinedFunction(
+                            httpClient,
+                            logger,
+                            description.ToUserDefinedFunctionCreate(spaceId, new [] { matcher.Id }),
+                            js);
                     }
                 }
             }
