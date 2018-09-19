@@ -9,11 +9,27 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
     public partial class Api
     {
+        public static async Task<Guid> CreateDevice(HttpClient httpClient, ILogger logger, Models.DeviceCreate deviceCreate)
+        {
+            logger.LogInformation($"Creating Device: {JsonConvert.SerializeObject(deviceCreate, Formatting.Indented)}");
+            var content = JsonConvert.SerializeObject(deviceCreate);
+            var response = await httpClient.PostAsync("devices", new StringContent(content, Encoding.UTF8, "application/json"));
+            return await GetIdFromResponse(response, logger);
+        }
+
         public static async Task<Guid> CreateResource(HttpClient httpClient, ILogger logger, Models.ResourceCreate resourceCreate)
         {
             logger.LogInformation($"Creating Resource: {JsonConvert.SerializeObject(resourceCreate, Formatting.Indented)}");
             var content = JsonConvert.SerializeObject(resourceCreate);
             var response = await httpClient.PostAsync("resources", new StringContent(content, Encoding.UTF8, "application/json"));
+            return await GetIdFromResponse(response, logger);
+        }
+
+        public static async Task<Guid> CreateSensor(HttpClient httpClient, ILogger logger, Models.SensorCreate sensorCreate)
+        {
+            logger.LogInformation($"Creating Sensor: {JsonConvert.SerializeObject(sensorCreate, Formatting.Indented)}");
+            var content = JsonConvert.SerializeObject(sensorCreate);
+            var response = await httpClient.PostAsync("sensors", new StringContent(content, Encoding.UTF8, "application/json"));
             return await GetIdFromResponse(response, logger);
         }
 

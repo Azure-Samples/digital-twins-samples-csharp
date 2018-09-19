@@ -17,7 +17,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 {
     public class ProvisionSampleResourcesTests
     {
-        private static ILogger silentLogger = new Mock<ILogger>().Object;
         private static Serializer yamlSerializer = new Serializer();
         private static Guid resource1Guid = new Guid("00000000-0000-0000-0000-000000000001");
         private static Models.Resource resource1 = new Models.Resource()
@@ -61,20 +60,20 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         [Fact]
         public async Task CreateSingleResource()
         {
-            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithRootSpace(
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
                 postResponseGuids: new [] { resource1Guid },
                 getResponses: new [] { resource1GetResponse });
 
             var descriptions = new [] { new SpaceDescription()
             {
-                name = FakeDigitalTwinsHttpClient.RootSpace.Name,
+                name = FakeDigitalTwinsHttpClient.Space.Name,
                 resources = new [] { new ResourceDescription()
                 {
                     type = "ResourceType",
                 }},
             }};
 
-            await Actions.CreateSpaces(httpClient, silentLogger, descriptions, Guid.Empty);
+            await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.Equal(1, httpHandler.PostRequests["resources"].Count);
             Assert.Equal(1, httpHandler.GetRequests["resources"].Count);
         }

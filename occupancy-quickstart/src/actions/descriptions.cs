@@ -6,9 +6,23 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
 {
+    public class DeviceDescription
+    {
+        public string hardwareId { get; set; }
+        public string name { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<SensorDescription> sensors { get; set; }
+    }
+
     public class ResourceDescription
     {
         public string type { get; set; }
+    }
+
+    public class SensorDescription
+    {
+        public string dataType { get; set; }
     }
 
     public class SpaceDescription
@@ -16,6 +30,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public string name { get; set; }
         public string type { get; set; }
         public string subType { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<DeviceDescription> devices { get; set; }
 
         [JsonIgnore]
         public IEnumerable<ResourceDescription> resources { get; set; }
