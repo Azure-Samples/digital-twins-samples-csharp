@@ -9,13 +9,13 @@ Edit [appsettings.json](./appsettings.json) and supply the following values:
 1. `ManagementApiUrl`
 2. `SasToken`
 
-> Note: You must have already generated a SAS Token using the Keystore API. 
+> Note: You must have already generated a SAS Token using the Keystore API.
 
 To generate a valid token:
 
 1. You will need to know your device's MAC address.
 2. Remove all columns (:) from the address and capitalize the value. If your MAC address is `18:36:ba:0c:85:13`, the expected value would be `1836BA0C8513`.
-3. Please ensure this value corresponds to the `HardwareId` property of your Topology Device.  To override the `hardwareId` you can simply edit `Program.cs` and manually set the `hardwareId`.
+3. Please ensure this value corresponds to the `hardwareId` property of your Topology Device.  To override the `hardwareId` you can simply edit `Program.cs` and manually set the `hardwareId`.
 
 Example configurations:
 
