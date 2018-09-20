@@ -20,7 +20,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     class Program
     {
         private static Random rnd = new Random();
-        private static string connectionString;
         private static string hardwareId;
         private static IConfigurationSection settings;
         static void Main(string[] args)
