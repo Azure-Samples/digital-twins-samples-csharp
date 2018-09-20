@@ -33,34 +33,31 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             hardwareId = GetMacAddress();
 
-            Console.WriteLine($"Your hardware ID is: {hardwareId}");
+            Console.WriteLine($"INFO: Your hardware ID is: {hardwareId}");
 
             var topologyClient = new TopologyClient(settings["ManagementApiUrl"], settings["SasToken"]);
-            connectionString = topologyClient.GetDeviceForHardwareId(hardwareId).Result.ConnectionString;
-            if (string.IsNullOrEmpty(connectionString))
+            var device = topologyClient.GetDeviceForHardwareId(hardwareId).Result;
+            if (device == null)
             {
-                Console.WriteLine("ERROR: Could not retrieve connection string.");
+                Console.WriteLine("ERROR: Failed to retrieve device from topology API. Please refer to documentation for pre-provisioning necessary metadata.");
                 return;
             }
 
             try
             {
-                DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(connectionString);
+                DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(device.ConnectionString);
 
                 if (deviceClient == null)
                 {
-                    Console.WriteLine("Failed to create DeviceClient!");
+                    Console.WriteLine("ERROR: Failed to create DeviceClient!");
+                    return;
                 }
-                else
-                {
-                    SendEvent(deviceClient).Wait();
-                }
-
-                Console.WriteLine("Exited!\n");
+                
+                SendEvent(deviceClient).Wait();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in sample: {0}", ex.Message);
+                Console.WriteLine("EXIT: Unexpected error: {0}", ex.Message);
             }
         }
 
@@ -69,7 +66,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             switch (sensorDataType)
             {
                 default:
-                    throw new Exception($"Unsupported configuration: SensorDataType, '{sensorDataType}'");
+                    throw new Exception($"Unsupported configuration: SensorDataType, '{sensorDataType}'. Please check your appsettings.json.");
                 case "Motion":
                     return () => rnd.Next(0, 2) == 0 ? "false" : "true";
                 case "Temperature":

@@ -33,7 +33,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine($"ERROR: Failed to call topology API: '{e.Message}'");
             }
             
             return device;
