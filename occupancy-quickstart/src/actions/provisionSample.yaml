@@ -1,5 +1,7 @@
 - name: Quickstart Building
   type: Venue
+  keystore:
+  - name: Sample Key Store
   resources:
   - type: IoTHub
   spaces:
