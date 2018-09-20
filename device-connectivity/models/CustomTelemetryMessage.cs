@@ -6,8 +6,8 @@ using System.Runtime.Serialization;
 
 namespace Microsoft.Azure.DigitalTwins.Samples.Models
 {
-    [DataContract(Name="TelemetryMessage")]
-    public class TelemetryMessage
+    [DataContract(Name="CustomTelemetryMessage")]
+    public class CustomTelemetryMessage
     {
         [DataMember(Name="SensorValue")]
         public string SensorValue { get; set; }

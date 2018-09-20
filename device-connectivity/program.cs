@@ -81,17 +81,16 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         static async Task SendEvent(DeviceClient deviceClient)
         {
-            var serializer = new DataContractJsonSerializer(typeof(TelemetryMessage));
+            var serializer = new DataContractJsonSerializer(typeof(CustomTelemetryMessage));
 
             var sensorDataTypes = settings["SensorDataTypes"].Split(',');
 
             while (true)
             {
-                var eventMessages = new List<Message>();
                 foreach (var sensorDataType in sensorDataTypes)
                 {
                     var getRandomSensorReading = CreateGetRandomSensorReading(sensorDataType);
-                    var telemetryMessage = new TelemetryMessage()
+                    var telemetryMessage = new CustomTelemetryMessage()
                     {
                         SensorValue = getRandomSensorReading(),
                     };
@@ -106,14 +105,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         eventMessage.Properties.Add("CreationTimeUtc", DateTime.UtcNow.ToString("o"));
                         eventMessage.Properties.Add("CorrelationId", Guid.NewGuid().ToString());
 
-                        eventMessages.Add(eventMessage);
-
                         Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.UTF8.GetString(eventMessage.GetBytes())} Properties: {{ {eventMessage.Properties.Aggregate(new StringBuilder(), (sb, x) => sb.Append($"'{x.Key}': '{x.Value}',"), sb => sb.ToString())} }}");
+
+                        await deviceClient.SendEventAsync(eventMessage);
+                        await Task.Delay(int.Parse(settings["MessageIntervalInMilliSeconds"]));
                     }
                 }
-                await deviceClient.SendEventBatchAsync(eventMessages).ConfigureAwait(false);
-
-                Thread.Sleep(int.Parse(settings["MessageIntervalInMilliSeconds"]));
             }
         }
 
