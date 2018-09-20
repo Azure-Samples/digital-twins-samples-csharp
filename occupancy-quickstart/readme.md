@@ -7,34 +7,34 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 ### Use the terminal
 
 1. Run the `dotnet restore` command.
-2. [Update appsettings.json](#configuring-appsettings.json).
-3. Run the `cd src` command.
-4. Run the `dotnet run` command to build and see usage.
-5. Run the `dotnet test ../tests` command to build and run tests.
+1. [Update appsettings.json](#configuring-appsettings.json).
+1. Run the `cd src` command.
+1. Run the `dotnet run` command to build and see usage.
+1. Run the `dotnet test ../tests` command to build and run tests.
 
 ### Use Visual Studio Code
 
 1. Open the 'occupancy-quickstart' folder in Visual Studio Code.
-2. [Update appsettings.json](#configuring-appsettings.json).
-3. Run the app by using the `F5` key. You can change the command-line parameters in `launch.json`.
-4. To build and run tests use the 'Run Task' command in Visual Studio Code and choose `test`.
+1. [Update appsettings.json](#configuring-appsettings.json).
+1. Run the app by using the `F5` key. You can change the command-line parameters in `launch.json`.
+1. To build and run tests use the 'Run Task' command in Visual Studio Code and choose `test`.
 
 ## Configure appsettings.json
 
 Please supply the following key-value pairs:
 
 1. `ClientId`: the `Application ID` of your Azure Active Directory app.
-2. `ClientSecret`: the password for your Azure Active Directory app obtained under the **Settings\Keys** tab.
-3. `Resource`: the name of your Digital Twins IoTSpaces instance.
-4. `Tenant`: the ID of your tenant. The Azure Active Directory `Directory ID` obtained under the **Properties** tab.
+1. `ClientSecret`: the password for your Azure Active Directory app obtained under the **Settings\Keys** tab.
+1. `Resource`: the name of your Digital Twins IoTSpaces instance.
+1. `Tenant`: the ID of your tenant. The Azure Active Directory `Directory ID` obtained under the **Properties** tab.
 
 ## Walkthrough
 
 1. See the [quickstart doc](https://github.com/MicrosoftDocs/azure-docs-pr/blob/release-preview-smart-spaces/articles/digital-twins/quickstart-view-occupancy-dotnet.md) to set up your Digital Twins resource and configure this sample to call it.
-2. Provision spaces, IoT Hub resource, devices, sensors, functions.
-3. Get spaces by parent `id`.
-4. Send motion telemetry every X seconds to simulate motion sensors.
-5. View occupancy of a spaces of type `Focus Room`.
+1. Provision spaces, IoT Hub resource, devices, sensors, functions.
+1. Get spaces by parent `id`.
+1. Send motion telemetry every X seconds to simulate motion sensors.
+1. View occupancy of a spaces of type `Focus Room`.
 
 ## Notes
 

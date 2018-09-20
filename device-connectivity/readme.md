@@ -7,16 +7,15 @@ This introductory sample demonstrates how to connect a device to Digital Twins a
 Edit [appsettings.json](./appsettings.json) and supply the following values:
 
 1. `ManagementApiUrl`
-2. `SasToken`
+1. `SasToken`
 
-//TODO Add the SAS Token
 > Note: You must have already generated a SAS Token using the [Key Store]() API.
 
 To generate a valid token:
 
 1. You will need to know your device's MAC address.
-2. Remove all columns (:) from the address and capitalize the value. If your MAC address is `18:36:ba:0c:85:13`, the expected value would be `1836BA0C8513`.
-3. Please ensure this value corresponds to the `hardwareId` property of your Topology Device.  To override the `hardwareId` you can simply edit `Program.cs` and manually set the `hardwareId`.
+1. Remove all columns (:) from the address and capitalize the value. If your MAC address is `18:36:ba:0c:85:13`, the expected value would be `1836BA0C8513`.
+1. Please ensure this value corresponds to the `hardwareId` property of your Topology Device.  To override the `hardwareId` you can simply edit `Program.cs` and manually set the `hardwareId`.
 
 Example configurations:
 
@@ -28,8 +27,8 @@ Example configurations:
 ## Build the app
 
 1. [Install .NET Core SDK](https://www.microsoft.com/net/core) on your execution platform.
-2. Run the `dotnet restore` command.
-3. Run the `dotnet build` command.
+1. Run the `dotnet restore` command.
+1. Run the `dotnet build` command.
 
 ## Execute the app
 
@@ -53,5 +52,5 @@ Under `./bin/Debug/netcoreapp2.0/<runtime identifier>/publish` or `.\bin\Debug\n
 ### Linux
 
 1. Install [Linux](https://www.raspberrypi.org/downloads/) on your Pi.
-2. Install the [platform dependencies](https://github.com/dotnet/core/blob/master/Documentation/prereqs.md) for .NET Core through your distribution's package manager.
-3. Run the `chmod 755 ./device-connectivity` command.
+1. Install the [platform dependencies](https://github.com/dotnet/core/blob/master/Documentation/prereqs.md) for .NET Core through your distribution's package manager.
+1. Run the `chmod 755 ./device-connectivity` command.
