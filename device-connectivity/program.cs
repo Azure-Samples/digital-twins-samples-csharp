@@ -95,8 +95,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     using (var stream = new MemoryStream())
                     {
                         serializer.WriteObject(stream, telemetryMessage);
-                        var byteBuffer = stream.ToArray();
-                        Message eventMessage = new Message(byteBuffer);
+                        var byteArray = stream.ToArray();
+                        Message eventMessage = new Message(byteArray);
                         eventMessage.Properties.Add("DigitalTwins-Telemetry", "1.0");
                         eventMessage.Properties.Add("DigitalTwins-SensorHardwareId", $"{hardwareId}-{sensorDataType}");
                         eventMessage.Properties.Add("CreationTimeUtc", DateTime.UtcNow.ToString("o"));
