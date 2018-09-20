@@ -39,6 +39,10 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     case ActionName.ProvisionSample:
                         await Actions.ProvisionSample(httpClient, logger);
                         break;
+                    case ActionName.GetOntology:
+                        await Actions.GetOntology(httpClient, logger);
+                        break;
+
                     default:
                         throw new NotImplementedException();
                 }

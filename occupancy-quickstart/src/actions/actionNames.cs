@@ -4,5 +4,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     {
         GetSpaces,
         ProvisionSample,
+        GetOntology,
     }
 }
