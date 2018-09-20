@@ -21,7 +21,12 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 
 ## Configure appsettings.json
 
-//TODO
+Please supply the following key-value pairs:
+
+1. `ClientId`: the `Application ID` of your Azure Active Directory app.
+2. `ClientSecret`: the password for your Azure Active Directory app obtained under the **Settings\Keys** tab.
+3. `Resource`: the name of your Digital Twins IoTSpaces instance.
+4. `Tenant`: the ID of your tenant. The Azure Active Directory `Directory ID` obtained under the **Properties** tab.
 
 ## Walkthrough
 
