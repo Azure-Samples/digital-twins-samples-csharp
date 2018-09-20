@@ -33,6 +33,15 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 }
             };
 
+        public static Models.RoleAssignmentCreate ToRoleAssignmentCreate(this RoleAssignmentDescription description, string objectId, string path)
+            => new Models.RoleAssignmentCreate()
+            {
+                ObjectId = objectId,
+                ObjectIdType = description.objectIdType,
+                Path = path,
+                RoleId = description.roleId,
+            };
+
         public static Models.ResourceCreate ToResourceCreate(this ResourceDescription description, Guid spaceId)
             => new Models.ResourceCreate()
             {
