@@ -26,6 +26,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public string type { get; set; }
     }
 
+    public class RoleAssignmentDescription
+    {
+        public string objectIdType { get; set; }
+        public string objectName { get; set; }
+        public string roleId { get; set; }
+    }
+
     public class SensorDescription
     {
         public string dataType { get; set; }
@@ -49,6 +56,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         [JsonIgnore]
         public IEnumerable<MatcherDescription> matchers { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<RoleAssignmentDescription> roleassignments { get; set; }
 
         [JsonIgnore]
         public IEnumerable<ResourceDescription> resources { get; set; }

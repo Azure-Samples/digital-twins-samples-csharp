@@ -34,6 +34,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return await GetIdFromResponse(response, logger);
         }
 
+        public static async Task<Guid> CreateRoleAssignment(HttpClient httpClient, ILogger logger, Models.RoleAssignmentCreate roleAssignmentCreate)
+        {
+            logger.LogInformation($"Creating RoleAssignment: {JsonConvert.SerializeObject(roleAssignmentCreate, Formatting.Indented)}");
+            var content = JsonConvert.SerializeObject(roleAssignmentCreate);
+            var response = await httpClient.PostAsync("roleassignments", new StringContent(content, Encoding.UTF8, "application/json"));
+            return await GetIdFromResponse(response, logger);
+        }
+
         public static async Task<Guid> CreateSensor(HttpClient httpClient, ILogger logger, Models.SensorCreate sensorCreate)
         {
             logger.LogInformation($"Creating Sensor: {JsonConvert.SerializeObject(sensorCreate, Formatting.Indented)}");
