@@ -6,6 +6,45 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
 {
+    public class DeviceDescription
+    {
+        public string hardwareId { get; set; }
+        public string name { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<SensorDescription> sensors { get; set; }
+    }
+
+    public class MatcherDescription
+    {
+        public string name { get; set; }
+        public string dataTypeValue { get; set; }
+    }
+
+    public class ResourceDescription
+    {
+        public string type { get; set; }
+    }
+
+    public class RoleAssignmentDescription
+    {
+        public string objectIdType { get; set; }
+        public string objectName { get; set; }
+        public string roleId { get; set; }
+    }
+
+    public class SensorDescription
+    {
+        public string dataType { get; set; }
+    }
+
+    public class UserDefinedFunctionDescription
+    {
+        public string name { get; set; }
+        public string matcher { get; set; }
+        public string script { get; set; }
+    }
+
     public class SpaceDescription
     {
         public string name { get; set; }
@@ -13,6 +52,21 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public string subType { get; set; }
 
         [JsonIgnore]
+        public IEnumerable<DeviceDescription> devices { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<MatcherDescription> matchers { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<RoleAssignmentDescription> roleassignments { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<ResourceDescription> resources { get; set; }
+
+        [JsonIgnore]
         public IEnumerable<SpaceDescription> spaces { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<UserDefinedFunctionDescription> userdefinedfunctions { get; set; }
     }
 }

@@ -46,6 +46,23 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 {
                     spaceIds.Add(spaceId);
 
+                    // This must happen before devices (or anyhting that could have devices like other spaces)
+                    // or the device create will fail because a resource is required on an ancestor space
+                    if (description.resources != null)
+                        await CreateResources(httpClient, logger, description.resources, spaceId);
+
+                    if (description.devices != null)
+                        await CreateDevices(httpClient, logger, description.devices, spaceId);
+
+                    if (description.matchers != null)
+                        await CreateMatchers(httpClient, logger, description.matchers, spaceId);
+
+                    if (description.userdefinedfunctions != null)
+                        await CreateUserDefinedFunctions(httpClient, logger, description.userdefinedfunctions, spaceId);
+
+                    if (description.roleassignments != null)
+                        await CreateRoleAssignments(httpClient, logger, description.roleassignments, spaceId);
+
                     if (description.spaces != null)
                         await CreateSpaces(httpClient, logger, description.spaces, spaceId);
                 }
@@ -54,66 +71,158 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return spaceIds;
         }
 
-        // Returns a space with same name and parentId if there is exactly one
-        // that maches that criteria. Otherwise returns null.
-        private static async Task<Models.Space> GetExistingSpace(
-            HttpClient httpClient,
-            ILogger logger,
-            string name,
-            Guid parentId)
+        private static async Task CreateDevices(HttpClient httpClient, ILogger logger, IEnumerable<DeviceDescription> descriptions, Guid spaceId)
         {
-            var filterName = $"Name eq '{name}'";
-            var filterParentSpaceId = parentId != Guid.Empty
-                ? $"ParentSpaceId eq guid'{parentId}'"
-                : $"ParentSpaceId eq null";
-            var odataFilter = $"$filter={filterName} and {filterParentSpaceId}";
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("Devices must have a spaceId");
 
-            var response = await httpClient.GetAsync($"spaces?{odataFilter}");
-            if (response.IsSuccessStatusCode)
+            foreach (var description in descriptions)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var spaces = JsonConvert.DeserializeObject<IReadOnlyCollection<Models.Space>>(content);
-                var matchingSpace = spaces.SingleOrDefault();
-                if (matchingSpace != null)
+                var deviceId = await GetExistingDeviceOrCreate(httpClient, logger, spaceId, description);
+
+                if (deviceId != Guid.Empty)
                 {
-                    logger.LogInformation($"Retrieved Unique Space using 'name' and 'parentSpaceId': {JsonConvert.SerializeObject(matchingSpace, Formatting.Indented)}");
-                    return matchingSpace;
+                    if (description.sensors != null)
+                        await CreateSensors(httpClient, logger, description.sensors, deviceId);
                 }
             }
-            return null;
+        }
+
+        private static async Task CreateMatchers(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<MatcherDescription> descriptions,
+            Guid spaceId)
+        {
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("Matchers must have a spaceId");
+
+            foreach (var description in descriptions)
+            {
+                await Api.CreateMatcher(httpClient, logger, description.ToMatcherCreate(spaceId));
+            }
+        }
+
+        private static async Task CreateResources(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<ResourceDescription> descriptions,
+            Guid spaceId)
+        {
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("Resources must have a spaceId");
+
+            foreach (var description in descriptions)
+            {
+                var createdId = await Api.CreateResource(httpClient, logger, description.ToResourceCreate(spaceId));
+                if (createdId != Guid.Empty)
+                {
+                    // After creation resources might take time to be ready to use so we need
+                    // to poll until it is done since downstream operations (like device creation)
+                    // may depend on it
+                    logger.LogInformation("Polling until resource is no longer in 'Provisioning' state...");
+                    while (await Api.IsResourceProvisioning(httpClient, logger, createdId))
+                    {
+                        await Task.Delay(5000);
+                    }
+                }
+            }
+        }
+
+        private static async Task CreateRoleAssignments(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<RoleAssignmentDescription> descriptions,
+            Guid spaceId)
+        {
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("RoleAssignments must have a spaceId");
+
+            var space = await Api.GetSpace(httpClient, logger, spaceId, includes: "fullpath");
+
+            // A SpacePath is the list of spaces formatted like so: "space1/space2" - where space2 has space1 as a parent
+            // When getting SpacePaths of a space itself there is always exactly one path - the path from the root to itself
+            // This is not true when getting space paths of other topology items (ie non spaces)
+            var path = space.SpacePaths.Single();
+
+            foreach (var description in descriptions)
+            {
+                string objectId;
+                switch (description.objectIdType)
+                {
+                    case "UserDefinedFunctionId":
+                        objectId = (await Api.FindUserDefinedFunction(httpClient, logger, description.objectName, spaceId))?.Id;
+                        break;
+                    default:
+                        objectId = null;
+                        logger.LogError($"roleAssignment with objectName must have known objectIdType but instead has '{description.objectIdType}'");
+                        break;
+                }
+
+                if (objectId != null)
+                {
+                    await Api.CreateRoleAssignment(httpClient, logger, description.ToRoleAssignmentCreate(objectId, path));
+                }
+            }
+        }
+
+        private static async Task CreateSensors(HttpClient httpClient, ILogger logger, IEnumerable<SensorDescription> descriptions, Guid deviceId)
+        {
+            if (deviceId == Guid.Empty)
+                throw new ArgumentException("Sensors must have a deviceId");
+
+            foreach (var description in descriptions)
+            {
+                await Api.CreateSensor(httpClient, logger, description.ToSensorCreate(deviceId));
+            }
+        }
+
+        private static async Task CreateUserDefinedFunctions(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<UserDefinedFunctionDescription> descriptions,
+            Guid spaceId)
+        {
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("UserDefinedFunctions must have a spaceId");
+
+            foreach (var description in descriptions)
+            {
+                var matcher = await Api.FindMatcher(httpClient, logger, description.matcher, spaceId);
+
+                using (var r = new StreamReader(description.script))
+                {
+                    var js = await r.ReadToEndAsync();
+                    if (String.IsNullOrWhiteSpace(js))
+                    {
+                        logger.LogError($"Error creating user defined function: Couldn't read from {description.script}");
+                    }
+                    else
+                    {
+                        await Api.CreateUserDefinedFunction(
+                            httpClient,
+                            logger,
+                            description.ToUserDefinedFunctionCreate(spaceId, new [] { matcher.Id }),
+                            js);
+                    }
+                }
+            }
+        }
+
+        private static async Task<Guid> GetExistingDeviceOrCreate(HttpClient httpClient, ILogger logger, Guid spaceId, DeviceDescription description)
+        {
+            var existingDevice = await Api.FindDevice(httpClient, logger, description.hardwareId, spaceId);
+            return existingDevice?.Id != null
+                ? Guid.Parse(existingDevice.Id)
+                : await Api.CreateDevice(httpClient, logger, description.ToDeviceCreate(spaceId));
         }
 
         private static async Task<Guid> GetExistingSpaceOrCreate(HttpClient httpClient, ILogger logger, Guid parentId, SpaceDescription description)
         {
-            var existingSpace = await GetExistingSpace(httpClient, logger, description.name, parentId);
+            var existingSpace = await Api.FindSpace(httpClient, logger, description.name, parentId);
             return existingSpace?.Id != null
                 ? Guid.Parse(existingSpace.Id)
-                : await CreateSpace(httpClient, logger, description.ToSpaceCreate(parentId));
-        }
-
-        private static async Task<Guid> CreateSpace(HttpClient httpClient, ILogger logger, Models.SpaceCreate spaceCreate)
-        {
-            logger.LogInformation($"Creating Space: {JsonConvert.SerializeObject(spaceCreate, Formatting.Indented)}");
-            var content = JsonConvert.SerializeObject(spaceCreate);
-            var response = await httpClient.PostAsync("spaces", new StringContent(content, Encoding.UTF8, "application/json"));
-            return await GetIdFromResponse(response, logger);
-        }
-
-        private static async Task<Guid> GetIdFromResponse(HttpResponseMessage response, ILogger logger)
-        {
-            if (!response.IsSuccessStatusCode)
-                return Guid.Empty;
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            // strip out the double quotes that come in the response and parse into a guid
-            if (!Guid.TryParse(content.Substring(1, content.Length - 2), out var createdId))
-            {
-                logger.LogError($"ERROR: Returned value from POST did not parse into a guid: {content}");
-                return Guid.Empty;
-            }
-
-            return createdId;
+                : await Api.CreateSpace(httpClient, logger, description.ToSpaceCreate(parentId));
         }
     }
 }
