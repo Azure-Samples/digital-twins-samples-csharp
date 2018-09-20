@@ -60,6 +60,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.userdefinedfunctions != null)
                         await CreateUserDefinedFunctions(httpClient, logger, description.userdefinedfunctions, spaceId);
 
+                    if (description.roleassignments != null)
+                        await CreateRoleAssignments(httpClient, logger, description.roleassignments, spaceId);
+
                     if (description.spaces != null)
                         await CreateSpaces(httpClient, logger, description.spaces, spaceId);
                 }
@@ -122,6 +125,43 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     {
                         await Task.Delay(5000);
                     }
+                }
+            }
+        }
+
+        private static async Task CreateRoleAssignments(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<RoleAssignmentDescription> descriptions,
+            Guid spaceId)
+        {
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("RoleAssignments must have a spaceId");
+
+            var space = await Api.GetSpace(httpClient, logger, spaceId, includes: "fullpath");
+
+            // A SpacePath is the list of spaces formatted like so: "space1/space2" - where space2 has space1 as a parent
+            // When getting SpacePaths of a space itself there is always exactly one path - the path from the root to itself
+            // This is not true when getting space paths of other topology items (ie non spaces)
+            var path = space.SpacePaths.Single();
+
+            foreach (var description in descriptions)
+            {
+                string objectId;
+                switch (description.objectIdType)
+                {
+                    case "UserDefinedFunctionId":
+                        objectId = (await Api.FindUserDefinedFunction(httpClient, logger, description.objectName, spaceId))?.Id;
+                        break;
+                    default:
+                        objectId = null;
+                        logger.LogError($"roleAssignment with objectName must have known objectIdType but instead has '{description.objectIdType}'");
+                        break;
+                }
+
+                if (objectId != null)
+                {
+                    await Api.CreateRoleAssignment(httpClient, logger, description.ToRoleAssignmentCreate(objectId, path));
                 }
             }
         }

@@ -45,9 +45,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             string name,
             Guid spaceId)
         {
-            var filterHardwareIds = $"names={name}";
+            var filterNames = $"names={name}";
             var filterSpaceId = $"&spaceIds={spaceId.ToString()}";
-            var filter = $"{filterHardwareIds}{filterSpaceId}";
+            var filter = $"{filterNames}{filterSpaceId}";
 
             var response = await httpClient.GetAsync($"matchers?{filter}");
             if (response.IsSuccessStatusCode)
@@ -88,6 +88,33 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 {
                     logger.LogInformation($"Retrieved Unique Space using 'name' and 'parentSpaceId': {JsonConvert.SerializeObject(matchingSpace, Formatting.Indented)}");
                     return matchingSpace;
+                }
+            }
+            return null;
+        }
+
+        // Returns a user defined fucntion with same name and spaceId if there is exactly one.
+        // Otherwise returns null.
+        public static async Task<Models.UserDefinedFunction> FindUserDefinedFunction(
+            HttpClient httpClient,
+            ILogger logger,
+            string name,
+            Guid spaceId)
+        {
+            var filterNames = $"names={name}";
+            var filterSpaceId = $"&spaceIds={spaceId.ToString()}";
+            var filter = $"{filterNames}{filterSpaceId}";
+
+            var response = await httpClient.GetAsync($"userdefinedfunctions?{filter}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var userDefinedFunctions = JsonConvert.DeserializeObject<IReadOnlyCollection<Models.UserDefinedFunction>>(content);
+                var userDefinedFunction = userDefinedFunctions.SingleOrDefault();
+                if (userDefinedFunction != null)
+                {
+                    logger.LogInformation($"Retrieved Unique UserDefinedFunction using 'name' and 'spaceId': {JsonConvert.SerializeObject(userDefinedFunction, Formatting.Indented)}");
+                    return userDefinedFunction;
                 }
             }
             return null;
