@@ -19,15 +19,6 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 1. Run the app by using the `F5` key. You can change the command-line parameters in `launch.json`.
 1. To build and run tests use the 'Run Task' command in Visual Studio Code and choose `test`.
 
-## Configure appsettings.json
-
-Please supply the following key-value pairs:
-
-1. `ClientId`: the `Application ID` of your Azure Active Directory app.
-1. `ClientSecret`: the password for your Azure Active Directory app obtained under the **Settings\Keys** tab.
-1. `Resource`: the name of your Digital Twins IoTSpaces instance.
-1. `Tenant`: the ID of your tenant. The Azure Active Directory `Directory ID` obtained under the **Properties** tab.
-
 ## Walkthrough
 
 1. See the [quickstart doc](https://github.com/MicrosoftDocs/azure-docs-pr/blob/release-preview-smart-spaces/articles/digital-twins/quickstart-view-occupancy-dotnet.md) to set up your Digital Twins resource and configure this sample to call it.
