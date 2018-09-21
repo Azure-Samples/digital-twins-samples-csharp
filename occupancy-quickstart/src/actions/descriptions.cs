@@ -15,6 +15,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public IEnumerable<SensorDescription> sensors { get; set; }
     }
 
+    public class KeyStoreDescription
+    {
+        public string name { get; set; }
+    }
+
     public class MatcherDescription
     {
         public string name { get; set; }
@@ -53,6 +58,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         [JsonIgnore]
         public IEnumerable<DeviceDescription> devices { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<KeyStoreDescription> keystores { get; set; }
 
         [JsonIgnore]
         public IEnumerable<MatcherDescription> matchers { get; set; }
