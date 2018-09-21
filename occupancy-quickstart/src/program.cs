@@ -33,14 +33,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
                 switch (actionName)
                 {
+                    case ActionName.GetOntology:
+                        await Actions.GetOntology(httpClient, logger);
+                        break;
                     case ActionName.GetSpaces:
                         await Actions.GetSpaces(httpClient, logger);
                         break;
                     case ActionName.ProvisionSample:
                         await Actions.ProvisionSample(httpClient, logger);
-                        break;
-                    case ActionName.GetOntology:
-                        await Actions.GetOntology(httpClient, logger);
                         break;
 
                     default:
