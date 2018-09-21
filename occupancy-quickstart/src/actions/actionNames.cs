@@ -2,7 +2,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
     enum ActionName
     {
-        GetOntology,
+        GetOntologies,
         GetSpaces,
         ProvisionSample,
     }
