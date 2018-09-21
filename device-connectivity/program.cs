@@ -34,17 +34,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             Console.WriteLine($"INFO: Your hardware ID is: {hardwareId}");
 
-            var topologyClient = new TopologyClient(settings["ManagementApiUrl"], settings["SasToken"]);
-            var device = topologyClient.GetDeviceForHardwareId(hardwareId).Result;
-            if (device == null)
-            {
-                Console.WriteLine("ERROR: Failed to retrieve device from topology API. Please refer to documentation for pre-provisioning necessary metadata.");
-                return;
-            }
-
             try
             {
-                DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(device.ConnectionString);
+                DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(settings["DeviceConnectionString"]);
 
                 if (deviceClient == null)
                 {

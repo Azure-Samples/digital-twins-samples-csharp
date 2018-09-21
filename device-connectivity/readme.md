@@ -5,19 +5,33 @@ sample sensory data.
 
 ## Configuring the app
 
-Edit [appsettings.json](./appsettings.json) to fill in the following values:
-* `ManagementApiUrl`
-* `SasToken`
+Edit your settings file to fill in the following values:
+* `DeviceConnectionString`
 
->Note: You have already generated a SAS Token from a configured Key on the Keystore API. To generate a valid token, you will need to
-know your device's MAC address. Remove all columns (:) from the address and capitalize the value. E.g.: If your MAC address is `18:36:ba:0c:85:13`, the expected value would be `1836BA0C8513`. Please ensure this value is also reflected on the `HardwareId` property of your Topology Device and the `Status` property is set to `Active`. If you need to override the identifier you can simply edit [Program.cs](./Program.cs) and manually set the `hardwareId` variable.
+You can get the connection string by calling Management API's Devices controller. E.g. for a device with ID `22215ed9-91e8-40af-9d1b-a22727849393`:
 
-Configuration example:
+```
+GET https://<instance-name>.westcentralus.azuresmartspaces.net/management/api/v1.0/devices/22215ed9-91e8-40af-9d1b-a22727849393?includes=ConnectionString
+
+{
+    "name": "My Sample Device",
+    "typeId": 2,
+    "subtypeId": 1,
+    "hardwareId": "00AABBCCDDEE",
+    "spaceId": "ef46f69f-0b95-45ee-a41f-718b3ee4c355",
+    "status": "Active",
+    "id": "f51e5295-ca81-4517-8f5d-0b940f678ef2",
+    "connectionString": "Hostname=..."
+}
+
+```
+
+Copy the `connectionString` over to the [appsettings.json](./appsettings.json) file:
+
 ```
 {
   "Settings": {
-    "ManagementApiUrl": "https://name.westcentralus.azuresmartspaces.net/management/",
-    "SasToken": "SharedAccessSignature id=1836BA0C8513&se=31556995200&kv=1&sig=...",
+    "DeviceConnectionString": "Hostname=...",
     "MessageIntervalInMilliSeconds": 5000,
     "SensorDataTypes": "Temperature,Motion,CarbonDioxide"
   }
