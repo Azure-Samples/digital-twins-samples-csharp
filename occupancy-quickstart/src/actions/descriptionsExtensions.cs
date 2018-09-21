@@ -33,6 +33,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 }
             };
 
+        public static Models.KeyStoreCreate ToKeyStoreCreate(this KeyStoreDescription description, Guid spaceId)
+            => new Models.KeyStoreCreate()
+            {
+                Name = description.name,
+                SpaceId = spaceId.ToString(),
+            };
+
         public static Models.RoleAssignmentCreate ToRoleAssignmentCreate(this RoleAssignmentDescription description, string objectId, string path)
             => new Models.RoleAssignmentCreate()
             {

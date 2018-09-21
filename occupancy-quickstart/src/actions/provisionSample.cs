@@ -51,6 +51,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.resources != null)
                         await CreateResources(httpClient, logger, description.resources, spaceId);
 
+                    if (description.keystores != null)
+                        await CreateKeyStores(httpClient, logger, description.keystores, spaceId);
+
                     if (description.devices != null)
                         await CreateDevices(httpClient, logger, description.devices, spaceId);
 
@@ -85,6 +88,17 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.sensors != null)
                         await CreateSensors(httpClient, logger, description.sensors, deviceId);
                 }
+            }
+        }
+
+        private static async Task CreateKeyStores(HttpClient httpClient, ILogger logger, IEnumerable<KeyStoreDescription> descriptions, Guid spaceId)
+        {
+            if (spaceId == Guid.Empty)
+                throw new ArgumentException("KeyStores must have a spaceId");
+
+            foreach (var description in descriptions)
+            {
+                await Api.CreateKeyStore(httpClient, logger, description.ToKeyStoreCreate(spaceId));
             }
         }
 
