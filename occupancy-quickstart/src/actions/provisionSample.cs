@@ -13,49 +13,51 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
     public static partial class Actions
     {
-        public static async Task<IEnumerable<Guid>> ProvisionSample(HttpClient httpClient, ILogger logger)
+        public static async Task<IEnumerable<ProvisionResults.Space>> ProvisionSample(HttpClient httpClient, ILogger logger)
         {
             IEnumerable<SpaceDescription> spaceCreateDescriptions;
             using (var r = new StreamReader("actions/provisionSample.yaml"))
             {
                 spaceCreateDescriptions = await GetProvisionSampleTopology(r);
             }
-            var createdSpaceIds = await CreateSpaces(httpClient, logger, spaceCreateDescriptions, Guid.Empty);
-            var createdSpaceIdsAsString = createdSpaceIds
-                .Select(x => x.ToString())
+            var results = await CreateSpaces(httpClient, logger, spaceCreateDescriptions, Guid.Empty);
+            var createdSpaceIdsAsString = results
+                .Select(x => x.Id.ToString())
                 .Aggregate((acc, cur) => acc + ", " + cur);
             logger.LogInformation($"Created spaces: {createdSpaceIdsAsString}");
-            return createdSpaceIds;
+            return results;
         }
 
         public static async Task<IEnumerable<SpaceDescription>> GetProvisionSampleTopology(TextReader textReader)
             => new Deserializer().Deserialize<IEnumerable<SpaceDescription>>(await textReader.ReadToEndAsync());
 
-        public static async Task<IEnumerable<Guid>> CreateSpaces(
+        public static async Task<IEnumerable<ProvisionResults.Space>> CreateSpaces(
             HttpClient httpClient,
             ILogger logger,
             IEnumerable<SpaceDescription> descriptions,
             Guid parentId)
         {
-            var spaceIds = new List<Guid>();
+            var spaceResults = new List<ProvisionResults.Space>();
             foreach (var description in descriptions)
             {
                 var spaceId = await GetExistingSpaceOrCreate(httpClient, logger, parentId, description);
 
                 if (spaceId != Guid.Empty)
                 {
-                    spaceIds.Add(spaceId);
-
                     // This must happen before devices (or anyhting that could have devices like other spaces)
                     // or the device create will fail because a resource is required on an ancestor space
                     if (description.resources != null)
                         await CreateResources(httpClient, logger, description.resources, spaceId);
 
                     if (description.keystores != null)
-                        await CreateKeyStores(httpClient, logger, description.keystores, spaceId);
+                        await CreateKeyStoresWithKeys(httpClient, logger, description.keystores, spaceId);
 
-                    if (description.devices != null)
-                        await CreateDevices(httpClient, logger, description.devices, spaceId);
+                    // TODO: test getKeyStore from space
+
+                    var sasTokens = description.devices != null
+                        ? (await CreateDevices(httpClient, logger, description.devices, spaceId))
+                            .Select(deviceId => CreateSasToken(httpClient, logger, deviceId))
+                        : Array.Empty<string>();
 
                     if (description.matchers != null)
                         await CreateMatchers(httpClient, logger, description.matchers, spaceId);
@@ -66,18 +68,28 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.roleassignments != null)
                         await CreateRoleAssignments(httpClient, logger, description.roleassignments, spaceId);
 
-                    if (description.spaces != null)
-                        await CreateSpaces(httpClient, logger, description.spaces, spaceId);
+                    var childSpaceResults = description.spaces != null
+                        ? await CreateSpaces(httpClient, logger, description.spaces, spaceId)
+                        : Array.Empty<ProvisionResults.Space>();
+
+                    spaceResults.Add(new ProvisionResults.Space()
+                    {
+                        Devices = sasTokens.Select(sasToken => new ProvisionResults.Device() { SasToken = sasToken } ),
+                        Id = spaceId,
+                        Spaces = childSpaceResults,
+                    });
                 }
             }
 
-            return spaceIds;
+            return spaceResults;
         }
 
-        private static async Task CreateDevices(HttpClient httpClient, ILogger logger, IEnumerable<DeviceDescription> descriptions, Guid spaceId)
+        private static async Task<IEnumerable<Guid>> CreateDevices(HttpClient httpClient, ILogger logger, IEnumerable<DeviceDescription> descriptions, Guid spaceId)
         {
             if (spaceId == Guid.Empty)
                 throw new ArgumentException("Devices must have a spaceId");
+
+            var deviceIds = new List<Guid>();
 
             foreach (var description in descriptions)
             {
@@ -85,21 +97,33 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
                 if (deviceId != Guid.Empty)
                 {
+                    deviceIds.Add(deviceId);
+
                     if (description.sensors != null)
                         await CreateSensors(httpClient, logger, description.sensors, deviceId);
                 }
             }
+
+            return deviceIds;
         }
 
-        private static async Task CreateKeyStores(HttpClient httpClient, ILogger logger, IEnumerable<KeyStoreDescription> descriptions, Guid spaceId)
+        private static async Task<IEnumerable<Guid>> CreateKeyStoresWithKeys(HttpClient httpClient, ILogger logger, IEnumerable<KeyStoreDescription> descriptions, Guid spaceId)
         {
             if (spaceId == Guid.Empty)
                 throw new ArgumentException("KeyStores must have a spaceId");
 
+            var keyStoreIds = new List<Guid>();
+
             foreach (var description in descriptions)
             {
-                await Api.CreateKeyStore(httpClient, logger, description.ToKeyStoreCreate(spaceId));
+                var keyStoreId = await Api.CreateKeyStore(httpClient, logger, description.ToKeyStoreCreate(spaceId));
+                if (keyStoreId != Guid.Empty)
+                {
+                    keyStoreIds.Add(keyStoreId);
+                }
             }
+
+            return keyStoreIds;
         }
 
         private static async Task CreateMatchers(
@@ -180,6 +204,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
+        private static string CreateSasToken(HttpClient httpClient, ILogger logger, Guid deviceId)
+        {
+            return "";
+        }
+
         private static async Task CreateSensors(HttpClient httpClient, ILogger logger, IEnumerable<SensorDescription> descriptions, Guid deviceId)
         {
             if (deviceId == Guid.Empty)
@@ -221,6 +250,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     }
                 }
             }
+        }
+
+        private static void EnsureKeyStoreHasKey(HttpClient httpClient, ILogger logger, Guid keyStoreId)
+        {
+            // /api/v1.0/keystores/{id}/keys/last
         }
 
         private static async Task<Guid> GetExistingDeviceOrCreate(HttpClient httpClient, ILogger logger, Guid spaceId, DeviceDescription description)
