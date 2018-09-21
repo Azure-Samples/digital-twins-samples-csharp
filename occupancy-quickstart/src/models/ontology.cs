@@ -2,8 +2,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Models
 {
     public class Ontology
     {
-        public int id {get; set;}
-        public string name { get; set; }
-        public bool loaded { get; set; }
+        public int Id {get; set;}
+        public string Name { get; set; }
+        public bool Loaded { get; set; }
     }
 }
