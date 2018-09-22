@@ -20,11 +20,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 spaceCreateDescriptions = await GetProvisionSampleTopology(r);
             }
+
             var results = await CreateSpaces(httpClient, logger, spaceCreateDescriptions, Guid.Empty);
-            var createdSpaceIdsAsString = results
-                .Select(x => x.Id.ToString())
-                .Aggregate((acc, cur) => acc + ", " + cur);
-            logger.LogInformation($"Created spaces: {createdSpaceIdsAsString}");
+
+            Console.WriteLine($"Completed Provisioning: {JsonConvert.SerializeObject(results, Formatting.Indented)}");
+
             return results;
         }
 
@@ -68,7 +68,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.roleassignments != null)
                         await CreateRoleAssignments(httpClient, logger, description.roleassignments, spaceId);
 
-                    var childSpaceResults = description.spaces != null
+                    var childSpacesResults = description.spaces != null
                         ? await CreateSpaces(httpClient, logger, description.spaces, spaceId)
                         : Array.Empty<ProvisionResults.Space>();
 
@@ -76,7 +76,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     {
                         Devices = sasTokens.Select(sasToken => new ProvisionResults.Device() { SasToken = sasToken } ),
                         Id = spaceId,
-                        Spaces = childSpaceResults,
+                        Spaces = childSpacesResults,
                     });
                 }
             }
