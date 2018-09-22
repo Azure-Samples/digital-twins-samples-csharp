@@ -10,13 +10,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
     public static partial class Actions
     {
-        public static async Task GetSpaces(HttpClient httpClient, ILogger logger)
+        // Prints out and returns spaces with the occupany property key set
+        public static async Task GetOccupancy(HttpClient httpClient, ILogger logger)
         {
             var spaces = await Api.GetSpaces(
                 httpClient, logger,
-                maxNumberToGet: 50, includes: "types,values,properties");
+                maxNumberToGet: 100, propertyKey: "Occupancy", includes: "properties");
 
-            Console.WriteLine($"GetSpaces: {JsonConvert.SerializeObject(spaces, Formatting.Indented)}");
+            Console.WriteLine($"Spaces with 'Occupancy' PropertyKey: {JsonConvert.SerializeObject(spaces, Formatting.Indented)}");
         }
     }
 }
