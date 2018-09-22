@@ -14,7 +14,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             var spaces = await Api.GetSpaces(
                 httpClient, logger,
-                maxNumberToGet: 50, includes: "types,values,properties");
+                maxNumberToGet: 10, includes: "types,values,properties");
 
             Console.WriteLine($"GetSpaces: {JsonConvert.SerializeObject(spaces, Formatting.Indented)}");
         }
