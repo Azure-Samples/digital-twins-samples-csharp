@@ -68,5 +68,26 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             return null;
         }
+
+        public static async Task<Models.Device> GetDevice(
+            HttpClient httpClient,
+            ILogger logger,
+            Guid id,
+            string includes = null)
+        {
+            if (id == Guid.Empty)
+                throw new ArgumentException("GetDevice requires a non empty guid as id");
+
+            var response = await httpClient.GetAsync($"devices/{id}/" + (includes != null ? $"?includes={includes}" : ""));
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var device = JsonConvert.DeserializeObject<Models.Device>(content);
+                logger.LogInformation($"Retrieved Device: {JsonConvert.SerializeObject(device, Formatting.Indented)}");
+                return device;
+            }
+
+            return null;
+        }
     }
 }
