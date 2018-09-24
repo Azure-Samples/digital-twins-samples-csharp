@@ -14,7 +14,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Models
         public int SubtypeId { get; set; }
         public string Status { get; set; }
         public int StatusId { get; set; }
+        public IEnumerable<Property> Properties { get; set; }
+        public IEnumerable<Space> Children { get; set; }
         public IEnumerable<string> SpacePaths { get; set; }
-        public List<Space> Children { get; set; }
     }
 }

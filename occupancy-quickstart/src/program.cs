@@ -33,6 +33,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
                 switch (actionName)
                 {
+                    case ActionName.GetOccupancy:
+                        await Actions.GetOccupancy(httpClient, logger);
+                        break;
                     case ActionName.GetOntologies:
                         await Api.GetOntologies(httpClient, logger);
                         break;
