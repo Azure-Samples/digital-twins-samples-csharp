@@ -20,46 +20,35 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     class Program
     {
         private static Random rnd = new Random();
-        public static Device DeviceInfo { get; set; }
-        public static IConfiguration Configuration { get; set; }
+        private static string hardwareId;
+        private static IConfigurationSection settings;
         static void Main(string[] args)
         {
-            Configuration = new ConfigurationBuilder()
+            settings = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.dev.json", optional: true)
-                .Build();
+                .Build()
+                .GetSection("Settings");
 
-            var hardwareId = GetMacAddress();
+            hardwareId = GetMacAddress();
 
-            Console.WriteLine($"Your hardware ID is: {hardwareId}");
-
-            var topologyClient = new TopologyClient(Configuration["ManagementApiUrl"], Configuration["SasToken"]);
-            DeviceInfo = topologyClient.GetDeviceForHardwareId(hardwareId).Result;
-            if (DeviceInfo == null)
-            {
-                Console.WriteLine("ERROR: Could not retrieve device information.");
-                return;
-            }
+            Console.WriteLine($"INFO: Your hardware ID is: {hardwareId}");
 
             try
             {
-                DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(DeviceInfo.ConnectionString);
+                DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(settings["DeviceConnectionString"]);
 
                 if (deviceClient == null)
                 {
-                    Console.WriteLine("Failed to create DeviceClient!");
+                    Console.WriteLine("ERROR: Failed to create DeviceClient!");
+                    return;
                 }
-                else
-                {
-                    SendEvent(deviceClient).Wait();
-                }
-
-                Console.WriteLine("Exited!\n");
+                
+                SendEvent(deviceClient).Wait();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in sample: {0}", ex.Message);
+                Console.WriteLine("EXIT: Unexpected error: {0}", ex.Message);
             }
         }
 
@@ -68,7 +57,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             switch (sensorDataType)
             {
                 default:
-                    throw new Exception($"Unsupported configuration: SensorDataType, '{sensorDataType}'");
+                    throw new Exception($"Unsupported configuration: SensorDataType, '{sensorDataType}'. Please check your appsettings.json.");
                 case "Motion":
                     return () => rnd.Next(0, 2) == 0 ? "false" : "true";
                 case "Temperature":
@@ -80,46 +69,36 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         static async Task SendEvent(DeviceClient deviceClient)
         {
-            var serializer = new DataContractJsonSerializer(typeof(TelemetryMessage));
+            var serializer = new DataContractJsonSerializer(typeof(CustomTelemetryMessage));
 
-            var sensorDataTypes = Configuration["SensorDataTypes"].Split(',');
+            var sensorDataTypes = settings["SensorDataTypes"].Split(',');
 
             while (true)
             {
                 foreach (var sensorDataType in sensorDataTypes)
                 {
                     var getRandomSensorReading = CreateGetRandomSensorReading(sensorDataType);
-
-                    var sensor = DeviceInfo.Sensors.FirstOrDefault(x => (x.DataType == sensorDataType));
-                    if (sensor == null)
+                    var telemetryMessage = new CustomTelemetryMessage()
                     {
-                        throw new Exception($"No preconfigured Sensor for DataType '{sensorDataType}' found.");
-                    }
-
-                    var telemetryMessage = new TelemetryMessage()
-                    {
-                        SensorId=sensor.Id,
-                        SensorReading=getRandomSensorReading(),
-                        EventTimestamp=DateTime.UtcNow.ToString("o"),
-                        SensorType=sensor.Type,
-                        SensorDataType=sensor.DataType
+                        SensorValue = getRandomSensorReading(),
                     };
 
                     using (var stream = new MemoryStream())
                     {
                         serializer.WriteObject(stream, telemetryMessage);
-                        var binaryMessage = stream.ToArray();
-                        Message eventMessage = new Message(binaryMessage);
-                        eventMessage.Properties.Add("Sensor", "");
-                        eventMessage.Properties.Add("MessageVersion", "1.0");
-                        eventMessage.Properties.Add("x-ms-flighting-udf-execution-manually-enabled", "true");
-                        Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.ASCII.GetString(binaryMessage)}");
+                        var byteArray = stream.ToArray();
+                        Message eventMessage = new Message(byteArray);
+                        eventMessage.Properties.Add("DigitalTwins-Telemetry", "1.0");
+                        eventMessage.Properties.Add("DigitalTwins-SensorHardwareId", $"{hardwareId}-{sensorDataType}");
+                        eventMessage.Properties.Add("CreationTimeUtc", DateTime.UtcNow.ToString("o"));
+                        eventMessage.Properties.Add("CorrelationId", Guid.NewGuid().ToString());
 
-                        await deviceClient.SendEventAsync(eventMessage).ConfigureAwait(false);
+                        Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.UTF8.GetString(eventMessage.GetBytes())} Properties: {{ {eventMessage.Properties.Aggregate(new StringBuilder(), (sb, x) => sb.Append($"'{x.Key}': '{x.Value}',"), sb => sb.ToString())} }}");
+
+                        await deviceClient.SendEventAsync(eventMessage);
+                        await Task.Delay(int.Parse(settings["MessageIntervalInMilliSeconds"]));
                     }
                 }
-
-                Thread.Sleep(int.Parse(Configuration["MessageIntervalInMilliSeconds"]));
             }
         }
 
@@ -127,10 +106,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             foreach(var nic in NetworkInterface.GetAllNetworkInterfaces())
             {
-                var physAddress = nic.GetPhysicalAddress().ToString();
-                if (physAddress.Length > 0)
+                if (nic.OperationalStatus == OperationalStatus.Up && nic.Speed > 0)
                 {
-                    return physAddress;
+                    var physAddress = nic.GetPhysicalAddress().ToString();
+                    if (physAddress.Length > 0)
+                    {
+                        return physAddress;
+                    }
                 }
             }
 

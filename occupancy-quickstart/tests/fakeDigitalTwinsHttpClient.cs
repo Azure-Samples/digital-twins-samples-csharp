@@ -64,11 +64,16 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             var getDeviceResponse = new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(JsonConvert.SerializeObject(Device)),
+            };
+            var getDevicesResponse = new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(JsonConvert.SerializeObject(new [] { Device })),
             };
             return CreateWithSpace(
                 postResponseGuids: postResponseGuids,
-                getResponses: new [] { getDeviceResponse }.Concat(getResponses) );
+                getResponses: new [] { getDevicesResponse, getDeviceResponse }.Concat(getResponses) );
         }
 
         private static IEnumerable<HttpResponseMessage> CreateGuidResponses(IEnumerable<Guid> guids)

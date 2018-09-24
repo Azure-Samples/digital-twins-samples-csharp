@@ -66,6 +66,22 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return await GetIdFromResponse(response, logger);
         }
 
+        public static async Task CreateProperty(HttpClient httpClient, ILogger logger, Guid spaceId, Models.PropertyCreate propertyCreate)
+        {
+            logger.LogInformation($"Creating Property: {JsonConvert.SerializeObject(propertyCreate, Formatting.Indented)}");
+            var content = JsonConvert.SerializeObject(propertyCreate);
+            var response = await httpClient.PostAsync($"spaces/{spaceId.ToString()}/properties", new StringContent(content, Encoding.UTF8, "application/json"));
+            logger.LogInformation($"Creating Property Response: {response}");
+        }
+
+        public static async Task CreatePropertyKey(HttpClient httpClient, ILogger logger, Models.PropertyKeyCreate propertyKeyCreate)
+        {
+            logger.LogInformation($"Creating PropertyKey: {JsonConvert.SerializeObject(propertyKeyCreate, Formatting.Indented)}");
+            var content = JsonConvert.SerializeObject(propertyKeyCreate);
+            var response = await httpClient.PostAsync($"propertykeys", new StringContent(content, Encoding.UTF8, "application/json"));
+            logger.LogInformation($"Creating PropertyKey Response: {response}");
+        }
+
         public static async Task<Guid> CreateUserDefinedFunction(
             HttpClient httpClient,
             ILogger logger,
