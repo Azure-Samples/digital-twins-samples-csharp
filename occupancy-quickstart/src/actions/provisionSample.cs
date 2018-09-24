@@ -49,15 +49,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     if (description.resources != null)
                         await CreateResources(httpClient, logger, description.resources, spaceId);
 
-                    if (description.keystores != null)
-                        await CreateKeyStoresWithKeys(httpClient, logger, description.keystores, spaceId);
-
-                    // TODO: test getKeyStore from space
-
-                    var sasTokens = description.devices != null
-                        ? (await CreateDevices(httpClient, logger, description.devices, spaceId))
-                            .Select(deviceId => CreateSasToken(httpClient, logger, deviceId))
-                        : Array.Empty<string>();
+                    var devices = description.devices != null
+                        ? await CreateDevices(httpClient, logger, description.devices, spaceId)
+                        : Array.Empty<Models.Device>();
 
                     if (description.matchers != null)
                         await CreateMatchers(httpClient, logger, description.matchers, spaceId);
@@ -74,7 +68,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
                     spaceResults.Add(new ProvisionResults.Space()
                     {
-                        Devices = sasTokens.Select(sasToken => new ProvisionResults.Device() { SasToken = sasToken } ),
+                        Devices = devices.Select(device => new ProvisionResults.Device()
+                            {
+                                ConnectionString = device.ConnectionString,
+                                HardwareId = device.HardwareId
+                            }),
                         Id = spaceId,
                         Spaces = childSpacesResults,
                     });
@@ -84,46 +82,31 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return spaceResults;
         }
 
-        private static async Task<IEnumerable<Guid>> CreateDevices(HttpClient httpClient, ILogger logger, IEnumerable<DeviceDescription> descriptions, Guid spaceId)
+        private static async Task<IEnumerable<Models.Device>> CreateDevices(
+            HttpClient httpClient,
+            ILogger logger,
+            IEnumerable<DeviceDescription> descriptions,
+            Guid spaceId)
         {
             if (spaceId == Guid.Empty)
                 throw new ArgumentException("Devices must have a spaceId");
 
-            var deviceIds = new List<Guid>();
+            var devices = new List<Models.Device>();
 
             foreach (var description in descriptions)
             {
-                var deviceId = await GetExistingDeviceOrCreate(httpClient, logger, spaceId, description);
+                var device = await GetExistingDeviceOrCreate(httpClient, logger, spaceId, description);
 
-                if (deviceId != Guid.Empty)
+                if (device != null)
                 {
-                    deviceIds.Add(deviceId);
+                    devices.Add(device);
 
                     if (description.sensors != null)
-                        await CreateSensors(httpClient, logger, description.sensors, deviceId);
+                        await CreateSensors(httpClient, logger, description.sensors, Guid.Parse(device.Id));
                 }
             }
 
-            return deviceIds;
-        }
-
-        private static async Task<IEnumerable<Guid>> CreateKeyStoresWithKeys(HttpClient httpClient, ILogger logger, IEnumerable<KeyStoreDescription> descriptions, Guid spaceId)
-        {
-            if (spaceId == Guid.Empty)
-                throw new ArgumentException("KeyStores must have a spaceId");
-
-            var keyStoreIds = new List<Guid>();
-
-            foreach (var description in descriptions)
-            {
-                var keyStoreId = await Api.CreateKeyStore(httpClient, logger, description.ToKeyStoreCreate(spaceId));
-                if (keyStoreId != Guid.Empty)
-                {
-                    keyStoreIds.Add(keyStoreId);
-                }
-            }
-
-            return keyStoreIds;
+            return devices;
         }
 
         private static async Task CreateMatchers(
@@ -204,11 +187,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
-        private static string CreateSasToken(HttpClient httpClient, ILogger logger, Guid deviceId)
-        {
-            return "";
-        }
-
         private static async Task CreateSensors(HttpClient httpClient, ILogger logger, IEnumerable<SensorDescription> descriptions, Guid deviceId)
         {
             if (deviceId == Guid.Empty)
@@ -252,17 +230,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
-        private static void EnsureKeyStoreHasKey(HttpClient httpClient, ILogger logger, Guid keyStoreId)
+        private static async Task<Models.Device> GetExistingDeviceOrCreate(HttpClient httpClient, ILogger logger, Guid spaceId, DeviceDescription description)
         {
-            // /api/v1.0/keystores/{id}/keys/last
-        }
+            var existingDevice = await Api.FindDevice(httpClient, logger, description.hardwareId, spaceId, includes: "ConnectionString");
+            if (existingDevice != null)
+                return existingDevice;
 
-        private static async Task<Guid> GetExistingDeviceOrCreate(HttpClient httpClient, ILogger logger, Guid spaceId, DeviceDescription description)
-        {
-            var existingDevice = await Api.FindDevice(httpClient, logger, description.hardwareId, spaceId);
-            return existingDevice?.Id != null
-                ? Guid.Parse(existingDevice.Id)
-                : await Api.CreateDevice(httpClient, logger, description.ToDeviceCreate(spaceId));
+            var newDeviceId = await Api.CreateDevice(httpClient, logger, description.ToDeviceCreate(spaceId));
+            return await Api.GetDevice(httpClient, logger, newDeviceId, includes: "ConnectionString");
         }
 
         private static async Task<Guid> GetExistingSpaceOrCreate(HttpClient httpClient, ILogger logger, Guid parentId, SpaceDescription description)

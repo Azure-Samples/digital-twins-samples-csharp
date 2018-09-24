@@ -14,6 +14,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.ProvisionResults
 
     public struct Device
     {
-        public string SasToken;
+        public string ConnectionString;
+        public string HardwareId;
     }
 }
