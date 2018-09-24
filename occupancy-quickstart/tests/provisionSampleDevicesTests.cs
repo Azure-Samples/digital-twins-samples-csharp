@@ -25,17 +25,34 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             HardwareId = "HardwareId1",
             Id = device1Guid.ToString(),
             Name = "Device1",
+            ConnectionString = "ConnectionString1",
         };
         private static Models.Device device2 = new Models.Device()
         {
             HardwareId = "HardwareId2",
             Id = device2Guid.ToString(),
             Name = "Device2",
+            ConnectionString = "ConnectionString2",
         };
-        private static HttpResponseMessage device1GetResponse = new HttpResponseMessage()
+        private static HttpResponseMessage getDevicesResponse_device1 = new HttpResponseMessage()
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(JsonConvert.SerializeObject(new [] { device1 })),
+        };
+        private static HttpResponseMessage getDeviceResponse_device1 = new HttpResponseMessage()
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonConvert.SerializeObject(device1)),
+        };
+        private static HttpResponseMessage getDevicesResponse_device2 = new HttpResponseMessage()
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonConvert.SerializeObject(new [] { device2 })),
+        };
+        private static HttpResponseMessage getDeviceResponse_device2 = new HttpResponseMessage()
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonConvert.SerializeObject(device2)),
         };
 
         [Fact]
@@ -74,7 +91,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         {
             (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
                 postResponseGuids: new [] { device1Guid, device2Guid },
-                getResponses: Enumerable.Repeat(Responses.NotFound, 2)
+                getResponses: new [] { Responses.NotFound, getDeviceResponse_device1, Responses.NotFound, getDeviceResponse_device2 }
             );
 
             var descriptions = new [] { new SpaceDescription()
@@ -93,9 +110,20 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     }},
             }};
 
-            await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
+            var spaceResult = (await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty))
+                            .Single();
             Assert.Equal(2, httpHandler.PostRequests["devices"].Count);
-            Assert.Equal(2, httpHandler.GetRequests["devices"].Count);
+            Assert.Equal(4, httpHandler.GetRequests["devices"].Count);
+            Assert.Equal(new [] {
+                new ProvisionResults.Device () {
+                    ConnectionString = "ConnectionString1",
+                    HardwareId = "HardwareId1",
+                },
+                new ProvisionResults.Device () {
+                    ConnectionString = "ConnectionString2",
+                    HardwareId = "HardwareId2",
+                }},
+                spaceResult.Devices);
         }
 
         [Fact]
@@ -103,7 +131,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         {
             (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
                 postResponseGuids: null,
-                getResponses: new [] { device1GetResponse }
+                getResponses: new [] { getDevicesResponse_device1 }
             );
 
             var descriptions = new [] { new SpaceDescription()

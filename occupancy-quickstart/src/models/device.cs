@@ -4,6 +4,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Models
     // Then we can change upstream apis like DescriptionExtensions
     public class Device
     {
+        public string ConnectionString { get; set; }
         public string HardwareId { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }

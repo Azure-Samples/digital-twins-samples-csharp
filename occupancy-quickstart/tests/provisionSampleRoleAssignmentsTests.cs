@@ -55,6 +55,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(JsonConvert.SerializeObject(space1)),
         };
+
         [Fact]
         public async Task GetProvisionSampleCreatesDescriptions()
         {
@@ -112,7 +113,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                         objectIdType = "UnknownObjectIdType"
                     }},
             }};
-            
+
             await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.False(httpHandler.PostRequests.ContainsKey("roleassignments"));
         }

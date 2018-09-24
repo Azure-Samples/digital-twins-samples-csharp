@@ -33,12 +33,19 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
                 switch (actionName)
                 {
+                    case ActionName.GetOccupancy:
+                        await Actions.GetOccupancy(httpClient, logger);
+                        break;
+                    case ActionName.GetOntologies:
+                        await Api.GetOntologies(httpClient, logger);
+                        break;
                     case ActionName.GetSpaces:
                         await Actions.GetSpaces(httpClient, logger);
                         break;
                     case ActionName.ProvisionSample:
                         await Actions.ProvisionSample(httpClient, logger);
                         break;
+
                     default:
                         throw new NotImplementedException();
                 }

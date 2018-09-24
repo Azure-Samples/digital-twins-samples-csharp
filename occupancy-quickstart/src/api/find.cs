@@ -16,11 +16,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             HttpClient httpClient,
             ILogger logger,
             string hardwareId,
-            Guid? spaceId)
+            Guid? spaceId,
+            string includes = null)
         {
             var filterHardwareIds = $"hardwareIds={hardwareId}";
             var filterSpaceId = spaceId != null ? $"&spaceIds={spaceId.ToString()}" : "";
-            var filter = $"{filterHardwareIds}{filterSpaceId}";
+            var includesParam = includes != null ? $"&includes={includes}" : "";
+            var filter = $"{filterHardwareIds}{filterSpaceId}{includesParam}";
 
             var response = await httpClient.GetAsync($"devices?{filter}");
             if (response.IsSuccessStatusCode)
