@@ -71,7 +71,7 @@ Under ./bin/Debug/netcoreapp2.0/<runtime identifier>/publish or .\bin\Debug\netc
 
 ## Customizing the app to your needs
 
-This app compiles a sample telemetry message with some randomly generated data. You can customize the message format as well as the payload by modifying [Models/CustomTelemetryMessage.cs](./Models/CustomTelemetryMessage.cs). The data contract of the model can be changed to any serializable format or you can choose to compile your own payload by generating a byte array or stream that can be passed to  [Message(byte[] byteArray)](https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.devices.client.message.-ctor?view=azure-dotnet#Microsoft_Azure_Devices_Client_Message__ctor_System_Byte___), as found in the `SendEvent` method. You will have to maintain a set of properties to ensure your message keeps getting routed appropriately, as listed below.
+This app compiles a sample telemetry message with some randomly generated data. You can customize the message format as well as the payload by modifying [models/CustomTelemetryMessage.cs](./models/CustomTelemetryMessage.cs). The data contract of the model can be changed to any serializable format or you can choose to compile your own payload by generating a byte array or stream that can be passed to  [Message(byte[] byteArray)](https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.devices.client.message.-ctor?view=azure-dotnet#Microsoft_Azure_Devices_Client_Message__ctor_System_Byte___), as found in the `SendEvent` method. You will have to maintain a set of properties to ensure your message keeps getting routed appropriately, as listed below.
 
 ### Telemetry Properties
 

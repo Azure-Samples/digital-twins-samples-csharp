@@ -1,6 +1,6 @@
 # Occupancy Sample
 
-Sample code to provision and read resources in a Digital Twins topology via management APIs. It also creates an example function that runs within the Digital Twins which computes motion from a sensor in a room in order to determine the occupancy.
+Sample code to provision and read resources in a Digital Twins topology via management apis. It also creates an exmaple function that runs within the Digital Twins which computes motion from a sensor in a room inorder to determine the occupancy.
 
 ## Building and Running
 
@@ -12,10 +12,10 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 1. `dotnet test ../tests` to build and run tests
 
 ### Using VSCode
-1. Open the 'occupancy-quickstart' folder in VSCode
+1. Open the 'occupancy-quickstart' folder in vscode
 1. [Update appsettings.json](#configuring-appsettings.json)
 1. Run the app by using F5.  You can change the commandline parameters in launch.json
-1. To build and run tests use the 'Run Task' command in VSCode and choose 'test'
+1. To build and run tests use the 'Run Task' command in vscode and choose 'test'
 
 ## Configuring appsettings.json
 TODO
