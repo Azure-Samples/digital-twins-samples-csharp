@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     public partial class Api
     {
         public static async Task<IEnumerable<Models.Ontology>> GetOntologies(
-            HttpClient httpClient, 
+            HttpClient httpClient,
             ILogger logger)
         {
             var response = await httpClient.GetAsync($"ontologies");
@@ -25,6 +26,24 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             else
             {
                 return Array.Empty<Models.Ontology>();
+            }
+        }
+
+        public static async Task<IEnumerable<Models.PropertyKeys>> GetPropertyKeys(
+            HttpClient httpClient,
+            ILogger logger)
+        {
+            var response = await httpClient.GetAsync($"propertykeys");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var propertyKeys = JsonConvert.DeserializeObject<IEnumerable<Models.PropertyKeys>>(content);
+                logger.LogInformation($"Retrieved PropertyKeys: {JsonConvert.SerializeObject(propertyKeys, Formatting.Indented)}");
+                return propertyKeys;
+            }
+            else
+            {
+                return Array.Empty<Models.PropertyKeys>();
             }
         }
 
@@ -67,6 +86,59 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
 
             return null;
+        }
+
+        public static async Task<Models.Device> GetDevice(
+            HttpClient httpClient,
+            ILogger logger,
+            Guid id,
+            string includes = null)
+        {
+            if (id == Guid.Empty)
+                throw new ArgumentException("GetDevice requires a non empty guid as id");
+
+            var response = await httpClient.GetAsync($"devices/{id}/" + (includes != null ? $"?includes={includes}" : ""));
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var device = JsonConvert.DeserializeObject<Models.Device>(content);
+                logger.LogInformation($"Retrieved Device: {JsonConvert.SerializeObject(device, Formatting.Indented)}");
+                return device;
+            }
+
+            return null;
+        }
+
+        public static async Task<IEnumerable<Models.Space>> GetSpaces(
+            HttpClient httpClient,
+            ILogger logger,
+            int maxNumberToGet = 10,
+            string includes = null,
+            string propertyKey = null)
+        {
+            var includesFilter = (includes != null ? $"includes={includes}" : "");
+            var propertyKeyFilter = (propertyKey != null ? $"propertyKey={propertyKey}" : "");
+            var topFilter = $"$top={maxNumberToGet}";
+            var response = await httpClient.GetAsync($"spaces{MakeQueryParams(new [] {includesFilter, propertyKeyFilter, topFilter})}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var spaces = JsonConvert.DeserializeObject<IEnumerable<Models.Space>>(content);
+                logger.LogInformation($"Retrieved {spaces.Count()} Spaces");
+                return spaces;
+            }
+            else
+            {
+                return Array.Empty<Models.Space>();
+            }
+        }
+
+        private static string MakeQueryParams(IEnumerable<string> queryParams)
+        {
+            return queryParams
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Select((s, i) => (i == 0 ? '?' : '&') + s)
+                .Aggregate((result, cur) => result + cur);
         }
     }
 }
