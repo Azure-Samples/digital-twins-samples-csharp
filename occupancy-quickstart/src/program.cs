@@ -33,6 +33,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
                 switch (actionName)
                 {
+                    case ActionName.CreateRoleAssignment:
+                        await Actions.CreateRoleAssignment(httpClient, logger, Guid.Parse(args[1]), args[2], Guid.Parse(args[3]));
+                        break;
                     case ActionName.GetOccupancy:
                         await Actions.GetOccupancy(httpClient, logger);
                         break;
@@ -60,7 +63,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         private static ActionName? ParseArgs(string[] args)
         {
-            if (args.Length == 1 && Enum.TryParse(args[0], out ActionName actionName))
+            if (args.Length >= 1 && Enum.TryParse(args[0], out ActionName actionName))
             {
                 return actionName;
             }
