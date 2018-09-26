@@ -15,9 +15,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             var spaces = await Api.GetSpaces(
                 httpClient, logger,
-                maxNumberToGet: 100, propertyKey: "Occupancy", includes: "properties");
+                maxNumberToGet: 100, propertyKey: "AvailableAndFresh", includes: "properties");
 
-            Console.WriteLine($"Spaces with 'Occupancy' PropertyKey: {JsonConvert.SerializeObject(spaces, Formatting.Indented)}");
+            Console.WriteLine($"Spaces with 'AvailableAndFresh' PropertyKey: {JsonConvert.SerializeObject(spaces, Formatting.Indented)}");
         }
     }
 }
