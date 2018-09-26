@@ -19,7 +19,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     ObjectId = objectId.ToString(),
                     ObjectIdType = objectIdType,
                     Path = "/",
-                    RoleId = "98e44ad7-28d4-4007-853b-b9968ad132d1", // # System Role: SpaceAdministrator
+                    RoleId = "98e44ad7-28d4-4007-853b-b9968ad132d1", // System Role: SpaceAdministrator
                     TenantId = tenantId.ToString(),
                 });
 
