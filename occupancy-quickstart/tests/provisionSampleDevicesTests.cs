@@ -131,7 +131,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         {
             (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
                 postResponseGuids: null,
-                getResponses: new [] { getDevicesResponse_device1 }
+                getResponses: new [] { getDevicesResponse_device1, getDeviceResponse_device1 }
             );
 
             var descriptions = new [] { new SpaceDescription()
@@ -147,7 +147,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 
             await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.False(httpHandler.PostRequests.ContainsKey("devices"));
-            Assert.Equal(1, httpHandler.GetRequests["devices"].Count);
+            Assert.Equal(2, httpHandler.GetRequests["devices"].Count);
         }
     }
 }

@@ -232,12 +232,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         private static async Task<Models.Device> GetExistingDeviceOrCreate(HttpClient httpClient, ILogger logger, Guid spaceId, DeviceDescription description)
         {
-            var existingDevice = await Api.FindDevice(httpClient, logger, description.hardwareId, spaceId, includes: "ConnectionString");
-            if (existingDevice != null)
-                return existingDevice;
-
-            var newDeviceId = await Api.CreateDevice(httpClient, logger, description.ToDeviceCreate(spaceId));
-            return await Api.GetDevice(httpClient, logger, newDeviceId, includes: "ConnectionString");
+            // NOTE: The API doesn't support getting connection strings on bulk get devices calls so we
+            // even in the case where we are reusing a preexisting device we need to make the GetDevice
+            // call below to get the connection string
+            var existingDeviceId = (await Api.FindDevice(httpClient, logger, description.hardwareId, spaceId))?.Id;
+            var deviceId = existingDeviceId != null
+                ? Guid.Parse(existingDeviceId)
+                : await Api.CreateDevice(httpClient, logger, description.ToDeviceCreate(spaceId));
+            return await Api.GetDevice(httpClient, logger, deviceId, includes: "ConnectionString");
         }
 
         private static async Task<Guid> GetExistingSpaceOrCreate(HttpClient httpClient, ILogger logger, Guid parentId, SpaceDescription description)
