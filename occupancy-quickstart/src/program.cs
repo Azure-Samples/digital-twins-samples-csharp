@@ -11,10 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
 {
-    class Program
+    static class Program
     {
         static async Task Main(string[] args)
         {
@@ -27,12 +28,15 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     return;
 
                 var loggerFactory = new Microsoft.Extensions.Logging.LoggerFactory()
-                    .AddConsole(LogLevel.Trace);
+                    .AddConsole(Microsoft.Extensions.Logging.LogLevel.Trace);
                 var logger = loggerFactory.CreateLogger("DigitalTwinsQuickstart");
-                var httpClient = await SetupHttpClient(appSettings, logger);
+                var httpClient = await SetupHttpClient(logger, appSettings);
 
                 switch (actionName)
                 {
+                    case ActionName.CreateRoleAssignment:
+                        await Actions.CreateRoleAssignment(httpClient, logger, Guid.Parse(args[1]), args[2], Guid.Parse(args[3]));
+                        break;
                     case ActionName.GetOccupancy:
                         await Actions.GetOccupancy(httpClient, logger);
                         break;
@@ -54,13 +58,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 Console.WriteLine($"Exception: {e}");
             }
-
-
         }
 
         private static ActionName? ParseArgs(string[] args)
         {
-            if (args.Length == 1 && Enum.TryParse(args[0], out ActionName actionName))
+            if (args.Length >= 1 && Enum.TryParse(args[0], out ActionName actionName))
             {
                 return actionName;
             }
@@ -76,21 +78,15 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
-        private static async Task<HttpClient> SetupHttpClient(AppSettings appSettings, ILogger logger)
+        private static async Task<HttpClient> SetupHttpClient(ILogger logger, AppSettings appSettings)
         {
             var httpClient = new HttpClient(new LoggingHttpHandler(logger))
             {
                 BaseAddress = new Uri(appSettings.BaseUrl),
             };
-            var accessToken = (await Authenticate(appSettings)).AccessToken;
+            var accessToken = (await Authentication.GetToken(logger, appSettings));
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
             return httpClient;
         }
-
-        private static Task<Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationResult> Authenticate(AppSettings appSettings) =>
-            new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(appSettings.Authority)
-                .AcquireTokenAsync(
-                    resource: appSettings.Resource,
-                    clientCredential: new Microsoft.IdentityModel.Clients.ActiveDirectory.ClientCredential(appSettings.ClientId, appSettings.ClientSecret));
     }
 }

@@ -48,9 +48,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             var contentDisplay = contentMaxLength == null ? "" : $", {contentMaxLength}";
             logger.LogTrace($"Response Status: {(int)response.StatusCode}, {response.StatusCode}{contentDisplay}");
 
-            // logger.LogTrace($"More Info: {Serialize(response)}");
-            // var content = await response.Content?.ReadAsStringAsync();
-            // logger.LogTrace($"Response Content: {content}");
+            // Enable to get more details:
+            // logger.LogTrace($"Full Response: {Serialize(response)}");
+            // logger.LogTrace($"Full Response Content: {content}");
         }
 
         private static string Serialize(object o)
