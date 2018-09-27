@@ -21,7 +21,7 @@
         - dataType: Motion
           hardwareId: SAMPLE_SENSOR_MOTION
         - dataType: CarbonDioxide
-          hardwareId: SAMPLE_SENSOR_CO2
+          hardwareId: SAMPLE_SENSOR_CARBOXDIOXIDE
       matchers:
       - name: Matcher Motion A1
         dataTypeValue: Motion
