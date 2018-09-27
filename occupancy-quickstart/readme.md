@@ -21,7 +21,7 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 
 ## Walkthrough
 
-1. See the [quickstart doc](https://github.com/MicrosoftDocs/azure-docs-pr/blob/release-preview-smart-spaces/articles/digital-twins/quickstart-view-occupancy-dotnet.md) to set up your Digital Twins resource and configure this sample to call it.
+1. See the [quickstart doc](https://docs.microsoft.com/azure/digital-twins/quickstart-view-occupancy-dotnet) to set up your Digital Twins resource and configure this sample to call it.
 1. Provision spaces, IoT Hub resource, devices, sensors, functions.
 1. Get spaces by parent `id`.
 1. Send motion telemetry every X seconds to simulate motion sensors.
@@ -31,4 +31,7 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 
 ### Authentication
 
-//TODO: look into alternate auth (url auth like azure cli uses) and then document the setup for the auth we go with (either here or in docs)
+To learn more about configurition, security, and API authentication:
+
+1. See the [role-based access control doc](https://docs.microsoft.com/azure/digital-twins/security-role-based-access-control).
+1. See the [Management API doc](https://docs.microsoft.com/azure/digital-twins/security-authenticating-apis).
