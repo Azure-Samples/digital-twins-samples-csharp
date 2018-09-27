@@ -62,7 +62,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     return () => rnd.Next(0, 2) == 0 ? "false" : "true";
                 case "Temperature":
                     return () => rnd.Next(70, 100).ToString(CultureInfo.InvariantCulture);
-                case "CarbonDioxide":
+                case "CO2":
                     return () => rnd.Next(950, 1300).ToString(CultureInfo.InvariantCulture);
             }
         }
@@ -91,7 +91,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         eventMessage.Properties.Add("DigitalTwins-Telemetry", "1.0");
                         eventMessage.Properties.Add("DigitalTwins-SensorHardwareId", $"{hardwareId}-{sensorDataType}");
                         eventMessage.Properties.Add("CreationTimeUtc", DateTime.UtcNow.ToString("o"));
-                        eventMessage.Properties.Add("CorrelationId", Guid.NewGuid().ToString());
+                        eventMessage.Properties.Add("x-ms-client-request-id", Guid.NewGuid().ToString());
 
                         Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.UTF8.GetString(eventMessage.GetBytes())} Properties: {{ {eventMessage.Properties.Aggregate(new StringBuilder(), (sb, x) => sb.Append($"'{x.Key}': '{x.Value}',"), sb => sb.ToString())} }}");
 
