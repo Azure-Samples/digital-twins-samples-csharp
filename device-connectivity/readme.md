@@ -5,6 +5,8 @@ sample sensory data.
 
 ## Configuring the app
 
+### DeviceConnectionString
+
 Edit your settings file to fill in the following values:
 * `DeviceConnectionString`
 
@@ -32,11 +34,14 @@ Copy the `connectionString` over to the [appsettings.json](./appsettings.json) f
 {
   "Settings": {
     "DeviceConnectionString": "Hostname=...",
-    "MessageIntervalInMilliSeconds": 5000,
-    "SensorDataTypes": "Temperature,Motion,CarbonDioxide"
+    ...
   }
 }
-```  
+```
+
+### Sensors
+
+TODO:
 
 ## Building the app
 

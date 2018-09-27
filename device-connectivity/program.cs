@@ -14,13 +14,13 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.DigitalTwins.Samples.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Binder;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
 {
     class Program
     {
         private static Random rnd = new Random();
-        private static string hardwareId;
         private static IConfigurationSection settings;
         static void Main(string[] args)
         {
@@ -29,10 +29,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 .AddJsonFile("appsettings.json")
                 .Build()
                 .GetSection("Settings");
-
-            hardwareId = GetMacAddress();
-
-            Console.WriteLine($"INFO: Your hardware ID is: {hardwareId}");
 
             try
             {
@@ -43,7 +39,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     Console.WriteLine("ERROR: Failed to create DeviceClient!");
                     return;
                 }
-                
+
                 SendEvent(deviceClient).Wait();
             }
             catch (Exception ex)
@@ -71,13 +67,17 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             var serializer = new DataContractJsonSerializer(typeof(CustomTelemetryMessage));
 
-            var sensorDataTypes = settings["SensorDataTypes"].Split(',');
+            var sensors = settings.GetSection("Sensors").Get<Sensor[]>();
 
-            while (true)
-            {
-                foreach (var sensorDataType in sensorDataTypes)
+            var intervalPerEvent = int.Parse(settings["MessageIntervalInSeconds"]);
+            var maxSecondsToRun = 600;
+            var maxEventsToSend = maxSecondsToRun / intervalPerEvent;
+            var eventsSentCount = 0;
+
+            do {
+                foreach (var sensor in sensors)
                 {
-                    var getRandomSensorReading = CreateGetRandomSensorReading(sensorDataType);
+                    var getRandomSensorReading = CreateGetRandomSensorReading(sensor.DataType);
                     var telemetryMessage = new CustomTelemetryMessage()
                     {
                         SensorValue = getRandomSensorReading(),
@@ -89,34 +89,25 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         var byteArray = stream.ToArray();
                         Message eventMessage = new Message(byteArray);
                         eventMessage.Properties.Add("DigitalTwins-Telemetry", "1.0");
-                        eventMessage.Properties.Add("DigitalTwins-SensorHardwareId", $"{hardwareId}-{sensorDataType}");
+                        eventMessage.Properties.Add("DigitalTwins-SensorHardwareId", $"{sensor.HardwareId}");
                         eventMessage.Properties.Add("CreationTimeUtc", DateTime.UtcNow.ToString("o"));
-                        eventMessage.Properties.Add("CorrelationId", Guid.NewGuid().ToString());
+                        eventMessage.Properties.Add("x-ms-client-request-id", Guid.NewGuid().ToString());
 
                         Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.UTF8.GetString(eventMessage.GetBytes())} Properties: {{ {eventMessage.Properties.Aggregate(new StringBuilder(), (sb, x) => sb.Append($"'{x.Key}': '{x.Value}',"), sb => sb.ToString())} }}");
 
                         await deviceClient.SendEventAsync(eventMessage);
-                        await Task.Delay(int.Parse(settings["MessageIntervalInMilliSeconds"]));
+                        await Task.Delay(TimeSpan.FromSeconds(intervalPerEvent));
                     }
                 }
-            }
-        }
+            } while (++eventsSentCount < maxEventsToSend);
 
-        private static string GetMacAddress()
-        {
-            foreach(var nic in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                if (nic.OperationalStatus == OperationalStatus.Up && nic.Speed > 0)
-                {
-                    var physAddress = nic.GetPhysicalAddress().ToString();
-                    if (physAddress.Length > 0)
-                    {
-                        return physAddress;
-                    }
-                }
-            }
-
-            throw new Exception("No hardware address found.");
+            Console.WriteLine($"Finished sending {eventsSentCount} events (per sensor type)");
         }
+    }
+
+    public class Sensor
+    {
+        public string DataType { get; set; }
+        public string HardwareId { get; set; }
     }
 }
