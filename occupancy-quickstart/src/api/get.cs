@@ -133,6 +133,25 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
+        public static async Task<IEnumerable<Models.Sensor>> GetSensorsOfSpace(
+            HttpClient httpClient,
+            ILogger logger,
+            Guid spaceId)
+        {
+            var response = await httpClient.GetAsync($"sensors?spaceId={spaceId.ToString()}&includes=Types");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var sensors = JsonConvert.DeserializeObject<IEnumerable<Models.Sensor>>(content);
+                logger.LogInformation($"Retrieved {sensors.Count()} Sensors");
+                return sensors;
+            }
+            else
+            {
+                return Array.Empty<Models.Sensor>();
+            }
+        }
+
         private static string MakeQueryParams(IEnumerable<string> queryParams)
         {
             return queryParams

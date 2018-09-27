@@ -48,9 +48,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(JsonConvert.SerializeObject(new [] { space })),
             };
+
+            var getSensorsForResultsResponse = new [] { Responses.NotFound };
+
             return FakeHttpHandler.CreateHttpClient(
                 postResponses: CreateGuidResponses(postResponseGuids),
-                getResponses: new [] { getRootSpaceResponse }.Concat(getResponses) );
+                getResponses: new [] { getRootSpaceResponse }
+                    .Concat(getResponses)
+                    .Concat(getSensorsForResultsResponse));
         }
 
         // Creates an httpClient that will respond with a space and device
