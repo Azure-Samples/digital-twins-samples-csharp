@@ -23,7 +23,7 @@ GET https://<instance-name>.westcentralus.azuresmartspaces.net/management/api/v1
     "hardwareId": "00AABBCCDDEE",
     "spaceId": "ef46f69f-0b95-45ee-a41f-718b3ee4c355",
     "status": "Active",
-    "id": "f51e5295-ca81-4517-8f5d-0b940f678ef2",
+    "id": "22215ed9-91e8-40af-9d1b-a22727849393",
     "connectionString": "Hostname=..."
 }
 
