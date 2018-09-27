@@ -23,7 +23,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             var results = await CreateSpaces(httpClient, logger, spaceCreateDescriptions, Guid.Empty);
 
-            Console.WriteLine($"Completed Provisioning: {JsonConvert.SerializeObject(results, Formatting.Indented)}");
+            Console.WriteLine($"Completed Provisioning: {JsonConvert.SerializeObject(results, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore } )}");
 
             return results;
         }
@@ -66,14 +66,21 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         ? await CreateSpaces(httpClient, logger, description.spaces, spaceId)
                         : Array.Empty<ProvisionResults.Space>();
 
+                    var sensors = await Api.GetSensorsOfSpace(httpClient, logger, spaceId);
+
                     spaceResults.Add(new ProvisionResults.Space()
                     {
+                        Id = spaceId,
                         Devices = devices.Select(device => new ProvisionResults.Device()
                             {
                                 ConnectionString = device.ConnectionString,
-                                HardwareId = device.HardwareId
+                                HardwareId = device.HardwareId,
                             }),
-                        Id = spaceId,
+                        Sensors = sensors.Select(sensor => new ProvisionResults.Sensor()
+                            {
+                                DataType = sensor.DataType,
+                                HardwareId = sensor.HardwareId,
+                            }),
                         Spaces = childSpacesResults,
                     });
                 }

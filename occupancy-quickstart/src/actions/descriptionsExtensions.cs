@@ -61,6 +61,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 DataType = description.dataType,
                 DeviceId = deviceId.ToString(),
+                HardwareId = description.hardwareId,
             };
 
         public static Models.SpaceCreate ToSpaceCreate(this SpaceDescription description, Guid parentId)
