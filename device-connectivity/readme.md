@@ -113,7 +113,7 @@ This app compiles a sample telemetry message with some randomly generated data. 
 
 ### Telemetry Properties
 
-While the payload contents of a `Message` can be arbitrary data, up to 256kb in size, there are a few requirements on expected [Message.Properties](https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.devices.client.message.properties?view=azure-dotnet). The following is the list of required and optional properties supported by the system:
+While the payload contents of a `Message` can be arbitrary data, up to 256kb in size, there are a few requirements on expected [Message.Properties](https://docs.microsoft.com/dotnet/api/microsoft.azure.devices.client.message.properties?view=azure-dotnet). The following is the list of required and optional properties supported by the system:
 
 | Property Name | Value | Required | Description |
 |---------------|-------|----------|-------------|
