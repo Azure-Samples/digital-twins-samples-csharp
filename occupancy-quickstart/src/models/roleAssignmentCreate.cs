@@ -8,5 +8,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Models
         public string ObjectIdType { get; set; }
         public string Path { get; set; }
         public string RoleId { get; set; }
+        public string TenantId { get; set; }
     }
 }
