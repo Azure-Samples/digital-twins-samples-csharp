@@ -69,10 +69,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             var sensors = settings.GetSection("Sensors").Get<Sensor[]>();
 
-            var intervalPerEvent = int.Parse(settings["MessageIntervalInSeconds"]);
+            var delayPerMessageSend = int.Parse(settings["MessageIntervalInSeconds"]);
+            var countOfSendsPerIteration = sensors.Length;
             var maxSecondsToRun = 600;
-            var maxEventsToSend = maxSecondsToRun / intervalPerEvent;
-            var eventsSentCount = 0;
+            var maxIterations = maxSecondsToRun / countOfSendsPerIteration / delayPerMessageSend;
+            var curIteration = 0;
 
             do {
                 foreach (var sensor in sensors)
@@ -96,12 +97,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.UTF8.GetString(eventMessage.GetBytes())} Properties: {{ {eventMessage.Properties.Aggregate(new StringBuilder(), (sb, x) => sb.Append($"'{x.Key}': '{x.Value}',"), sb => sb.ToString())} }}");
 
                         await deviceClient.SendEventAsync(eventMessage);
-                        await Task.Delay(TimeSpan.FromSeconds(intervalPerEvent));
+                        await Task.Delay(TimeSpan.FromSeconds(delayPerMessageSend));
                     }
                 }
-            } while (++eventsSentCount < maxEventsToSend);
+            } while (++curIteration < maxIterations);
 
-            Console.WriteLine($"Finished sending {eventsSentCount} events (per sensor type)");
+            Console.WriteLine($"Finished sending {curIteration} events (per sensor type)");
         }
     }
 
