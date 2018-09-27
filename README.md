@@ -15,6 +15,8 @@ The repo contains several standalone projects:
 - The [Occupancy](./occupancy-quickstart/readme.md) sample is suggested as a first example to gain familiarity with Digital Twins.
 - The [Device Connectivity](./device-connectivity/readme.md) sample demonstrates how to connect a device to Digital Twins and submit sensory data.
 
+For corresponding documentation, please see the project readme's above.
+
 ## Visual Studio Code
 
 A [workspace file](./digital-twins-samples.code-workspace) containing all the apps is included for [Visual Studio Code](https://code.visualstudio.com/) users.
