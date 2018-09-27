@@ -1,9 +1,11 @@
-var co2Type = "CO2";
+var CarbonDioxideType = "CarbonDioxide";
 var motionType = "Motion";
 var spaceAirQuality = "AvailableAndFresh";
 
 function process(telemetry, executionContext) {
   
+    sendNotification(telemetry.SensorId, "CarbonDioxide", JSON.stringify("hello world")); 
+
     // Log SensorId and Message
     log(`Sensor ID: ${telemetry.SensorId}. `);
     log(`Sensor value: ${JSON.stringify(telemetry.Message)}.`);
@@ -25,8 +27,8 @@ function process(telemetry, executionContext) {
         var carbonDioxideThreshold = 1000.0;
 
         // Retrieve C02, and motion sensors
-        var co2Sensor = otherSensors.find(function(element) {
-            return element.DataType === co2Type;
+        var CarbonDioxideSensor = otherSensors.find(function(element) {
+            return element.DataType === CarbonDioxideType;
         });
 
         var motionSensor = otherSensors.find(function(element) {
@@ -36,23 +38,23 @@ function process(telemetry, executionContext) {
         // get latest values for above sensors
         var motionVal = motionSensor.Value().Value;
         var presence = !!motionVal && motionVal.toLowerCase() === "true";
-        var co2 = getFloatValue(co2Sensor.Value().Value);
+        var CarbonDioxide = getFloatValue(CarbonDioxideSensor.Value().Value);
 
         // Return if no motion or C02 found
-        if(motionVal === null || co2 === null) {
+        if(motionVal === null || CarbonDioxide === null) {
             return;
         }
 
         // If C02 greater than threshold and presence in the room => log, notify and set parent space computed value 
-        if(co2 < carbonDioxideThreshold && !presence) {
-            log(`Room is available and air quality is good. Carbon Dioxide: ${co2Sensor.Value().Value}. Presence: ${presence}.`);
+        if(CarbonDioxide < carbonDioxideThreshold && !presence) {
+            log(`Room is available and air quality is good. Carbon Dioxide: ${CarbonDioxideSensor.Value().Value}. Presence: ${presence}.`);
             setSpaceValue(parentSpace.Id, spaceAirQuality, "Room is available and air quality is good.");
 
             // Set up custom notification for air quality
             parentSpace.Notify(JSON.stringify("Room not available or air quality is poor.")); 
         }
         else {
-            log(`Room is not available or air quality is poor. Carbon Dioxide: ${co2Sensor.Value().Value}. Presence: ${presence}.`);
+            log(`Room is not available or air quality is poor. Carbon Dioxide: ${CarbonDioxideSensor.Value().Value}. Presence: ${presence}.`);
             setSpaceValue(parentSpace.Id, spaceAirQuality, "Room is not available or air quality is poor.");
 
             // Set up custom notification for air quality

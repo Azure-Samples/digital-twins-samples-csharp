@@ -25,6 +25,8 @@
       matchers:
       - name: Matcher Motion A1
         dataTypeValue: Motion
+      - name: Matcher CarbonDioxide A1
+        dataTypeValue: CarbonDioxide
       userdefinedfunctions:
       - name: Motion Processor
         matcher: Matcher Motion A1
