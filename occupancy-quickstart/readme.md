@@ -7,7 +7,7 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 ### Use the terminal
 
 1. Run the `dotnet restore` command.
-1. [Update appsettings.json](#configuring-appsettings.json).
+1. Update `appsettings.json`.
 1. Run the `cd src` command.
 1. Run the `dotnet run` command to build and see usage.
 1. Run the `dotnet test ../tests` command to build and run tests.
@@ -15,7 +15,7 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 ### Use Visual Studio Code
 
 1. Open the 'occupancy-quickstart' folder in Visual Studio Code.
-1. [Update appsettings.json](#configuring-appsettings.json).
+1. Update `appsettings.json`.
 1. Run the app by using the `F5` key. You can change the command-line parameters in `launch.json`.
 1. To build and run tests use the 'Run Task' command in Visual Studio Code and choose `test`.
 
