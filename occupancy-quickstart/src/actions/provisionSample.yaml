@@ -1,4 +1,4 @@
-- name: Quickstart Building
+- name: Tenant Test
   type: Venue
   resources:
   - type: IoTHub
@@ -21,13 +21,13 @@
         - dataType: Motion
         - dataType: Temperature
       matchers:
-      - name: Matcher Motion A1
+      - name: Matcher Motion new
         dataTypeValue: Motion
       userdefinedfunctions:
-      - name: Motion Processor
-        matcher: Matcher Motion A1
+      - name: Motion Processor new
+        matcher: Matcher Motion new
         script: actions/userDefinedFunctions/placeholder.js
       roleassignments:
       - roleId: 98e44ad7-28d4-4007-853b-b9968ad132d1 # System Role: SpaceAdministrator
-        objectName: Motion Processor
+        objectName: Motion Processor new
         objectIdType: UserDefinedFunctionId
