@@ -59,7 +59,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 case "Temperature":
                     return () => rnd.Next(70, 100).ToString(CultureInfo.InvariantCulture);
                 case "CarbonDioxide":
-                    return () => rnd.Next(950, 1300).ToString(CultureInfo.InvariantCulture);
+                    return () => rnd.Next(850, 1100).ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -93,6 +93,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         eventMessage.Properties.Add("DigitalTwins-SensorHardwareId", $"{sensor.HardwareId}");
                         eventMessage.Properties.Add("CreationTimeUtc", DateTime.UtcNow.ToString("o"));
                         eventMessage.Properties.Add("x-ms-client-request-id", Guid.NewGuid().ToString());
+                        eventMessage.Properties.Add("x-ms-flighting-udf-execution-manually-enabled", "true");
 
                         Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.UTF8.GetString(eventMessage.GetBytes())} Properties: {{ {eventMessage.Properties.Aggregate(new StringBuilder(), (sb, x) => sb.Append($"'{x.Key}': '{x.Value}',"), sb => sb.ToString())} }}");
 
