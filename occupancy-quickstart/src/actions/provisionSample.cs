@@ -227,11 +227,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     }
                     else
                     {
-                        await Api.CreateUserDefinedFunction(
+                        await CreateOrPatchUserDefinedFunction(
                             httpClient,
                             logger,
-                            description.ToUserDefinedFunctionCreate(spaceId, new [] { matcher.Id }),
-                            js);
+                            description,
+                            js,
+                            spaceId,
+                            new [] { matcher.Id });
                     }
                 }
             }
@@ -255,6 +257,34 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return existingSpace?.Id != null
                 ? Guid.Parse(existingSpace.Id)
                 : await Api.CreateSpace(httpClient, logger, description.ToSpaceCreate(parentId));
+        }
+
+        private static async Task CreateOrPatchUserDefinedFunction(
+            HttpClient httpClient,
+            ILogger logger,
+            UserDefinedFunctionDescription description,
+            string js,
+            Guid spaceId,
+            IEnumerable<string> matcherIds)
+        {
+            var userDefinedFunction = await Api.FindUserDefinedFunction(httpClient, logger, description.name, spaceId);
+
+            if (userDefinedFunction != null)
+            {
+                await Api.UpdateUserDefinedFunction(
+                    httpClient,
+                    logger,
+                    description.ToUserDefinedFunction(userDefinedFunction.Id, spaceId, matcherIds),
+                    js);
+            }
+            else
+            {
+                await Api.CreateUserDefinedFunction(
+                    httpClient,
+                    logger,
+                    description.ToUserDefinedFunctionCreate(spaceId, matcherIds),
+                    js);
+            }
         }
     }
 }

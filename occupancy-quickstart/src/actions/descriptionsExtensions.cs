@@ -71,6 +71,15 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 ParentSpaceId = parentId != Guid.Empty ? parentId.ToString() : "",
             };
 
+        public static Models.UserDefinedFunction ToUserDefinedFunction(this UserDefinedFunctionDescription description, string Id, Guid spaceId, IEnumerable<string> matcherIds)
+            => new Models.UserDefinedFunction()
+            {
+                Id = Id,
+                Name = description.name,
+                SpaceId = spaceId.ToString(),
+                Matchers = matcherIds,
+            };
+
         public static Models.UserDefinedFunctionCreate ToUserDefinedFunctionCreate(this UserDefinedFunctionDescription description, Guid spaceId, IEnumerable<string> matcherIds)
             => new Models.UserDefinedFunctionCreate()
             {

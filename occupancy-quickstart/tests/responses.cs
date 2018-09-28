@@ -9,5 +9,10 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         {
             StatusCode = HttpStatusCode.NotFound,
         };
+
+        public static HttpResponseMessage OK = new HttpResponseMessage()
+        {
+            StatusCode = HttpStatusCode.OK,
+        };
     }
 }

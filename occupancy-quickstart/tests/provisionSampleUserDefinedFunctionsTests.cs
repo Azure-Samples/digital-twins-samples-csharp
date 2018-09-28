@@ -31,6 +31,16 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(JsonConvert.SerializeObject(new [] { matcher1 })),
         };
+        private static Models.UserDefinedFunction udf1 = new Models.UserDefinedFunction()
+        {
+            Id = udfGuid1.ToString(),
+            Name = "User Defined Function 1",
+        };
+        private static HttpResponseMessage udf1GetResponse = new HttpResponseMessage()
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonConvert.SerializeObject(new [] { udf1 })),
+        };
         [Fact]
         public async Task GetProvisionSampleCreatesDescriptions()
         {
@@ -67,7 +77,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         {
             (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
                 postResponseGuids: new [] { udfGuid1, udfGuid2 },
-                getResponses: new [] { matcher1GetResponse, matcher1GetResponse }
+                getResponses: new [] { matcher1GetResponse, Responses.NotFound, matcher1GetResponse, Responses.NotFound }
             );
 
             var descriptions = new [] { new SpaceDescription()
@@ -91,7 +101,35 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.Equal(2, httpHandler.PostRequests["userdefinedfunctions"].Count);
             Assert.Equal(2, httpHandler.GetRequests["matchers"].Count);
-            Assert.False(httpHandler.GetRequests.ContainsKey("userdefinedfunctions"));
+            Assert.Equal(2, httpHandler.GetRequests["userdefinedfunctions"].Count);
+        }
+
+        [Fact]
+        public async Task UpdateUserDefinedFunction()
+        {
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
+                postResponseGuids: new [] { udfGuid1, udfGuid2 },
+                getResponses: new [] { matcher1GetResponse, udf1GetResponse },
+                patchResponses: new [] { Responses.OK }
+            );
+
+            var descriptions = new [] { new SpaceDescription()
+            {
+                name = FakeDigitalTwinsHttpClient.Space.Name,
+                userdefinedfunctions = new [] {
+                    new UserDefinedFunctionDescription()
+                    {
+                        name = "Function 1",
+                        matcher = "Matcher1",
+                        script = "userDefinedFunctions/function1.js",
+                    }},
+            }};
+
+            await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
+            Assert.False(httpHandler.PostRequests.ContainsKey("userdefinedfunctions"));
+            Assert.Equal(1, httpHandler.PatchRequests["userdefinedfunctions"].Count);
+            Assert.Equal(1, httpHandler.GetRequests["matchers"].Count);
+            Assert.Equal(1, httpHandler.GetRequests["userdefinedfunctions"].Count);
         }
     }
 }
