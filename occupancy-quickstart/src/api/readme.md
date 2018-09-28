@@ -2,8 +2,9 @@
 
 This folder contains helpers that wrap Digital Twins REST API to produce and consume in memory [models](../models/readme.md).  They also contains some helpers for simplifying interactions.
 
-> [!NOTE]
-> These APIs are not complete.  
+## Note
+
+These APIs are not complete.  
 
 See the Swagger documentation that is part of your Azure Digital Twins instance for a complete description of capabilities.  
 

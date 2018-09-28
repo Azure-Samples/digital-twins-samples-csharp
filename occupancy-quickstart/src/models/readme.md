@@ -2,8 +2,9 @@
 
 This folder contains models used when interacting with Azure Digital Twins Management APIs.
 
-> [!NOTE]
-> These models are not complete (they do not contain all fields available).  
+## Note
+
+These models are not complete (they do not contain all fields available).  
 
 See the Swagger documentation that is part of your Azure Digital Twins instance for a complete description.  
 
