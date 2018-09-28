@@ -16,12 +16,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     {
         public static (HttpClient, FakeHttpHandler) CreateHttpClient(
             IEnumerable<HttpResponseMessage> postResponses = null,
-            IEnumerable<HttpResponseMessage> getResponses = null)
+            IEnumerable<HttpResponseMessage> getResponses = null,
+            IEnumerable<HttpResponseMessage> patchResponses = null)
         {
             var httpHandler = new FakeHttpHandler()
             {
                 PostResponses = postResponses,
                 GetResponses = getResponses,
+                PatchResponses = patchResponses,
             };
             return (
                 new HttpClient(httpHandler)
@@ -36,10 +38,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             requests[HttpMethod.Post] = new Dictionary<string, List<HttpRequestMessage>>();
             requests[HttpMethod.Get] = new Dictionary<string, List<HttpRequestMessage>>();
+            requests[HttpMethod.Patch] = new Dictionary<string, List<HttpRequestMessage>>();
         }
 
-        public IReadOnlyDictionary<string, List<HttpRequestMessage>> PostRequests => requests[HttpMethod.Post];
+        public IReadOnlyDictionary<string, List<HttpRequestMessage>> PatchRequests => requests[HttpMethod.Patch];
         public IReadOnlyDictionary<string, List<HttpRequestMessage>> GetRequests => requests[HttpMethod.Get];
+        public IReadOnlyDictionary<string, List<HttpRequestMessage>> PostRequests => requests[HttpMethod.Post];
         private Dictionary<HttpMethod, Dictionary<string, List<HttpRequestMessage>>> requests = new Dictionary<HttpMethod, Dictionary<string, List<HttpRequestMessage>>>();
 
         public IEnumerable<HttpResponseMessage> PostResponses { get; set; }
@@ -47,6 +51,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         public IEnumerable<HttpResponseMessage> GetResponses { get; set; }
         private IEnumerator<HttpResponseMessage> enumerateGetResponses;
+
+        public IEnumerable<HttpResponseMessage> PatchResponses { get; set; }
+        private IEnumerator<HttpResponseMessage> enumeratePatchResponses;
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -72,6 +79,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 if (enumerateGetResponses == null)
                     enumerateGetResponses = GetResponses.GetEnumerator();
                 return enumerateGetResponses;
+            }
+            else if (request.Method == HttpMethod.Patch)
+            {
+                if (enumeratePatchResponses == null)
+                    enumeratePatchResponses = PatchResponses.GetEnumerator();
+                return enumeratePatchResponses;
             }
             else if (request.Method == HttpMethod.Post)
             {
