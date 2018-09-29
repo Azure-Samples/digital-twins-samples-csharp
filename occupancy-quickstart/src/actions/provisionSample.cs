@@ -216,7 +216,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             foreach (var description in descriptions)
             {
-                var matcher = await Api.FindMatcher(httpClient, logger, description.matcher, spaceId);
+                var matchers = await Api.FindMatchers(httpClient, logger, description.matcherNames, spaceId);
 
                 using (var r = new StreamReader(description.script))
                 {
@@ -233,7 +233,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                             description,
                             js,
                             spaceId,
-                            new [] { matcher.Id });
+                            matchers);
                     }
                 }
             }
@@ -265,7 +265,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             UserDefinedFunctionDescription description,
             string js,
             Guid spaceId,
-            IEnumerable<string> matcherIds)
+            IEnumerable<Models.Matcher> matchers)
         {
             var userDefinedFunction = await Api.FindUserDefinedFunction(httpClient, logger, description.name, spaceId);
 
@@ -274,7 +274,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 await Api.UpdateUserDefinedFunction(
                     httpClient,
                     logger,
-                    description.ToUserDefinedFunction(userDefinedFunction.Id, spaceId, matcherIds),
+                    description.ToUserDefinedFunction(userDefinedFunction.Id, spaceId, matchers),
                     js);
             }
             else
@@ -282,7 +282,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 await Api.CreateUserDefinedFunction(
                     httpClient,
                     logger,
-                    description.ToUserDefinedFunctionCreate(spaceId, matcherIds),
+                    description.ToUserDefinedFunctionCreate(spaceId, matchers.Select(m => m.Id)),
                     js);
             }
         }
