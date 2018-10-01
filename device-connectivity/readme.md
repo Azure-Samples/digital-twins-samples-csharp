@@ -97,7 +97,7 @@ Choose `win-arm` or `linux-arm` for your platform:
 
 * Run the `dotnet publish -r <platform>` command.
 
-Under `./bin/Debug/netcoreapp2.0/<runtime identifier>/publish` or `.\bin\Debug\netcoreapp2.0\<runtime identifier>\publish` you will see the whole self contained app that you need to copy to your Raspberry Pi.
+Under `./bin/Debug/netcoreapp2.0/{{your-runtime-identifier}}/publish` or `.\bin\Debug\netcoreapp2.0\{{your-runtime-identifier}}\publish` you will see the whole self contained app that you need to copy to your Raspberry Pi.
 
 ### Windows 10 IoT
 
