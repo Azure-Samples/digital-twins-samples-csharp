@@ -86,6 +86,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             };
             var accessToken = (await Authentication.GetToken(logger, appSettings));
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+            httpClient.DefaultRequestHeaders.Add("x-ms-flighting-udf-execution-manually-enabled", "true");
             return httpClient;
         }
     }
