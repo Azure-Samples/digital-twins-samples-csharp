@@ -41,6 +41,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     public class SensorDescription
     {
         public string dataType { get; set; }
+        public string hardwareId { get; set; }
     }
 
     public class UserDefinedFunctionDescription

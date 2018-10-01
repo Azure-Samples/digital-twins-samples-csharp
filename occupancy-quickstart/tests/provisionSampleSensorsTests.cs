@@ -31,6 +31,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     hardwareId: DeviceHardwareId1
                     sensors:
                     - dataType: SensorType1
+                      hardwareId: SensorHardwareId1
                 ";
             var expectedDescriptions = new [] { new SpaceDescription()
             {
@@ -44,6 +45,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                             new SensorDescription()
                             {
                                 dataType = "SensorType1",
+                                hardwareId = "SensorHardwareId1",
                             }
                         },
                     },
@@ -73,10 +75,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                             new SensorDescription()
                             {
                                 dataType = "SensorType1",
+                                hardwareId = "SensorHardwareId1",
                             },
                             new SensorDescription()
                             {
                                 dataType = "SensorType2",
+                                hardwareId = "SensorHardwareId2",
                             }
                         }
                     }
@@ -85,7 +89,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
 
             await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.Equal(2, httpHandler.PostRequests["sensors"].Count);
-            Assert.False(httpHandler.GetRequests.ContainsKey("sensors"));
         }
     }
 }

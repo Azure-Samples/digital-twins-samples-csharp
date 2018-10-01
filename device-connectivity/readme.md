@@ -7,6 +7,9 @@ sample sensory data.
 
 Edit your settings file to fill in the following values:
 * `DeviceConnectionString`
+* `Sensors`
+
+### DeviceConnectionString
 
 You can get the connection string by calling Management API's Devices controller. E.g. for a device with ID `22215ed9-91e8-40af-9d1b-a22727849393`:
 
@@ -32,11 +35,47 @@ Copy the `connectionString` over to the [appsettings.json](./appsettings.json) f
 {
   "Settings": {
     "DeviceConnectionString": "Hostname=...",
-    "MessageIntervalInMilliSeconds": 5000,
-    "SensorDataTypes": "Temperature,Motion,CarbonDioxide"
+    ...
   }
 }
-```  
+```
+
+### Sensors
+
+An array of one or more Sensors you wish to send data for using this sample. You can get the DataType and HardwareId of each Sensor by calling Management API's Sensors controller. E.g. for a sensor with ID `c4cf2f41-edd6-4fc3-a47a-6bedab6470db`:
+
+```
+GET https://<instance-name>.westcentralus.azuresmartspaces.net/management/api/v1.0/sensors/c4cf2f41-edd6-4fc3-a47a-6bedab6470db?includes=Types
+
+{
+    "dataType":"Motion",
+    "dataTypeId":27
+    "deviceId":"f51e5295-ca81-4517-8f5d-0b940f678ef2",
+    "id": "c4cf2f41-edd6-4fc3-a47a-6bedab6470db",
+    "hardwareId":"1234ABC",
+    "name": "My Sample Sensor",
+    "spaceId": "ef46f69f-0b95-45ee-a41f-718b3ee4c355"
+}
+
+```
+
+Copy the `hardwareId` and `dataType` over to be one entry in the `Sensors` array in the [appsettings.json](./appsettings.json) file:
+
+```
+
+{
+  "Settings": {
+    "Sensors": [{
+      "DataType": "Motion",
+      "HardwareId": "1234ABC"
+    },{
+      "DataType": "CarbonDioxide",
+      "HardwareId": "SOMEOTHERID"
+    }]
+  }
+}
+
+```
 
 ## Building the app
 

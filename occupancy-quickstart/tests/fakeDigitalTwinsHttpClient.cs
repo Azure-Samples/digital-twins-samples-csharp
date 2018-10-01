@@ -37,10 +37,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         public static (HttpClient, FakeHttpHandler) CreateWithSpace(
             IEnumerable<Guid> postResponseGuids,
             IEnumerable<HttpResponseMessage> getResponses = null,
+            IEnumerable<HttpResponseMessage> patchResponses = null,
             Models.Space space = null)
         {
             postResponseGuids = postResponseGuids ?? Array.Empty<Guid>();
             getResponses = getResponses ?? Array.Empty<HttpResponseMessage>();
+            patchResponses = patchResponses ?? Array.Empty<HttpResponseMessage>();
             space = space ?? Space;
 
             var getRootSpaceResponse = new HttpResponseMessage()
@@ -48,9 +50,15 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(JsonConvert.SerializeObject(new [] { space })),
             };
+
+            var getSensorsForResultsResponse = new [] { Responses.NotFound };
+
             return FakeHttpHandler.CreateHttpClient(
                 postResponses: CreateGuidResponses(postResponseGuids),
-                getResponses: new [] { getRootSpaceResponse }.Concat(getResponses) );
+                getResponses: new [] { getRootSpaceResponse }
+                    .Concat(getResponses)
+                    .Concat(getSensorsForResultsResponse),
+                patchResponses: patchResponses);
         }
 
         // Creates an httpClient that will respond with a space and device
