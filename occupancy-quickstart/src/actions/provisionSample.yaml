@@ -25,10 +25,12 @@
       matchers:
       - name: Matcher Motion A1
         dataTypeValue: Motion
+      - name: Matcher CarbonDioxide A1
+        dataTypeValue: CarbonDioxide
       userdefinedfunctions:
       - name: Motion Processor
         matcher: Matcher Motion A1
-        script: actions/userDefinedFunctions/placeholder.js
+        script: actions/userDefinedFunctions/availability.js
       roleassignments:
       - roleId: 98e44ad7-28d4-4007-853b-b9968ad132d1 # System Role: SpaceAdministrator
         objectName: Motion Processor
