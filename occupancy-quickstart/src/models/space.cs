@@ -2,14 +2,6 @@ using System.Collections.Generic;
 
 namespace Microsoft.Azure.DigitalTwins.Samples.Models
 {
-    public class SensorValue
-    {
-        public string Type;
-        public string Value;
-        public string Timestamp;
-        public IEnumerable<(string description, string value)> HistoricalValues;
-    }
-
     public class Space
     {
         public string Id { get; set; }
