@@ -5,6 +5,7 @@ This introductory sample demonstrates how to connect a device to Digital Twins a
 ## Configure the app
 
 Edit your settings file to fill in the following values:
+
 * `DeviceConnectionString`
 * `Sensors`
 
@@ -13,7 +14,7 @@ Edit your settings file to fill in the following values:
 You can get the connection string by calling Management API's Devices controller. E.g. for a device with ID `22215ed9-91e8-40af-9d1b-a22727849393`:
 
 ```
-GET https://<instance-name>.westcentralus.azuresmartspaces.net/management/api/v1.0/devices/22215ed9-91e8-40af-9d1b-a22727849393?includes=ConnectionString
+GET https://{{your-instance-name}}.westcentralus.azuresmartspaces.net/management/api/v1.0/devices/22215ed9-91e8-40af-9d1b-a22727849393?includes=ConnectionString
 ```
 ```json
 {
@@ -41,10 +42,10 @@ Copy the `connectionString` over to the [appsettings.json](./appsettings.json) f
 
 ### Sensors
 
-An array of one or more Sensors you wish to send data for using this sample. You can get the DataType and HardwareId of each Sensor by calling Management API's Sensors controller. E.g. for a sensor with ID `c4cf2f41-edd6-4fc3-a47a-6bedab6470db`:
+An array of one or more Sensors you wish to send data for using this sample. You can get the `dataType` and `hardwareId` of each Sensor by calling Management API's Sensors controller. E.g. for a sensor with ID `c4cf2f41-edd6-4fc3-a47a-6bedab6470db`:
 
 ```
-GET https://<instance-name>.westcentralus.azuresmartspaces.net/management/api/v1.0/sensors/c4cf2f41-edd6-4fc3-a47a-6bedab6470db?includes=Types
+GET https://{{your-instance-name}}.westcentralus.azuresmartspaces.net/management/api/v1.0/sensors/c4cf2f41-edd6-4fc3-a47a-6bedab6470db?includes=Types
 
 {
     "dataType":"Motion",
@@ -93,6 +94,7 @@ Copy the `hardwareId` and `dataType` over to be one entry in the `Sensors` array
 ### Build the app
 
 Choose `win-arm` or `linux-arm` for your platform:
+
 * Run the `dotnet publish -r <platform>` command.
 
 Under `./bin/Debug/netcoreapp2.0/<runtime identifier>/publish` or `.\bin\Debug\netcoreapp2.0\<runtime identifier>\publish` you will see the whole self contained app that you need to copy to your Raspberry Pi.
