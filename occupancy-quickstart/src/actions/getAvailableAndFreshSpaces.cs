@@ -44,9 +44,4 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return null;
         }
     }
-
-    public class AnyItem
-    {
-        public string Id { get; set; }
-    }
 }
