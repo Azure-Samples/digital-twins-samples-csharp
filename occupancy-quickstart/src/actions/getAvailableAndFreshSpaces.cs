@@ -13,7 +13,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         // Prints out and returns spaces with the occupany property key set
         public static async Task GetAvailableAndFreshSpaces(HttpClient httpClient, ILogger logger)
         {
-            Console.WriteLine("Polling for spaces with 'AvailableAndFresh' value type");
+            Console.WriteLine("Polling spaces with 'AvailableAndFresh' value type");
 
             var maxGets = 30;
             for (var curGets = 0; curGets < maxGets; ++curGets)
