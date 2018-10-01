@@ -11,16 +11,21 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     public static partial class Actions
     {
         // Prints out and returns spaces with the occupany property key set
-        public static async Task GetOccupancy(HttpClient httpClient, ILogger logger)
+        public static async Task GetAvailableAndFreshSpaces(HttpClient httpClient, ILogger logger)
         {
-            var spaces = await GetManagementItemsAsync<Models.Space>(httpClient, "spaces", "name=Focus Room A1&includes=values");
-            var serializedObjects = JsonConvert.SerializeObject(
-                    spaces,
-                    Formatting.Indented,
-                    new JsonSerializerSettings {
-                        NullValueHandling = NullValueHandling.Ignore
-                    });
-            Console.WriteLine($"Get Space 'Focus Room A1': {serializedObjects}");
+            Console.WriteLine("Polling for spaces with 'AvailableAndFresh' value type");
+
+            var maxGets = 30;
+            for (var curGets = 0; curGets < maxGets; ++curGets)
+            {
+                var spaces = await GetManagementItemsAsync<Models.Space>(httpClient, "spaces", "includes=values");
+                var availableAndFreshSpaces = spaces.Where(s => s.Values != null && s.Values.Any(v => v.Type == "AvailableAndFresh"));
+                var availableAndFreshDisplay = availableAndFreshSpaces
+                    .Select(s => $"Name: {s.Name}\nId: {s.Id}\nValue: {s.Values.First(v => v.Type == "AvailableAndFresh").Value}\n")
+                    .Aggregate((acc, cur) => acc + "\n" + cur);
+                Console.WriteLine($"{availableAndFreshDisplay}");
+                await Task.Delay(TimeSpan.FromSeconds(4));
+            }
         }
 
         private static async Task<IEnumerable<T>> GetManagementItemsAsync<T>(

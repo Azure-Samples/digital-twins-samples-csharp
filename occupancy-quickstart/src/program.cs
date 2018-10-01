@@ -37,8 +37,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     case ActionName.CreateRoleAssignment:
                         await Actions.CreateRoleAssignment(httpClient, logger, Guid.Parse(args[1]), args[2], Guid.Parse(args[3]));
                         break;
-                    case ActionName.GetOccupancy:
-                        await Actions.GetOccupancy(httpClient, logger);
+                    case ActionName.GetAvailableAndFreshSpaces:
+                        await Actions.GetAvailableAndFreshSpaces(httpClient, logger);
                         break;
                     case ActionName.GetOntologies:
                         await Api.GetOntologies(httpClient, logger);

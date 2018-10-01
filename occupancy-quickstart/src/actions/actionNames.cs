@@ -3,7 +3,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     enum ActionName
     {
         CreateRoleAssignment,
-        GetOccupancy,
+        GetAvailableAndFreshSpaces,
         GetOntologies,
         GetSpaces,
         ProvisionSample,
