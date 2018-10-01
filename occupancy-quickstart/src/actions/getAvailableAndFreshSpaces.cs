@@ -11,7 +11,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     public static partial class Actions
     {
         // Prints out and returns spaces with the occupany property key set
-        public static async Task GetAvailableAndFreshSpaces(HttpClient httpClient, ILogger logger)
+        public static async Task GetAvailableAndFreshSpaces(HttpClient httpClient)
         {
             Console.WriteLine("Polling spaces with 'AvailableAndFresh' value type");
 
