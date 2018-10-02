@@ -4,7 +4,7 @@ var spaceAvailFresh = "AvailableAndFresh";
 var carbonDioxideThreshold = 1000.0;
 
 function process(telemetry, executionContext) {
-  
+
     try {
         // Log SensorId and Message
         log(`Sensor ID: ${telemetry.SensorId}. `);
@@ -38,30 +38,30 @@ function process(telemetry, executionContext) {
         var motionValue = motionSensor.Value().Value;
         var presence = !!motionValue && motionValue.toLowerCase() === "true";
         var carbonDioxideValue = getFloatValue(carbonDioxideSensor.Value().Value);
-        
+
         // Return if no motion or carbonDioxide found return
         if(carbonDioxideValue === null || motionValue === null) {
             sendNotification(telemetry.SensorId, "Sensor", "Error: Carbon dioxide or motion are null, returning");
             return;
         }
-        
-        var availableFresh = "Room is available and air quality is good";
-        var noAvailableOrFresh = "Room not available or air quality is poor";
 
-        // If carbonDioxide less than threshold and no presence in the room => log, notify and set parent space computed value 
+        var availableFresh = "Room is available and air is fresh";
+        var noAvailableOrFresh = "Room is not available or air quality is poor";
+
+        // If carbonDioxide less than threshold and no presence in the room => log, notify and set parent space computed value
         if(carbonDioxideValue < carbonDioxideThreshold && !presence) {
             log(`${availableFresh}. Carbon Dioxide: ${carbonDioxideValue}. Presence: ${presence}.`);
             setSpaceValue(parentSpace.Id, spaceAvailFresh, availableFresh);
 
             // Set up custom notification for air quality
-            parentSpace.Notify(JSON.stringify(availableFresh)); 
+            parentSpace.Notify(JSON.stringify(availableFresh));
         }
         else {
             log(`${noAvailableOrFresh}. Carbon Dioxide: ${carbonDioxideValue}. Presence: ${presence}.`);
             setSpaceValue(parentSpace.Id, spaceAvailFresh, noAvailableOrFresh);
 
             // Set up custom notification for air quality
-            parentSpace.Notify(JSON.stringify(noAvailableOrFresh)); 
+            parentSpace.Notify(JSON.stringify(noAvailableOrFresh));
         }
     }
     catch (error)
