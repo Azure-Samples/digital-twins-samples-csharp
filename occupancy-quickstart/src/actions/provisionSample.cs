@@ -274,7 +274,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 await Api.UpdateUserDefinedFunction(
                     httpClient,
                     logger,
-                    description.ToUserDefinedFunction(userDefinedFunction.Id, spaceId, matchers),
+                    description.ToUserDefinedFunctionUpdate(userDefinedFunction.Id, spaceId, matchers.Select(m => m.Id)),
                     js);
             }
             else

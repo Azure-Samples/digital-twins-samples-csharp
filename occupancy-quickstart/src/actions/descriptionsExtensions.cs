@@ -87,5 +87,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 SpaceId = spaceId.ToString(),
                 Matchers = matcherIds,
             };
+
+        public static Models.UserDefinedFunctionUpdate ToUserDefinedFunctionUpdate(this UserDefinedFunctionDescription description, string id, Guid spaceId, IEnumerable<string> matcherIds)
+            => new Models.UserDefinedFunctionUpdate()
+            {
+                Id = id,
+                Name = description.name,
+                SpaceId = spaceId.ToString(),
+                Matchers = matcherIds,
+            };
     }
 }
