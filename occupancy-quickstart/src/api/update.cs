@@ -13,7 +13,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public static async Task UpdateUserDefinedFunction(
             HttpClient httpClient,
             ILogger logger,
-            Models.UserDefinedFunction userDefinedFunction,
+            Models.UserDefinedFunctionUpdate userDefinedFunction,
             string js)
         {
             logger.LogInformation($"Updating UserDefinedFunction with Metadata: {JsonConvert.SerializeObject(userDefinedFunction, Formatting.Indented)}");

@@ -29,7 +29,9 @@
         dataTypeValue: CarbonDioxide
       userdefinedfunctions:
       - name: Motion Processor
-        matcher: Matcher Motion A1
+        matcherNames:
+        - Matcher Motion A1
+        - Matcher CarbonDioxide A1
         script: actions/userDefinedFunctions/availability.js
       roleassignments:
       - roleId: 98e44ad7-28d4-4007-853b-b9968ad132d1 # System Role: SpaceAdministrator

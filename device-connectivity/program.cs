@@ -71,7 +71,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
             var delayPerMessageSend = int.Parse(settings["MessageIntervalInSeconds"]);
             var countOfSendsPerIteration = sensors.Length;
-            var maxSecondsToRun = 600;
+            var maxSecondsToRun = 15 * 60;
             var maxIterations = maxSecondsToRun / countOfSendsPerIteration / delayPerMessageSend;
             var curIteration = 0;
 

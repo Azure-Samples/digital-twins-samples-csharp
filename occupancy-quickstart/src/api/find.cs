@@ -41,13 +41,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
         // Returns a matcher with same name and spaceId if there is exactly one.
         // Otherwise returns null.
-        public static async Task<Models.Matcher> FindMatcher(
+        public static async Task<IEnumerable<Models.Matcher>> FindMatchers(
             HttpClient httpClient,
             ILogger logger,
-            string name,
+            IEnumerable<string> names,
             Guid spaceId)
         {
-            var filterNames = $"names={name}";
+            var commaDelimitedNames = names.Aggregate((string acc, string s) => acc + "," + s);
+            var filterNames = $"names={commaDelimitedNames}";
             var filterSpaceId = $"&spaceIds={spaceId.ToString()}";
             var filter = $"{filterNames}{filterSpaceId}";
 
@@ -56,11 +57,10 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var matchers = JsonConvert.DeserializeObject<IReadOnlyCollection<Models.Matcher>>(content);
-                var matcher = matchers.SingleOrDefault();
-                if (matcher != null)
+                if (matchers != null)
                 {
-                    logger.LogInformation($"Retrieved Unique Matcher using 'name' and 'spaceId': {JsonConvert.SerializeObject(matcher, Formatting.Indented)}");
-                    return matcher;
+                    logger.LogInformation($"Retrieved Unique Matchers using 'names' and 'spaceId': {JsonConvert.SerializeObject(matchers, Formatting.Indented)}");
+                    return matchers;
                 }
             }
             return null;
@@ -107,7 +107,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             var filterSpaceId = $"&spaceIds={spaceId.ToString()}";
             var filter = $"{filterNames}{filterSpaceId}";
 
-            var response = await httpClient.GetAsync($"userdefinedfunctions?{filter}");
+            var response = await httpClient.GetAsync($"userdefinedfunctions?{filter}&includes=matchers");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
