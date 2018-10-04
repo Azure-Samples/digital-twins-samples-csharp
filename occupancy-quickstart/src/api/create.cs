@@ -18,6 +18,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             return await GetIdFromResponse(response, logger);
         }
 
+        public static async Task<Guid> CreateEndpoints(HttpClient httpClient, ILogger logger, Models.EndpointsCreate endpointCreate)
+        {
+            logger.LogInformation($"Creating Endpoint: {JsonConvert.SerializeObject(endpointCreate, Formatting.Indented)}");
+            var content = JsonConvert.SerializeObject(endpointCreate);
+            var response = await httpClient.PostAsync("endpoints", new StringContent(content, Encoding.UTF8, "application/json"));
+            return await GetIdFromResponse(response, logger);
+        }
+
         public static async Task<Guid> CreateKeyStore(HttpClient httpClient, ILogger logger, Models.KeyStoreCreate keyStoreCreate)
         {
             logger.LogInformation($"Creating KeyStore: {JsonConvert.SerializeObject(keyStoreCreate, Formatting.Indented)}");

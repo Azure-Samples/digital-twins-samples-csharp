@@ -1,0 +1,9 @@
+- type: EventGrid
+  eventTypes:
+  - SensorChange
+  - SpaceChange
+  - TopologyOperation
+  - UdfCustom
+  connectionString: <Primary connection string for your Event Grid>
+  secondaryConnectionString: <Secondary connection string for your Event Grid>
+  path: <Event Grid Topic Name>
