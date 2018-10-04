@@ -15,6 +15,15 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         public IEnumerable<SensorDescription> sensors { get; set; }
     }
 
+    public class EndpointDescription
+    {
+        public string type { get; set; }
+        public string[] eventTypes { get; set; }
+        public string connectionString { get; set; }
+        public string secondaryConnectionString { get; set; }
+        public string path { get; set; }
+    }
+
     public class KeyStoreDescription
     {
         public string name { get; set; }

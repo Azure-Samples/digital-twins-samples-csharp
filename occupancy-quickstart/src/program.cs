@@ -29,6 +29,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
                 switch (actionName)
                 {
+                    case ActionName.CreateEndpoints:
+                        await Actions.CreateEndpoints(await SetupHttpClient(Loggers.ConsoleLogger, appSettings), Loggers.ConsoleLogger);
+                        break;
                     case ActionName.CreateRoleAssignment:
                         await Actions.CreateRoleAssignment(await SetupHttpClient(Loggers.ConsoleLogger, appSettings), Loggers.ConsoleLogger, Guid.Parse(args[1]), args[2], Guid.Parse(args[3]));
                         break;
