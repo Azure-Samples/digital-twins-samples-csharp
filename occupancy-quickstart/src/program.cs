@@ -27,27 +27,22 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 if (actionName == null)
                     return;
 
-                var loggerFactory = new Microsoft.Extensions.Logging.LoggerFactory()
-                    .AddConsole(Microsoft.Extensions.Logging.LogLevel.Trace);
-                var logger = loggerFactory.CreateLogger("DigitalTwinsQuickstart");
-                var httpClient = await SetupHttpClient(logger, appSettings);
-
                 switch (actionName)
                 {
                     case ActionName.CreateRoleAssignment:
-                        await Actions.CreateRoleAssignment(httpClient, logger, Guid.Parse(args[1]), args[2], Guid.Parse(args[3]));
+                        await Actions.CreateRoleAssignment(await SetupHttpClient(Loggers.ConsoleLogger, appSettings), Loggers.ConsoleLogger, Guid.Parse(args[1]), args[2], Guid.Parse(args[3]));
                         break;
-                    case ActionName.GetOccupancy:
-                        await Actions.GetOccupancy(httpClient, logger);
+                    case ActionName.GetAvailableAndFreshSpaces:
+                        await Actions.GetAvailableAndFreshSpaces(await SetupHttpClient(Loggers.SilentLogger, appSettings));
                         break;
                     case ActionName.GetOntologies:
-                        await Api.GetOntologies(httpClient, logger);
+                        await Api.GetOntologies(await SetupHttpClient(Loggers.ConsoleLogger, appSettings), Loggers.ConsoleLogger);
                         break;
                     case ActionName.GetSpaces:
-                        await Actions.GetSpaces(httpClient, logger);
+                        await Actions.GetSpaces(await SetupHttpClient(Loggers.ConsoleLogger, appSettings), Loggers.ConsoleLogger);
                         break;
                     case ActionName.ProvisionSample:
-                        await Actions.ProvisionSample(httpClient, logger);
+                        await Actions.ProvisionSample(await SetupHttpClient(Loggers.ConsoleLogger, appSettings), Loggers.ConsoleLogger);
                         break;
 
                     default:
@@ -86,6 +81,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             };
             var accessToken = (await Authentication.GetToken(logger, appSettings));
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+            httpClient.DefaultRequestHeaders.Add("x-ms-flighting-udf-execution-manually-enabled", "true");
             return httpClient;
         }
     }

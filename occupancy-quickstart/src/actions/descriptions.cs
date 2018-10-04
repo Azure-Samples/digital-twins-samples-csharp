@@ -47,7 +47,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     public class UserDefinedFunctionDescription
     {
         public string name { get; set; }
-        public string matcher { get; set; }
+        public IEnumerable<string> matcherNames { get; set; }
         public string script { get; set; }
     }
 
