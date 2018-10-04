@@ -17,6 +17,16 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 SpaceId = spaceId.ToString(),
             };
 
+        public static Models.EndpointsCreate ToEndpointCreate(this EndpointDescription description)
+            => new Models.EndpointsCreate()
+            {
+                ConnectionString = description.connectionString,
+                EventTypes = description.eventTypes,
+                Path = description.path,
+                SecondaryConnectionString = description.secondaryConnectionString,
+                Type = description.type,
+            };
+
         public static Models.MatcherCreate ToMatcherCreate(this MatcherDescription description, Guid spaceId)
             => new Models.MatcherCreate()
             {
