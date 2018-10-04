@@ -26,10 +26,21 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             Name = "Matcher1",
             SpaceId = null,
         };
+        private static Models.Matcher matcher2 = new Models.Matcher()
+        {
+            Id = new Guid("90000000-0000-0000-0000-000000000002").ToString(),
+            Name = "Matcher2",
+            SpaceId = null,
+        };
         private static HttpResponseMessage matcher1GetResponse = new HttpResponseMessage()
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(JsonConvert.SerializeObject(new [] { matcher1 })),
+        };
+        private static HttpResponseMessage matchers1And2GetResponse = new HttpResponseMessage()
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonConvert.SerializeObject(new [] { matcher1, matcher2 })),
         };
         private static Models.UserDefinedFunction udf1 = new Models.UserDefinedFunction()
         {
@@ -48,8 +59,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 - name: Test1
                   userdefinedfunctions:
                   - name: Function 1
+                    matcherNames:
+                    - matcher 1
+                    - matcher 2
                     script: some1/path1
                   - name: Function 2
+                    matcherNames:
+                    - matcher 3
                     script: some2/path2
                 ";
             var expectedDescriptions = new [] { new SpaceDescription()
@@ -59,11 +75,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     new UserDefinedFunctionDescription()
                     {
                         name = "Function 1",
+                        matcherNames = new [] { "matcher 1", "matcher 2" },
                         script = "some1/path1",
                     },
                     new UserDefinedFunctionDescription()
                     {
                         name = "Function 2",
+                        matcherNames = new [] { "matcher 3" },
                         script = "some2/path2",
                     },
                 },
@@ -77,7 +95,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         {
             (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.CreateWithSpace(
                 postResponseGuids: new [] { udfGuid1, udfGuid2 },
-                getResponses: new [] { matcher1GetResponse, Responses.NotFound, matcher1GetResponse, Responses.NotFound }
+                getResponses: new [] { matchers1And2GetResponse, Responses.NotFound, matcher1GetResponse, Responses.NotFound }
             );
 
             var descriptions = new [] { new SpaceDescription()
@@ -87,13 +105,13 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     new UserDefinedFunctionDescription()
                     {
                         name = "Function 1",
-                        matcher = "Matcher1",
+                        matcherNames = new [] { "Matcher1", "Matcher2" },
                         script = "userDefinedFunctions/function1.js",
                     },
                     new UserDefinedFunctionDescription()
                     {
                         name = "Function 2",
-                        matcher = "Matcher1",
+                        matcherNames = new [] { "Matcher1" },
                         script = "userDefinedFunctions/function2.js",
                     }},
             }};
@@ -101,6 +119,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
             await Actions.CreateSpaces(httpClient, Loggers.SilentLogger, descriptions, Guid.Empty);
             Assert.Equal(2, httpHandler.PostRequests["userdefinedfunctions"].Count);
             Assert.Equal(2, httpHandler.GetRequests["matchers"].Count);
+            Assert.Equal(
+                "http://bing.com/matchers?names=Matcher1,Matcher2&spaceIds=90000000-0000-0000-0000-000000000001",
+                httpHandler.GetRequests["matchers"][0].RequestUri.ToString());
+            Assert.Equal(
+                "http://bing.com/matchers?names=Matcher1&spaceIds=90000000-0000-0000-0000-000000000001",
+                httpHandler.GetRequests["matchers"][1].RequestUri.ToString());
             Assert.Equal(2, httpHandler.GetRequests["userdefinedfunctions"].Count);
         }
 
@@ -120,7 +144,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                     new UserDefinedFunctionDescription()
                     {
                         name = "Function 1",
-                        matcher = "Matcher1",
+                        matcherNames = new [] { "Matcher1" },
                         script = "userDefinedFunctions/function1.js",
                     }},
             }};

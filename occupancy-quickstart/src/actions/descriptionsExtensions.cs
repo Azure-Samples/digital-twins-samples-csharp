@@ -27,7 +27,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     {
                         Target = "Sensor",
                         Path = "$.dataType",
-                        Value = description.dataTypeValue,
+                        Value = $"\"{description.dataTypeValue}\"",
                         Comparison = "Equals",
                     }
                 }
@@ -71,18 +71,27 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 ParentSpaceId = parentId != Guid.Empty ? parentId.ToString() : "",
             };
 
-        public static Models.UserDefinedFunction ToUserDefinedFunction(this UserDefinedFunctionDescription description, string Id, Guid spaceId, IEnumerable<string> matcherIds)
+        public static Models.UserDefinedFunction ToUserDefinedFunction(this UserDefinedFunctionDescription description, string Id, Guid spaceId, IEnumerable<Models.Matcher> matchers)
             => new Models.UserDefinedFunction()
             {
                 Id = Id,
                 Name = description.name,
                 SpaceId = spaceId.ToString(),
-                Matchers = matcherIds,
+                Matchers = matchers,
             };
 
         public static Models.UserDefinedFunctionCreate ToUserDefinedFunctionCreate(this UserDefinedFunctionDescription description, Guid spaceId, IEnumerable<string> matcherIds)
             => new Models.UserDefinedFunctionCreate()
             {
+                Name = description.name,
+                SpaceId = spaceId.ToString(),
+                Matchers = matcherIds,
+            };
+
+        public static Models.UserDefinedFunctionUpdate ToUserDefinedFunctionUpdate(this UserDefinedFunctionDescription description, string id, Guid spaceId, IEnumerable<string> matcherIds)
+            => new Models.UserDefinedFunctionUpdate()
+            {
+                Id = id,
                 Name = description.name,
                 SpaceId = spaceId.ToString(),
                 Matchers = matcherIds,
