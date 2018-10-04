@@ -18,6 +18,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
     public class CreateEndpointsTests
     {
         private static Serializer yamlSerializer = new Serializer();
+        private static Guid endpoint1Guid = new Guid("00000000-0000-0000-0000-000000000001");
+        private static Guid endpoint2Guid = new Guid("00000000-0000-0000-0000-000000000002");
 
         [Fact]
         public async Task GetProvisionSampleCreatesDescriptions()
@@ -46,11 +48,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         [Fact]
         public async Task CreateTwoEndpoints()
         {
-            (var httpClient, var httpHandler) = FakeHttpHandler.CreateHttpClient(
-                postResponses: new [] { Responses.OK, Responses.OK }
+            var endpointGuids = new[] { endpoint1Guid, endpoint2Guid };
+            (var httpClient, var httpHandler) = FakeDigitalTwinsHttpClient.Create(
+                postResponseGuids: endpointGuids
             );
 
-            var descriptions = new [] { 
+            var descriptions = new [] {
                 new EndpointDescription()
                 {
                     type = "Type1",
@@ -69,7 +72,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
                 },
             };
 
-            var result = await Actions.CreateEndpoints(httpClient, Loggers.SilentLogger, descriptions);
+            Assert.Equal(endpointGuids,
+                await Actions.CreateEndpoints(httpClient, Loggers.SilentLogger, descriptions));
             Assert.Equal(2, httpHandler.PostRequests["endpoints"].Count);
             Assert.False(httpHandler.GetRequests.ContainsKey("endpoints"));
         }
