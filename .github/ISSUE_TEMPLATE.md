@@ -1,6 +1,6 @@
 ### Description
 
-Please provide a succinct description of your issue.
+Please provide a succinct description of your issue.  Please include which sample (ie top level folder) this is referring to.
 
 ### Repro steps
 
