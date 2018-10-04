@@ -1,30 +1,32 @@
-<!--
-IF SUFFICIENT INFORMATION IS NOT PROVIDED VIA THE FOLLOWING TEMPLATE THE ISSUE MIGHT BE CLOSED WITHOUT FURTHER CONSIDERATION OR INVESTIGATION
--->
-> Please provide us with the following information:
-> ---------------------------------------------------------------
+### Description
 
-### This issue is for a: (mark with an `x`)
-```
-[ ] bug report -> please search issues before submitting
-[ ] feature request
-[ ] documentation issue or request
-[ ] regression (a behavior that used to work and stopped in a new release)
-```
+Please provide a succinct description of your issue.
 
-### Minimal steps to reproduce
->
+### Repro steps
 
-### Any log messages given by the failure
->
+Please provide the steps required to reproduce the problem.
 
-### Expected/desired behavior
->
+1. Step A
 
-### OS and Version?
-> Windows 7, 8 or 10. Linux (which distribution). macOS (Yosemite? El Capitan? Sierra?)
+2. Step B
 
-### Mention any other details that might be useful
+### Expected behavior
 
-> ---------------------------------------------------------------
-> Thanks! We'll be in touch soon.
+Please provide a description of the behavior you expect.
+
+### Actual behavior
+
+Please provide a description of the actual behavior you observe. 
+
+### Logs
+
+If applicable, please provide any logs or output from the sample.
+
+### Known workarounds
+
+Please provide a description of any known workarounds.
+
+### Related information 
+
+* Operating system
+* CoreCLR version (run `dotnet --version`)
