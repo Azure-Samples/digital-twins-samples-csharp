@@ -1,13 +1,24 @@
 # Digital Twins Samples
 
-This repo contains dotnet core projects that demonstrate using the Azure Digitial Twins platform. Each folder contains a seperate dotnet core app.  See the readme in each folder for details.
+This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app.  
 
-## Getting Started
+See the `readme` in each sub-folder for specific details about each app.
 
-1. [Install dotnet core](https://www.microsoft.com/net/download)
-1. `git clone https://github.com/Azure-Samples/digital-twins-samples-csharp.git`
-1. `cd digital-twins-samples-csharp`
-1. The repo is composed of several standalone projects.  [Occupancy](./occupancy-quickstart/readme.md) sample is the suggested starting sample.
+## Get Started
 
-### Visual Studio Code
-If using [Visual Studio Code](https://code.visualstudio.com/) we have included a [visual studio code workspace file](./digital-twins-samples.code-workspace) that will load all samples. Alternatively, each folder can be opened individually.
+1. [Install dotnet core](https://www.microsoft.com/net/download).
+1. Run the `git clone https://github.com/Azure-Samples/digital-twins-samples-csharp.git` command.
+1. Run the `cd digital-twins-samples-csharp` command.
+
+The repo contains several standalone projects:
+
+- The [Occupancy](./occupancy-quickstart/readme.md) sample is suggested as a first example to gain familiarity with Digital Twins.
+- The [Device Connectivity](./device-connectivity/readme.md) sample demonstrates how to connect a device to Digital Twins and submit sensory data.
+
+For corresponding documentation, please see the project readme's above.
+
+## Visual Studio Code
+
+A [workspace file](./digital-twins-samples.code-workspace) containing all the apps is included for [Visual Studio Code](https://code.visualstudio.com/) users.
+
+Alternatively, each app can be opened individually.

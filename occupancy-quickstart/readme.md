@@ -1,34 +1,37 @@
 # Occupancy Sample
 
-Sample code to provision and read resources in a Digital Twins topology via management apis. It also creates an exmaple function that runs within the Digital Twins which computes motion from a sensor in a room inorder to determine the occupancy.
+Sample code to provision and read resources in a Digital Twins topology via management APIs. It also creates an example function that runs within the Digital Twins instance that computes motion from a sensor in a room in order to determine the occupancy.
 
-## Building and Running
+## Build and Run the Sample
 
-### Using terminal
-1. `dotnet restore`
-1. [Update appsettings.json](#configuring-appsettings.json)
-1. `cd src`
-1. `dotnet run` to build and see usage
-1. `dotnet test ../tests` to build and run tests
+### Use the terminal
 
-### Using VSCode
-1. Open the 'occupancy-quickstart' folder in vscode
-1. [Update appsettings.json](#configuring-appsettings.json)
-1. Run the app by using F5.  You can change the commandline parameters in launch.json
-1. To build and run tests use the 'Run Task' command in vscode and choose 'test'
+1. Run the `dotnet restore` command.
+1. Update `appsettings.json`.
+1. Run the `cd src` command.
+1. Run the `dotnet run` command to build and see usage.
+1. Run the `dotnet test ../tests` command to build and run tests.
 
-## Configuring appsettings.json
-TODO
+### Use Visual Studio Code
+
+1. Open the 'occupancy-quickstart' folder in Visual Studio Code.
+1. Update `appsettings.json`.
+1. Run the app by using the `F5` key. You can change the command-line parameters in `launch.json`.
+1. To build and run tests use the 'Run Task' command in Visual Studio Code and choose `test`.
 
 ## Walkthrough
 
-* See [TODO: add docs quickstart link] for how to configure your Digitial Twins resource and configure this app to be able to call it
-* Provision spaces, IoT Hub resource, devices, sensors, functions
-* Get spaces by parent id
-* Send motion telemetry every X seconds to simulate motion sensors
-* View occupancy of a spaces of type “Focus Room”
+1. See the [quickstart doc](https://docs.microsoft.com/azure/digital-twins/quickstart-view-occupancy-dotnet) to set up your Digital Twins resource and configure this sample to call it.
+1. Provision spaces, IoT Hub resource, devices, sensors, functions.
+1. Get spaces by parent `id`.
+1. Send motion telemetry every X seconds to simulate motion sensors.
+1. View occupancy of a spaces of type `Focus Room`.
 
 ## Notes
 
 ### Authentication
-TODO: look into alternate auth (url auth like azure cli uses) and then document the setup for the auth we go with (either here or in docs)
+
+To learn more about configurition, security, and API authentication:
+
+1. See the [role-based access control doc](https://docs.microsoft.com/azure/digital-twins/security-role-based-access-control).
+1. See the [Management API doc](https://docs.microsoft.com/azure/digital-twins/security-authenticating-apis).
