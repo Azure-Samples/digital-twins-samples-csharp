@@ -65,3 +65,4 @@ ClientBin/
 *.publishsettings
 orleans.codegen.cs
 appsettings.dev.json
+.accesstoken

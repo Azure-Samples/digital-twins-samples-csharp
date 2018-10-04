@@ -85,9 +85,24 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 BaseAddress = new Uri(appSettings.BaseUrl),
             };
-            var accessToken = (await Authentication.GetToken(logger, appSettings));
+            var accessToken = await GetAccessToken(logger, appSettings);
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
             return httpClient;
+        }
+
+        private static async Task<object> GetAccessToken(ILogger logger, AppSettings appSettings)
+        {
+            var accessTokenFilename = ".accesstoken";
+            if (System.IO.File.Exists(accessTokenFilename))
+            {
+                return System.IO.File.ReadAllText(accessTokenFilename);
+            }
+            else
+            {
+                var accessToken = await Authentication.GetToken(logger, appSettings);
+                System.IO.File.WriteAllText(accessTokenFilename, accessToken);
+                return accessToken;
+            }
         }
     }
 }
