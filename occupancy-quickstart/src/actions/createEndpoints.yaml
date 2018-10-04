@@ -1,15 +1,9 @@
-- type: EventHub
+- type: EventGrid
   eventTypes:
   - SensorChange
   - SpaceChange
   - TopologyOperation
   - UdfCustom
-  connectionString: <Enter connection string>
-  secondaryConnectionString: <Enter secondary connection string>
-  path: EventHubPath
-- type: EventHub
-  eventTypes:
-  - DeviceMessage
-  connectionString: <Enter connection string>
-  secondaryConnectionString: <Enter secondary connection string>
-  path: EventHubPath
+  connectionString: <Primary connection string for your Event Grid>
+  secondaryConnectionString: <Secondary connection string for your Event Grid>
+  path: <Event Grid Topic Name>
