@@ -1,8 +1,11 @@
-# Digital Twins Samples
+# Digital Twins Samples [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app.  
 
-See the `readme` in each sub-folder for specific details about each app.
+See the `README.md` in each sub-folder for specific details about each app:
+
+* [Occupancy sample](./occupancy-quickstart/README.md)
+* [Device Connectivity sample](./device-connectivity/README.md)
 
 ## Get Started
 
@@ -22,3 +25,7 @@ For corresponding documentation, please see the project readme's above.
 A [workspace file](./digital-twins-samples.code-workspace) containing all the apps is included for [Visual Studio Code](https://code.visualstudio.com/) users.
 
 Alternatively, each app can be opened individually.
+
+## Licensing and Use
+
+Azure Digital Twins Samples are [MIT Licensed](./LICENSE.md).
