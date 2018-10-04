@@ -13,7 +13,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 {
     public static partial class Actions
     {
-        public static async Task<HttpResponseMessage> CreateEndpoints(HttpClient httpClient, ILogger logger)
+        public static async Task<IEnumerable<Guid>> CreateEndpoints(HttpClient httpClient, ILogger logger)
         {
             IEnumerable<EndpointDescription> endpointDescriptions;
             using (var r = new StreamReader("actions/createEndpoints.yaml"))
@@ -21,26 +21,36 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 endpointDescriptions = await GetCreateEndpointsDescriptions(r);
             }
 
-            var response = await CreateEndpoints(httpClient, logger, endpointDescriptions);
+            var createdIds = (await CreateEndpoints(httpClient, logger, endpointDescriptions)).ToList();
+            var createdIdsAsString = createdIds
+                .Select(id => id.ToString())
+                .Aggregate((acc, cur) => acc + ", " + cur);
+            var createdIdsSummary =
+                createdIds.Count == 0
+                    ? "Created 0 endpoints."
+                    : createdIds.Count == 1
+                        ? $"Created 1 endpoint: {createdIdsAsString}"
+                        : $"Created {createdIds.Count} endpoints: {createdIdsAsString}";
 
-            Console.WriteLine($"CreateEndpoints completed with: {JsonConvert.SerializeObject(response, Formatting.Indented)}");
+            Console.WriteLine($"CreateEndpoints completed. {createdIdsSummary}");
 
-            return response;
+            return createdIds;
         }
 
         public static async Task<IEnumerable<EndpointDescription>> GetCreateEndpointsDescriptions(TextReader textReader)
             => new Deserializer().Deserialize<IEnumerable<EndpointDescription>>(await textReader.ReadToEndAsync());
 
-        public static async Task<HttpResponseMessage> CreateEndpoints(
+        public static async Task<IEnumerable<Guid>> CreateEndpoints(
             HttpClient httpClient,
             ILogger logger,
             IEnumerable<EndpointDescription> descriptions)
         {
+            var endpointIds = new List<Guid>();
             foreach (var description in descriptions)
             {
-                await Api.CreateEndpoints(httpClient, logger, description.ToEndpointCreate());
+                endpointIds.Add(await Api.CreateEndpoints(httpClient, logger, description.ToEndpointCreate()));
             }
-            return null;
+            return endpointIds.Where(id => id != Guid.Empty);
         }
     }
 }
