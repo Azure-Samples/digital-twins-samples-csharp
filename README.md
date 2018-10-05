@@ -1,4 +1,5 @@
-# Digital Twins Samples 
+# Digital Twins Samples
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Contribute](https://img.shields.io/badge/PR%27s-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app.  
@@ -16,10 +17,10 @@ See the `README.md` in each sub-folder for specific details about each app:
 
 The repo contains several standalone projects:
 
-- The [Occupancy](./occupancy-quickstart/readme.md) sample is suggested as a first example to gain familiarity with Digital Twins.
-- The [Device Connectivity](./device-connectivity/readme.md) sample demonstrates how to connect a device to Digital Twins and submit sensory data.
+* The [Occupancy](./occupancy-quickstart/readme.md) sample is suggested as a first example to gain familiarity with Digital Twins.
+* The [Device Connectivity](./device-connectivity/readme.md) sample demonstrates how to connect a device to Digital Twins and submit sensory data.
 
-For corresponding documentation, please see the project readme's above.
+For corresponding documentation, please see the project `README's` above.
 
 ## Visual Studio Code
 
