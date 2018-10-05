@@ -4,7 +4,7 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 
 ## Build and Run the Sample
 
-### Use a Shell
+### Use a shell
 
 1. Update `appsettings.json` using a text editor
 1. Run the app (and see usage)
