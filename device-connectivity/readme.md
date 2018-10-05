@@ -1,4 +1,5 @@
-# Digital Twins Device Connectivity Sample [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# Digital Twins Device Connectivity Sample 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Contribute](https://img.shields.io/badge/PR%27s-welcome-brightgreen.svg)](../CONTRIBUTING.md)
 
 This introductory sample demonstrates how to connect a device to Digital Twins and submit sample sensory data.
 
