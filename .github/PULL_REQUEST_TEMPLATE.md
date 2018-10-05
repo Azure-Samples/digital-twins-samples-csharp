@@ -1,8 +1,9 @@
 ## Purpose
-<!-- Describe the intention of the changes being proposed. What problem does it solve or functionality does it add? -->
-* ...
+
+Please describe the intention of the changes being proposed. What problem does it solve or functionality does it add?
 
 ## Pull Request Type
+
 What kind of change does this Pull Request introduce?
 
 <!-- Please check the one that applies to this PR using "x". -->
@@ -15,26 +16,17 @@ What kind of change does this Pull Request introduce?
 [ ] Other... Please describe:
 ```
 
-## How to Test
-Get the code
-```
-git clone https://github.com/Azure-Samples/digital-twins-samples-csharp.git
-cd digital-twins-samples-csharp
-```
+## Test By
 
-Run the tests
-```
-dotnet restore <folder>
-dotnet build <folder>
-dotnet restore <folder>.tests
-dotnet test <folder>.tests
-```
+<!-- For code changes, please provide details with how you validated the change. For non trivial changes please add and/or augment unit tests, if possible, so that we can keep the code as easy to maintain as possible. 
+At a minimum:
+1. run relevent tests using: dotnet test <folder>.tests 
+2. run the relevent samples using:
+  * cd <folder> or cd <folder>\src
+  * dotnet run
+-->
 
-Also verify anything you think is relevant by manually running the sample(s)
-```
-cd <folder>
-dotnet run
-```
+Please describe how you tested
 
 ## Other Information
 <!-- Add any other helpful information that may be needed here. -->
