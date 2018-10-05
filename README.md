@@ -7,8 +7,11 @@ See the `readme` in each sub-folder for specific details about each app.
 ## Get Started
 
 1. [Install dotnet core](https://www.microsoft.com/net/download).
-1. Run the `git clone https://github.com/Azure-Samples/digital-twins-samples-csharp.git` command.
-1. Run the `cd digital-twins-samples-csharp` command.
+1. Get the code
+```shell
+git clone https://github.com/Azure-Samples/digital-twins-samples-csharp.git
+cd digital-twins-samples-csharp
+```
 
 The repo contains several standalone projects:
 
