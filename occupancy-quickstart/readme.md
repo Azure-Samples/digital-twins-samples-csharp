@@ -15,12 +15,13 @@ appSettings.json is used to specify info on which Digital Twins instance to conn
 
 ### Use a shell
 
-1. Run the app (and see usage)
+1. Run the app
     ```shell
     cd src
     dotnet restore
     dotnet run
     ```
+    This will show usage.  For a walkthrough of what you can do see [quickstart doc](https://docs.microsoft.com/azure/digital-twins/quickstart-view-occupancy-dotnet).
 1. Run tests
     ```shell
     dotnet test ../tests
