@@ -50,3 +50,7 @@ To learn more about configuration, security, and API authentication:
 
 1. See the [role-based access control doc](https://docs.microsoft.com/azure/digital-twins/security-role-based-access-control).
 1. See the [Management API doc](https://docs.microsoft.com/azure/digital-twins/security-authenticating-apis).
+
+## Problems
+
+If you run into problems or have questions checkout our [FAQ](./docs/faq.md).  If that doesn't help search open and closed [issues](https://github.com/Azure-Samples/digital-twins-samples-csharp/issues) and open a new one if you can't find an answer.
