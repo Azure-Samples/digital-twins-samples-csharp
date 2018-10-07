@@ -13,13 +13,12 @@ appSettings.json is used to specify info on which Digital Twins instance to conn
 - Tenant: The **directory ID** of a your Azure Active Directory.
 - BaseUrl: The management api url to your Digital Twins instance (see appSetting.json for what this should look like).
 
-
 ### Use a shell
 
 1. Run the app (and see usage)
     ```shell
-    dotnet restore
     cd src
+    dotnet restore
     dotnet run
     ```
 1. Run tests
@@ -27,20 +26,11 @@ appSettings.json is used to specify info on which Digital Twins instance to conn
     dotnet test ../tests
     ```
 
-
 ### Use Visual Studio Code
 
 1. Open the 'occupancy-quickstart' folder in Visual Studio Code.
 1. Run the app by using the `F5` key. You can change the command-line parameters in `launch.json`.
 1. To build and run tests use the 'Run Task' command in Visual Studio Code and choose `test`.
-
-## Walkthrough
-
-1. See the [quickstart doc](https://docs.microsoft.com/azure/digital-twins/quickstart-view-occupancy-dotnet) to set up your Digital Twins resource and configure this sample to call it.
-1. Provision spaces, IoT Hub resource, devices, sensors, functions.
-1. Get spaces by parent `id`.
-1. Send motion telemetry every X seconds to simulate motion sensors.
-1. View occupancy of a spaces of type `Focus Room`.
 
 ## Notes
 
