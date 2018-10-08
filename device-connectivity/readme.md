@@ -1,4 +1,5 @@
-# Digital Twins Device Connectivity Sample
+# Digital Twins Device Connectivity Sample 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Contribute](https://img.shields.io/badge/PR%27s-welcome-brightgreen.svg)](../CONTRIBUTING.md)
 
 This introductory sample demonstrates how to connect a device to Digital Twins and submit sample sensory data.
 
@@ -124,3 +125,6 @@ While the payload contents of a `Message` can be arbitrary data, up to 256kb in 
 | CreationTimeUtc | `string` | no | An [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) formatted date string identifying the sampling time of the payload. E.g.: `2018-09-20T07:35:00.8587882-07:00` |
 | CorrelationId | `string` | no | A `uuid` formatted as a string that can be used to trace events across the system. E.g.: `cec16751-ab27-405d-8fe6-c68e1412ce1f`|
 
+## Licensing and Use
+
+Azure Digital Twins Samples are [MIT Licensed](./LICENSE.md).
