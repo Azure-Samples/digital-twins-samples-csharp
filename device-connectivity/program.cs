@@ -93,7 +93,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         eventMessage.Properties.Add("DigitalTwins-SensorHardwareId", $"{sensor.HardwareId}");
                         eventMessage.Properties.Add("CreationTimeUtc", DateTime.UtcNow.ToString("o"));
                         eventMessage.Properties.Add("x-ms-client-request-id", Guid.NewGuid().ToString());
-                        eventMessage.Properties.Add("x-ms-flighting-udf-execution-manually-enabled", "true");
 
                         Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.UTF8.GetString(eventMessage.GetBytes())} Properties: {{ {eventMessage.Properties.Aggregate(new StringBuilder(), (sb, x) => sb.Append($"'{x.Key}': '{x.Value}',"), sb => sb.ToString())} }}");
 
