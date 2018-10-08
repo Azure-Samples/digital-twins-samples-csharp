@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
 
 using System;
 using System.Collections.Generic;
@@ -48,18 +48,25 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
-        static Func<string> CreateGetRandomSensorReading(string sensorDataType)
+        static Func<string> CreateGetRandomSensorReading(string sensorDataType, int iteration)
         {
             switch (sensorDataType)
             {
                 default:
                     throw new Exception($"Unsupported configuration: SensorDataType, '{sensorDataType}'. Please check your appsettings.json.");
                 case "Motion":
-                    return () => rnd.Next(0, 2) == 0 ? "false" : "true";
+                    if (iteration % 6 < 5)
+                        return () => "false";
+                    else 
+                        return () => "true";
+
                 case "Temperature":
                     return () => rnd.Next(70, 100).ToString(CultureInfo.InvariantCulture);
-                case "CarbonDioxide":
-                    return () => rnd.Next(850, 1100).ToString(CultureInfo.InvariantCulture);
+                case "CarbonDioxide": 
+                    if (iteration % 6 < 5)
+                        return () => rnd.Next(800, 1000).ToString(CultureInfo.InvariantCulture);
+                    else 
+                        return () => rnd.Next(1000, 1100).ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -78,7 +85,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             do {
                 foreach (var sensor in sensors)
                 {
-                    var getRandomSensorReading = CreateGetRandomSensorReading(sensor.DataType);
+                    var getRandomSensorReading = CreateGetRandomSensorReading(sensor.DataType, curIteration);
                     var telemetryMessage = new CustomTelemetryMessage()
                     {
                         SensorValue = getRandomSensorReading(),

@@ -6,4 +6,4 @@
   - UdfCustom
   connectionString: <Primary connection string for your Event Grid>
   secondaryConnectionString: <Secondary connection string for your Event Grid>
-  path: <Event Grid Topic Name>
+  path: <Event Grid Topic Name without https:// and /api/events, e.g. eventgridname.region.eventgrid.azure.net>

@@ -12,7 +12,8 @@ See the `README.md` in each sub-folder for specific details about each app:
 ## Get Started
 
 1. [Install dotnet core](https://www.microsoft.com/net/download).
-1. Get the code
+1. Clone the repo:
+
 ```shell
 git clone https://github.com/Azure-Samples/digital-twins-samples-csharp.git
 cd digital-twins-samples-csharp
@@ -34,4 +35,3 @@ Alternatively, each app can be opened individually.
 ## Licensing and Use
 
 Azure Digital Twins Samples are [MIT Licensed](./LICENSE.md).
-

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System.Collections.Generic;
 
 namespace Microsoft.Azure.DigitalTwins.Samples.Models
@@ -17,6 +20,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Models
         public IEnumerable<Property> Properties { get; set; }
         public IEnumerable<Space> Children { get; set; }
         public IEnumerable<string> SpacePaths { get; set; }
-        public IEnumerable<SensorValue> Values { get; set; }
+        public IEnumerable<SpaceValue> Values { get; set; }
     }
 }
