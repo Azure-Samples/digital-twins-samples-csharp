@@ -8,7 +8,7 @@ Please note that the supplied API helpers demonstrate only a few of the full ran
 
 See the Swagger documentation that is part of your Azure Digital Twins instance for a complete description of API capabilities:
 
-For reference, a Swagger sneak preview is provided to demonstrate the API feature set. It's hosted at [docs.westcentralus.azuresmartspaces.net/management/swagger](https://docs.westcentralus.azuresmartspaces.net/management/swagger).
+A Swagger sneak preview is provided to demonstrate the API feature set. It's hosted at [docs.westcentralus.azuresmartspaces.net/management/swagger](https://docs.westcentralus.azuresmartspaces.net/management/swagger).
 
 You can access your own, generated, Management API Swagger documentation at:
 
@@ -16,8 +16,8 @@ You can access your own, generated, Management API Swagger documentation at:
 https://yourInstanceName.yourLocation.azuresmartspaces.net/management/swagger
 ```
 
-Replace `yourInstanceName` with the name of your Azure Digital Twins instance.  
-Replace `yourLocation` with which server region your instance is hosted on.  
+* Replace `yourInstanceName` with the name of your Azure Digital Twins instance.  
+* Replace `yourLocation` with which server region your instance is hosted on.  
 
 ## AutoRest
 

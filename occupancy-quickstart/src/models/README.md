@@ -8,7 +8,7 @@ Note that the supplied models demonstrate only a limited number of the total ava
 
 See the included Swagger documentation to see all available models and fields:
 
-For reference, a Swagger sneak preview is provided to demonstrate the API feature set. It's hosted at [docs.westcentralus.azuresmartspaces.net/management/swagger](https://docs.westcentralus.azuresmartspaces.net/management/swagger).
+A Swagger sneak preview is provided to demonstrate the API feature set. It's hosted at [docs.westcentralus.azuresmartspaces.net/management/swagger](https://docs.westcentralus.azuresmartspaces.net/management/swagger).
 
 You can access your own, generated, Management API Swagger documentation at:
 
@@ -16,8 +16,8 @@ You can access your own, generated, Management API Swagger documentation at:
 https://yourInstanceName.yourLocation.azuresmartspaces.net/management/swagger
 ```
 
-Replace `yourInstanceName` with the name of your Azure Digital Twins instance.  
-Replace `yourLocation` with which server region your instance is hosted on.  
+* Replace `yourInstanceName` with the name of your Azure Digital Twins instance.  
+* Replace `yourLocation` with which server region your instance is hosted on.  
 
 ## AutoRest
 
