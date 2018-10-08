@@ -6,8 +6,8 @@ This repo contains .NET Core samples that demonstrate how to use the Azure Digit
 
 See the `README.md` in each sub-folder for specific details about each app:
 
-* [Occupancy sample](./occupancy-quickstart/README.md).
-* [Device Connectivity sample](./device-connectivity/README.md).
+* [Occupancy sample](./occupancy-quickstart/README.md)
+* [Device Connectivity sample](./device-connectivity/README.md)
 
 ## Get Started
 
@@ -35,4 +35,3 @@ Alternatively, each app can be opened individually.
 ## Licensing and Use
 
 Azure Digital Twins Samples are [MIT Licensed](./LICENSE.md).
-
