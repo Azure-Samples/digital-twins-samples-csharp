@@ -1,4 +1,5 @@
 # Occupancy Sample
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Contribute](https://img.shields.io/badge/PR%27s-welcome-brightgreen.svg)](../CONTRIBUTING.md)
 
 Sample code to provision and read resources in a Digital Twins topology via management APIs. It also creates an example function that runs within the Digital Twins instance that computes motion from a sensor in a room in order to determine the occupancy.
 
@@ -38,7 +39,11 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 
 ### Authentication
 
-To learn more about configurition, security, and API authentication:
+To learn more about configuration, security, and API authentication:
 
 1. See the [role-based access control doc](https://docs.microsoft.com/azure/digital-twins/security-role-based-access-control).
 1. See the [Management API doc](https://docs.microsoft.com/azure/digital-twins/security-authenticating-apis).
+
+## Licensing and Use
+
+Azure Digital Twins Samples are [MIT Licensed](./LICENSE.md).
