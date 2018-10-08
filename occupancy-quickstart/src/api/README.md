@@ -1,6 +1,6 @@
 # API
 
-This folder contains helpers that wrap Digital Twins REST API to produce and consume in memory [models](../models/readme.md).  
+This folder contains helpers that wrap Digital Twins REST API to produce and consume in memory [models](../models/README.md).  
 
 Additional helpers are supplied to further simplify API interactions.
 
