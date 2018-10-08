@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 var carbonDioxideType = "CarbonDioxide";
 var motionType = "Motion";
 var spaceAvailFresh = "AvailableAndFresh";
