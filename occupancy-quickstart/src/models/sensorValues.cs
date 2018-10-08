@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Azure.DigitalTwins.Samples.Models
 {
-    public class SensorValue
+    public class SpaceValue
     {
         public string Type;
         public string Value;
