@@ -1,4 +1,5 @@
 # Occupancy Sample
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Contribute](https://img.shields.io/badge/PR%27s-welcome-brightgreen.svg)](../CONTRIBUTING.md)
 
 Sample code to provision and read resources in a Digital Twins topology via management APIs. It also creates an example function that runs within the Digital Twins instance that computes motion from a sensor in a room in order to determine the occupancy.
@@ -9,21 +10,25 @@ Below are some details on how to get up and running.  For a more detailed walkth
 
 ### Update appSettings.json
 
-appSettings.json is used to specify info on which Digital Twins instance to connect to. The three fields you will need to fill in are:
-- ClientId: The **application ID** of a native Azure Active Directory app that has permissions to call the Azure Digital Twins service.
-- Tenant: The **directory ID** of a your Azure Active Directory.
-- BaseUrl: The management api url to your Digital Twins instance (see appSetting.json for what this should look like).
+`appSettings.json` is used to specify info on which Digital Twins instance to connect to. The three fields you will need to fill in are:
+
+- `ClientId`: The **application ID** of a native Azure Active Directory app that has permissions to call the Azure Digital Twins service.
+- `Tenant`: The **directory ID** of a your Azure Active Directory.
+- `BaseUrl`: The management api url to your Digital Twins instance (see `appSetting.json` for what this should look like).
 
 ### Use a shell
 
-1. Run the app
+1. Run the app:
+
     ```shell
     cd src
     dotnet restore
     dotnet run
     ```
     This will show usage.  For a walkthrough of what you can do see [quickstart doc](https://docs.microsoft.com/azure/digital-twins/quickstart-view-occupancy-dotnet).
-1. Run tests
+
+1. Run tests:
+
     ```shell
     dotnet test ../tests
     ```
