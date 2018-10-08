@@ -26,7 +26,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                     break;
                 }
                 var availableAndFreshDisplay = availableAndFreshSpaces
-                    .Select(s => $"Name: {s.Name}\nId: {s.Id}\nValue: {s.Values.First(v => v.Type == "AvailableAndFresh").Value}\n")
+                    .Select(s => GetDisplayValues(s))
                     .Aggregate((acc, cur) => acc + "\n" + cur);
                 Console.WriteLine($"{availableAndFreshDisplay}");
                 await Task.Delay(TimeSpan.FromSeconds(4));
@@ -47,6 +47,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
 
             return null;
+        }
+
+        private static string GetDisplayValues(Models.Space space)
+        {
+            var spaceValue = space.Values.First(v => v.Type == "AvailableAndFresh");
+            return $"Name: {space.Name}\nId: {space.Id}\nTimestamp: {spaceValue.Timestamp}\nValue: {spaceValue.Value}\n";
         }
     }
 }
