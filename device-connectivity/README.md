@@ -34,7 +34,7 @@ GET https://{{your-instance-name}}.westcentralus.azuresmartspaces.net/management
 
 Copy the `connectionString` over to the [appsettings.json](./appsettings.json) file:
 
-```JSON
+```plaintext
 {
   "Settings": {
     "DeviceConnectionString": "Hostname=...",
@@ -54,7 +54,7 @@ GET https://{{your-instance-name}}.westcentralus.azuresmartspaces.net/management
 ```JSON
 {
     "dataType":"Motion",
-    "dataTypeId":27
+    "dataTypeId":27,
     "deviceId":"f51e5295-ca81-4517-8f5d-0b940f678ef2",
     "id": "c4cf2f41-edd6-4fc3-a47a-6bedab6470db",
     "hardwareId":"1234ABC",
