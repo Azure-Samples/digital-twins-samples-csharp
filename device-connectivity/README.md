@@ -1,4 +1,5 @@
 # Digital Twins Device Connectivity Sample 
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Contribute](https://img.shields.io/badge/PR%27s-welcome-brightgreen.svg)](../CONTRIBUTING.md)
 
 This introductory sample demonstrates how to connect a device to Digital Twins and submit sample sensory data.
@@ -14,10 +15,11 @@ Edit your settings file to fill in the following values:
 
 You can get the connection string by calling Management API's Devices controller. E.g. for a device with ID `22215ed9-91e8-40af-9d1b-a22727849393`:
 
-```
+```plaintext
 GET https://{{your-instance-name}}.westcentralus.azuresmartspaces.net/management/api/v1.0/devices/22215ed9-91e8-40af-9d1b-a22727849393?includes=ConnectionString
 ```
-```json
+
+```JSON
 {
     "name": "My Sample Device",
     "typeId": 2,
@@ -32,7 +34,7 @@ GET https://{{your-instance-name}}.westcentralus.azuresmartspaces.net/management
 
 Copy the `connectionString` over to the [appsettings.json](./appsettings.json) file:
 
-```json
+```plaintext
 {
   "Settings": {
     "DeviceConnectionString": "Hostname=...",
@@ -45,25 +47,25 @@ Copy the `connectionString` over to the [appsettings.json](./appsettings.json) f
 
 An array of one or more Sensors you wish to send data for using this sample. You can get the `dataType` and `hardwareId` of each Sensor by calling Management API's Sensors controller. E.g. for a sensor with ID `c4cf2f41-edd6-4fc3-a47a-6bedab6470db`:
 
-```
+```plaintext
 GET https://{{your-instance-name}}.westcentralus.azuresmartspaces.net/management/api/v1.0/sensors/c4cf2f41-edd6-4fc3-a47a-6bedab6470db?includes=Types
+```
 
+```JSON
 {
     "dataType":"Motion",
-    "dataTypeId":27
+    "dataTypeId":27,
     "deviceId":"f51e5295-ca81-4517-8f5d-0b940f678ef2",
     "id": "c4cf2f41-edd6-4fc3-a47a-6bedab6470db",
     "hardwareId":"1234ABC",
     "name": "My Sample Sensor",
     "spaceId": "ef46f69f-0b95-45ee-a41f-718b3ee4c355"
 }
-
 ```
 
 Copy the `hardwareId` and `dataType` over to be one entry in the `Sensors` array in the [appsettings.json](./appsettings.json) file:
 
-```
-
+```JSON
 {
   "Settings": {
     "Sensors": [{
@@ -75,30 +77,43 @@ Copy the `hardwareId` and `dataType` over to be one entry in the `Sensors` array
     }]
   }
 }
-
 ```
 
-## Build the app
+## Build and Run the app
 
 1. [Install .NET Core SDK](https://www.microsoft.com/net/core) on your execution platform.
-1. Run the `dotnet restore` command.
-1. Run the `dotnet build` command.
+1. Run the following commands to build the app:
 
-## Execute the app
+    ```shell
+    dotnet restore
+    dotnet build
+    ```
+1. Run the app:
 
-* Run the `dotnet run` command.
+    ```shell
+    dotnet run
+    ```
 
-## Run your app on a Raspberry Pi
+## Platform-specific instructions
 
->Note: Here is how you can run this app on a Raspberry Pi.
+Instructions specific to your execution platform.
 
-### Build the app
+### Build and run the app on a Raspberry Pi
 
 Choose `win-arm` or `linux-arm` for your platform:
 
-* Run the `dotnet publish -r <platform>` command.
+* Run the following:
 
-Under `./bin/Debug/netcoreapp2.0/{{your-runtime-identifier}}/publish` or `.\bin\Debug\netcoreapp2.0\{{your-runtime-identifier}}\publish` you will see the whole self contained app that you need to copy to your Raspberry Pi.
+    ```shell
+     dotnet publish -r <platform>
+    ```
+
+Under either:
+
+* `./bin/Debug/netcoreapp2.0/{{your-runtime-identifier}}/publish`
+* `.\bin\Debug\netcoreapp2.0\{{your-runtime-identifier}}\publish` 
+
+You will see the whole self contained app that you need to copy to your Raspberry Pi.
 
 ### Windows 10 IoT
 
@@ -108,7 +123,11 @@ Under `./bin/Debug/netcoreapp2.0/{{your-runtime-identifier}}/publish` or `.\bin\
 
 1. Install [Linux](https://www.raspberrypi.org/downloads/) on your Pi.
 1. Install the [platform dependencies](https://github.com/dotnet/core/blob/master/Documentation/prereqs.md) for .NET Core through your distribution's package manager.
-1. Run the `chmod 755 ./device-connectivity` command.
+1. Run:
+
+    ```bash
+    chmod 755 ./device-connectivity
+    ```
 
 ## Customizing the app to your needs
 
