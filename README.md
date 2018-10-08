@@ -6,13 +6,14 @@ This repo contains .NET Core samples that demonstrate how to use the Azure Digit
 
 See the `README.md` in each sub-folder for specific details about each app:
 
-* [Occupancy sample](./occupancy-quickstart/README.md)
-* [Device Connectivity sample](./device-connectivity/README.md)
+* [Occupancy sample](./occupancy-quickstart/README.md).
+* [Device Connectivity sample](./device-connectivity/README.md).
 
 ## Get Started
 
 1. [Install dotnet core](https://www.microsoft.com/net/download).
-1. Get the code
+1. Clone the repo:
+
 ```shell
 git clone https://github.com/Azure-Samples/digital-twins-samples-csharp.git
 cd digital-twins-samples-csharp
