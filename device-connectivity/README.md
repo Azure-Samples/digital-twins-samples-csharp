@@ -90,7 +90,7 @@ Copy the `hardwareId` and `dataType` over to be one entry in the `Sensors` array
 
 ## Run your app on a Raspberry Pi
 
->Note: Here is how you can run this app on a Raspberry Pi.
+Steps to run this app on a Raspberry Pi.
 
 ### Build the app
 

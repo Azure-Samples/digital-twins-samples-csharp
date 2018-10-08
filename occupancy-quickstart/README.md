@@ -9,10 +9,11 @@ Below are some details on how to get up and running.  For a more detailed walkth
 
 ### Update appSettings.json
 
-appSettings.json is used to specify info on which Digital Twins instance to connect to. The three fields you will need to fill in are:
-- ClientId: The **application ID** of a native Azure Active Directory app that has permissions to call the Azure Digital Twins service.
-- Tenant: The **directory ID** of a your Azure Active Directory.
-- BaseUrl: The management api url to your Digital Twins instance (see appSetting.json for what this should look like).
+`appSettings.json` is used to specify info on which Digital Twins instance to connect to. The three fields you will need to fill in are:
+
+- `ClientId`: The **application ID** of a native Azure Active Directory app that has permissions to call the Azure Digital Twins service.
+- `Tenant`: The **directory ID** of a your Azure Active Directory.
+- `BaseUrl`: The management api url to your Digital Twins instance (see appSetting.json for what this should look like).
 
 ### Use a shell
 
