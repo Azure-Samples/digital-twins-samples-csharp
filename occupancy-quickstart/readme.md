@@ -4,13 +4,20 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 
 ## Build and Run the Sample
 
-### Use the terminal
+### Use a shell
 
-1. Run the `dotnet restore` command.
-1. Update `appsettings.json`.
-1. Run the `cd src` command.
-1. Run the `dotnet run` command to build and see usage.
-1. Run the `dotnet test ../tests` command to build and run tests.
+1. Update `appsettings.json` using a text editor
+1. Run the app (and see usage)
+    ```shell
+    dotnet restore
+    cd src
+    dotnet run
+    ```
+1. Run tests
+    ```shell
+    dotnet test ../tests
+    ```
+
 
 ### Use Visual Studio Code
 
@@ -31,7 +38,7 @@ Sample code to provision and read resources in a Digital Twins topology via mana
 
 ### Authentication
 
-To learn more about configurition, security, and API authentication:
+To learn more about configuration, security, and API authentication:
 
 1. See the [role-based access control doc](https://docs.microsoft.com/azure/digital-twins/security-role-based-access-control).
 1. See the [Management API doc](https://docs.microsoft.com/azure/digital-twins/security-authenticating-apis).
