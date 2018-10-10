@@ -5,6 +5,7 @@ var carbonDioxideType = "CarbonDioxide";
 var motionType = "Motion";
 var spaceAvailFresh = "AvailableAndFresh";
 var carbonDioxideThreshold = 1000.0;
+// Add code from the Tutorial here
 
 function process(telemetry, executionContext) {
 
@@ -36,22 +37,28 @@ function process(telemetry, executionContext) {
         var motionSensor = otherSensors.find(function(element) {
             return element.DataType === motionType;
         });
+        
+        // Add code from the Tutorial here
 
         // get latest values for above sensors
         var motionValue = motionSensor.Value().Value;
         var presence = !!motionValue && motionValue.toLowerCase() === "true";
         var carbonDioxideValue = getFloatValue(carbonDioxideSensor.Value().Value);
+        // Add code from the Tutorial here
 
         // Return if no motion or carbonDioxide found return
+        // Replace with code from the Tutorial
         if(carbonDioxideValue === null || motionValue === null) {
             sendNotification(telemetry.SensorId, "Sensor", "Error: Carbon dioxide or motion are null, returning");
             return;
         }
 
+        // Replace with code from the Tutorial
         var availableFresh = "Room is available and air is fresh";
         var noAvailableOrFresh = "Room is not available or air quality is poor";
 
         // If carbonDioxide less than threshold and no presence in the room => log, notify and set parent space computed value
+        // Replace with code from the Tutorial
         if(carbonDioxideValue < carbonDioxideThreshold && !presence) {
             log(`${availableFresh}. Carbon Dioxide: ${carbonDioxideValue}. Presence: ${presence}.`);
             setSpaceValue(parentSpace.Id, spaceAvailFresh, availableFresh);
