@@ -62,22 +62,19 @@ function process(telemetry, executionContext) {
             // Modify this line to log your sensor value when condition is met
             log(`${availableFresh}. Carbon Dioxide: ${carbonDioxideValue}. Presence: ${presence}.`);
             setSpaceValue(parentSpace.Id, spaceAvailFresh, availableFresh);
-
-            // Set up custom notification for air quality
-            parentSpace.Notify(JSON.stringify(availableFresh));
         }
         else {
             // Modify this line to log your sensor value when condition is not met
             log(`${noAvailableOrFresh}. Carbon Dioxide: ${carbonDioxideValue}. Presence: ${presence}.`);
             setSpaceValue(parentSpace.Id, spaceAvailFresh, noAvailableOrFresh);
 
-            // Set up custom notification for air quality
+            // Set up custom notification for poor air quality
             parentSpace.Notify(JSON.stringify(noAvailableOrFresh));
         }
     }
     catch (error)
     {
-        log(`An error has occured processing the UDF Error: ${error.name} Message ${error.message}.`);
+        log(`An error has occurred processing the UDF Error: ${error.name} Message ${error.message}.`);
     }
 }
 
