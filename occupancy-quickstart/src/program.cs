@@ -85,24 +85,43 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 BaseAddress = new Uri(appSettings.BaseUrl),
             };
+
             var accessToken = await GetAccessToken(logger, appSettings);
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
             return httpClient;
         }
 
-        private static async Task<object> GetAccessToken(ILogger logger, AppSettings appSettings)
+        // Gets an access token
+        // First tries (by making a request) using a cached token and if that
+        // fails we generated a new one using device login and cache it.
+        private static async Task<string> GetAccessToken(ILogger logger, AppSettings appSettings)
         {
             var accessTokenFilename = ".accesstoken";
-            if (System.IO.File.Exists(accessTokenFilename))
+            var accessToken = ReadAccessTokenFromFile(accessTokenFilename);
+            if (accessToken == null || !(await TryRequestWithAccessToken(new Uri(appSettings.BaseUrl), accessToken)))
             {
-                return System.IO.File.ReadAllText(accessTokenFilename);
-            }
-            else
-            {
-                var accessToken = await Authentication.GetToken(logger, appSettings);
+                accessToken = await Authentication.GetToken(logger, appSettings);
                 System.IO.File.WriteAllText(accessTokenFilename, accessToken);
-                return accessToken;
             }
+
+            return accessToken;
         }
+
+        private static async Task<bool> TryRequestWithAccessToken(Uri baseAddress, string accessToken)
+        {
+            // We create a new httpClient so we can force console logging for this operation
+            var httpClient = new HttpClient(new LoggingHttpHandler(Loggers.ConsoleLogger))
+            {
+                BaseAddress = baseAddress,
+            };
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+
+            Loggers.ConsoleLogger.LogInformation("Checking if previous access token is valid...");
+
+            return (await httpClient.GetAsync("ontologies")).IsSuccessStatusCode;
+        }
+
+        private static string ReadAccessTokenFromFile(string filename)
+            => System.IO.File.Exists(filename) ? System.IO.File.ReadAllText(filename) : null;
     }
 }
