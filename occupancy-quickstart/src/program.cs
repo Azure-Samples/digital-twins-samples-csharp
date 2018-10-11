@@ -86,6 +86,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 BaseAddress = new Uri(appSettings.BaseUrl),
             };
             var accessToken = (await Authentication.GetToken(logger, appSettings));
+
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
             return httpClient;
         }
