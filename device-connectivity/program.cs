@@ -55,7 +55,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 default:
                     throw new Exception($"Unsupported configuration: SensorDataType, '{sensorDataType}'. Please check your appsettings.json.");
                 case "Motion":
-                    if (iteration % 6 < 5)
+                    if (iteration % 6 < 3)
                         return () => "false";
                     else 
                         return () => "true";
@@ -63,7 +63,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 case "Temperature":
                     return () => rnd.Next(70, 100).ToString(CultureInfo.InvariantCulture);
                 case "CarbonDioxide": 
-                    if (iteration % 6 < 5)
+                    if (iteration % 6 < 3)
                         return () => rnd.Next(800, 1000).ToString(CultureInfo.InvariantCulture);
                     else 
                         return () => rnd.Next(1000, 1100).ToString(CultureInfo.InvariantCulture);
@@ -104,9 +104,11 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         Console.WriteLine($"\t{DateTime.UtcNow.ToLocalTime()}> Sending message: {Encoding.UTF8.GetString(eventMessage.GetBytes())} Properties: {{ {eventMessage.Properties.Aggregate(new StringBuilder(), (sb, x) => sb.Append($"'{x.Key}': '{x.Value}',"), sb => sb.ToString())} }}");
 
                         await deviceClient.SendEventAsync(eventMessage);
-                        await Task.Delay(TimeSpan.FromSeconds(delayPerMessageSend));
                     }
                 }
+                
+                await Task.Delay(TimeSpan.FromSeconds(delayPerMessageSend));
+                
             } while (++curIteration < maxIterations);
 
             Console.WriteLine($"Finished sending {curIteration} events (per sensor type)");
