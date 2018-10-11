@@ -108,7 +108,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 }
                 
                 await Task.Delay(TimeSpan.FromSeconds(delayPerMessageSend));
-                
+
             } while (++curIteration < maxIterations);
 
             Console.WriteLine($"Finished sending {curIteration} events (per sensor type)");
