@@ -25,7 +25,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 var availableAndFreshSpaces = spaces.Where(s => s.Values != null && s.Values.Any(v => v.Type == "AvailableAndFresh"));
                 if (!availableAndFreshSpaces.Any())
                 {
-                    Console.WriteLine("ERROR: Unable to find a space with value type 'AvailableAndFresh");
+                    Console.WriteLine("ERROR: Unable to find a space with value type 'AvailableAndFresh'");
                     break;
                 }
                 var availableAndFreshDisplay = availableAndFreshSpaces
