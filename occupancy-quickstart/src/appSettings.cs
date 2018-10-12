@@ -35,7 +35,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         }
 
         private static string EnsureTrailingSlash(string baseUrl)
-            => baseUrl.Length > 0 && baseUrl[baseUrl.Length-1] == '/'
+            => baseUrl.Length == 0 || baseUrl[baseUrl.Length-1] == '/'
                 ? baseUrl
                 : baseUrl + '/';
     }
