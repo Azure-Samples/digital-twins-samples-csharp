@@ -24,6 +24,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         private static IConfigurationSection settings;
         static void Main(string[] args)
         {
+            if (args.Length != 0)
+            {
+                Console.WriteLine("Usage: dotnet run\nNo arugments are supported");
+                return;
+            }
+
             settings = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
@@ -57,15 +63,15 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 case "Motion":
                     if (iteration % 6 < 3)
                         return () => "false";
-                    else 
+                    else
                         return () => "true";
 
                 case "Temperature":
                     return () => rnd.Next(70, 100).ToString(CultureInfo.InvariantCulture);
-                case "CarbonDioxide": 
+                case "CarbonDioxide":
                     if (iteration % 6 < 3)
                         return () => rnd.Next(800, 1000).ToString(CultureInfo.InvariantCulture);
-                    else 
+                    else
                         return () => rnd.Next(1000, 1100).ToString(CultureInfo.InvariantCulture);
             }
         }
@@ -106,7 +112,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                         await deviceClient.SendEventAsync(eventMessage);
                     }
                 }
-                
+
                 await Task.Delay(TimeSpan.FromSeconds(delayPerMessageSend));
 
             } while (++curIteration < maxIterations);
