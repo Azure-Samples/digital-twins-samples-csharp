@@ -18,5 +18,5 @@ trce: DigitalTwinsQuickstart[0]
       Response Status: 404, NotFound,
 ```
 
-A 404 usually indicates the `baseUrl` in appSettings.json (or appSettings.dev.json) is misconfigured.
+A 404 usually indicates the `BaseUrl` in appSettings.json (or appSettings.dev.json) is misconfigured.
 
