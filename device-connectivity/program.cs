@@ -26,7 +26,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             if (args.Length != 0)
             {
-                Console.WriteLine("Usage: dotnet run\nNo arugments are supported");
+                Console.WriteLine("Usage: dotnet run\nNo arguments are supported");
                 return;
             }
 
