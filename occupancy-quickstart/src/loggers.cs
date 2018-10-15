@@ -9,10 +9,10 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     {
         public static ILogger SilentLogger =
             new Microsoft.Extensions.Logging.LoggerFactory()
-                .CreateLogger("DigitalTwinsQuickstartTests");
+                .CreateLogger("DigitalTwinsQuickstart");
         public static ILogger ConsoleLogger =
             new Microsoft.Extensions.Logging.LoggerFactory()
                 .AddConsole(LogLevel.Trace)
-                .CreateLogger("DigitalTwinsQuickstartTests");
+                .CreateLogger("DigitalTwinsQuickstart");
     }
 }
