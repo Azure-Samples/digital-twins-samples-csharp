@@ -38,6 +38,7 @@
         - Matcher CarbonDioxide A1
 #        - Matcher Temperature
         script: actions/userDefinedFunctions/availability.js
+#        script: actions/userDefinedFunctions/availabilityForTutorial.js
       roleassignments:
       - roleId: 98e44ad7-28d4-4007-853b-b9968ad132d1 # System Role: SpaceAdministrator
         objectName: Motion Processor
