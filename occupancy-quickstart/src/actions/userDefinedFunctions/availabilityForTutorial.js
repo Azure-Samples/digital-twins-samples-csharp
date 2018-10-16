@@ -39,7 +39,7 @@ function process(telemetry, executionContext) {
            return element.DataType === motionType;
        });
        var temperatureSensor = otherSensors.find(function(element) {
-       return element.DataType === temperatureType;
+           return element.DataType === temperatureType;
        });
  
        // get latest values for above sensors
@@ -58,7 +58,7 @@ function process(telemetry, executionContext) {
        var noAlert = "Either room is occupied, or working conditions are not right.";
     
        // If sensor values are within range and room is available
-       if(carbonDioxideValue < carbonDioxideThreshold && temperatureValue < temperatureThreshold && presence) {
+       if(carbonDioxideValue < carbonDioxideThreshold && temperatureValue < temperatureThreshold && !presence) {
            log(`${alert}. Carbon Dioxide: ${carbonDioxideValue}. Temperature: ${temperatureValue}. Presence: ${presence}.`);
            
            // log, notify and set parent space computed value
