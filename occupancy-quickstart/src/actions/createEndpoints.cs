@@ -25,17 +25,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
 
             var createdIds = (await CreateEndpoints(httpClient, logger, endpointDescriptions)).ToList();
-            var createdIdsAsString = createdIds
-                .Select(id => id.ToString())
-                .Aggregate((acc, cur) => acc + ", " + cur);
-            var createdIdsSummary =
-                createdIds.Count == 0
-                    ? "Created 0 endpoints."
-                    : createdIds.Count == 1
-                        ? $"Created 1 endpoint: {createdIdsAsString}"
-                        : $"Created {createdIds.Count} endpoints: {createdIdsAsString}";
 
-            Console.WriteLine($"CreateEndpoints completed. {createdIdsSummary}");
+            Console.WriteLine($"CreateEndpoints completed. {GetCreationSummary("endpoint", "endpoints", createdIds)}");
 
             return createdIds;
         }

@@ -6,7 +6,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
     enum ActionName
     {
         CreateEndpoints,
-        CreateRoleAssignment,
+        CreateRoleAssignments,
         GetAvailableAndFreshSpaces,
         GetOntologies,
         GetSpaces,

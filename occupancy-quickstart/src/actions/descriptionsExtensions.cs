@@ -53,13 +53,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 SpaceId = spaceId.ToString(),
             };
 
-        public static Models.RoleAssignmentCreate ToRoleAssignmentCreate(this RoleAssignmentDescription description, string objectId, string path)
+        public static Models.RoleAssignmentCreate ToRoleAssignmentCreate(this RoleAssignmentDescription description, string objectId = null, string path = null)
             => new Models.RoleAssignmentCreate()
             {
-                ObjectId = objectId,
+                ObjectId = objectId ?? description.objectId,
                 ObjectIdType = description.objectIdType,
-                Path = path,
+                Path = path ?? description.path,
                 RoleId = description.roleId,
+                TenantId = description.tenantId,
             };
 
         public static Models.ResourceCreate ToResourceCreate(this ResourceDescription description, Guid spaceId)

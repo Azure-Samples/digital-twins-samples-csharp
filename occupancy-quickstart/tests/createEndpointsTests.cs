@@ -25,7 +25,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples.Tests
         private static Guid endpoint2Guid = new Guid("00000000-0000-0000-0000-000000000002");
 
         [Fact]
-        public async Task GetProvisionSampleCreatesDescriptions()
+        public async Task GetCreateEndpointsCreatesDescriptions()
         {
             var yaml = @"
                 - type: Type1

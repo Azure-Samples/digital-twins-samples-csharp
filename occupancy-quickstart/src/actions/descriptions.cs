@@ -45,9 +45,12 @@ namespace Microsoft.Azure.DigitalTwins.Samples
 
     public class RoleAssignmentDescription
     {
+        public string objectId { get; set; }
         public string objectIdType { get; set; }
         public string objectName { get; set; }
+        public string path { get; set; }
         public string roleId { get; set; }
+        public string tenantId { get; set; }
     }
 
     public class SensorDescription
