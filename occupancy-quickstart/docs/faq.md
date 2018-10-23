@@ -39,4 +39,4 @@ is an aad *web* app instead of an aad *native* app).
 
 #### Response Status: 403, Forbidden
 
-This usually is because the user account used for login (while running this app) is not authenticated within the Digital Twins' Management Api.  See [role-based access control](https://docs.microsoft.com/en-us/azure/digital-twins/security-role-based-access-control) for more info.
+This usually is because the user account used for login (when prompted by this app) is not authenticated in the Digital Twins' Management Api.  See [role-based access control](https://docs.microsoft.com/en-us/azure/digital-twins/security-role-based-access-control) for more info.
