@@ -20,3 +20,23 @@ trce: DigitalTwinsQuickstart[0]
 
 A 404 usually indicates the `BaseUrl` in appSettings.json (or appSettings.dev.json) is misconfigured.
 
+
+#### Response Status: 401, Unauthorized
+
+There are several conditions that can cause a 401.  Below are different errors that can be included as part of a 401 and possible corrections.
+
+##### The request body must contain the following parameter: 'client_secret or client_assertion
+```
+trce: DigitalTwinsQuickstart[0]
+      Response Status: 401, Unauthorized, {"message":"Authorization has been denied for this request."}
+To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code ZZZZZZZ to authenticate.
+Exception: Microsoft.IdentityModel.Clients.ActiveDirectory.AdalServiceException: AADSTS70002: The request body must contain the following parameter: 'client_secret or client_assertion'.
+```
+
+This usually indicates the aad app you are using (as represented by `ClientId` in appSettings.json or appSettings.dev.json) 
+is an aad *web* app instead of an aad *native* app).
+
+
+#### Response Status: 403, Forbidden
+
+This usually is because the user account used for login (while running this app) is not authenticated within the Digital Twins' Management Api.  See [role-based access control](https://docs.microsoft.com/en-us/azure/digital-twins/security-role-based-access-control) for more info.
