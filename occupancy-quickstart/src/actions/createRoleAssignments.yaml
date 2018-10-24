@@ -1,0 +1,8 @@
+# Examples of how to add a user as a space admin to the root.
+# See docs for more details or how to add other types to Digital Twins role-based access controls
+# To use: Substitute <ObjectId> and <TenantId> with appropriate values from your AAD directory and run CreateRoleAssignments
+- objectId: <ObjectId> # ObjectId (guid) of user to add
+  objectIdType: UserId
+  path: /
+  roleId: 98e44ad7-28d4-4007-853b-b9968ad132d1 # System Role: SpaceAdministrator
+  tenantId: <TenantId> # aka the AAD DirectoryId
