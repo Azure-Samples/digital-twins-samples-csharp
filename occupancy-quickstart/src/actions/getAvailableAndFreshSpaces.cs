@@ -30,16 +30,18 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 }
 
                 var availableAndFreshSpaces = spaces.Where(s => s.Values != null && s.Values.Any(v => v.Type == "AvailableAndFresh"));
-                if (!availableAndFreshSpaces.Any())
+                if (availableAndFreshSpaces.Any())
                 {
-                    Console.WriteLine("ERROR: Unable to find a space with value type 'AvailableAndFresh'");
-                    break;
+                    var availableAndFreshDisplay = availableAndFreshSpaces
+                        .Select(s => GetDisplayValues(s))
+                        .Aggregate((acc, cur) => acc + "\n" + cur);
+                    Console.WriteLine($"{availableAndFreshDisplay}");
+                }
+                else
+                {
+                    Console.WriteLine("Unable to find a space with value type 'AvailableAndFresh'");
                 }
 
-                var availableAndFreshDisplay = availableAndFreshSpaces
-                    .Select(s => GetDisplayValues(s))
-                    .Aggregate((acc, cur) => acc + "\n" + cur);
-                Console.WriteLine($"{availableAndFreshDisplay}");
                 await Task.Delay(TimeSpan.FromSeconds(4));
             }
         }
