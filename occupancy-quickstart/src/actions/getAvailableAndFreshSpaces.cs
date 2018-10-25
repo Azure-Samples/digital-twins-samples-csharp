@@ -21,13 +21,21 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             var maxGets = 30;
             for (var curGets = 0; curGets < maxGets; ++curGets)
             {
-                var spaces = await GetManagementItemsAsync<Models.Space>(httpClient, "spaces", "includes=values");
+                var (spaces, response) = await GetManagementItemsAsync<Models.Space>(httpClient, "spaces", "includes=values");
+                if (spaces == null)
+                {
+                    var content = await response.Content?.ReadAsStringAsync();
+                    Console.WriteLine($"ERROR: GET spaces?includes=values failed with: {(int)response.StatusCode}, {response.StatusCode} {content}");
+                    break;
+                }
+
                 var availableAndFreshSpaces = spaces.Where(s => s.Values != null && s.Values.Any(v => v.Type == "AvailableAndFresh"));
                 if (!availableAndFreshSpaces.Any())
                 {
                     Console.WriteLine("ERROR: Unable to find a space with value type 'AvailableAndFresh'");
                     break;
                 }
+
                 var availableAndFreshDisplay = availableAndFreshSpaces
                     .Select(s => GetDisplayValues(s))
                     .Aggregate((acc, cur) => acc + "\n" + cur);
@@ -36,7 +44,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             }
         }
 
-        private static async Task<IEnumerable<T>> GetManagementItemsAsync<T>(
+        private static async Task<(IEnumerable<T>, HttpResponseMessage)> GetManagementItemsAsync<T>(
             HttpClient httpClient,
             string queryItem,
             string queryParams)
@@ -46,10 +54,10 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var objects = JsonConvert.DeserializeObject<IEnumerable<T>>(content);
-                return objects;
+                return (objects, response);
             }
 
-            return null;
+            return (null, response);
         }
 
         private static string GetDisplayValues(Models.Space space)
