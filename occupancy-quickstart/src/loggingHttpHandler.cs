@@ -49,7 +49,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 ? content
                 : content.Substring(0, maxContentLength - 3) + "...";
             var contentDisplay = contentMaxLength == null ? "" : $", {contentMaxLength}";
-            logger.LogTrace($"Response Status: {(int)response.StatusCode}, {response.StatusCode}{contentDisplay}");
+            logger.LogTrace($"Response Status: {(int)response.StatusCode}, {response.StatusCode} {contentDisplay}");
 
             // Enable to get more details:
             // logger.LogTrace($"Full Response: {Serialize(response)}");
