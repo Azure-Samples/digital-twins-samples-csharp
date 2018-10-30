@@ -21,8 +21,8 @@ cd digital-twins-samples-csharp
 
 The repo contains several standalone projects:
 
-* The [Occupancy](./occupancy-quickstart/readme.md) sample is suggested as a first example to gain familiarity with Digital Twins.
-* The [Device Connectivity](./device-connectivity/readme.md) sample demonstrates how to connect a device to Digital Twins and submit sensory data.
+* The [Occupancy](./occupancy-quickstart/README.md) sample is suggested as a first example to gain familiarity with Digital Twins.
+* The [Device Connectivity](./device-connectivity/README.md) sample demonstrates how to connect a device to Digital Twins and submit sensory data.
 
 For corresponding documentation, please see the project `README's` above.
 
