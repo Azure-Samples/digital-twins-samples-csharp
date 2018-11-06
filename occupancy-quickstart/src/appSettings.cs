@@ -24,8 +24,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             var appSettings = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.dev.json", optional: true)
+                .AddJsonFile("appSettings.json")
+                .AddJsonFile("appSettings.dev.json", optional: true)
                 .Build()
                 .Get<AppSettings>();
 
