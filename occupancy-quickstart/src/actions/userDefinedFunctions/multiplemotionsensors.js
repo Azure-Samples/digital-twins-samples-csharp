@@ -1,7 +1,37 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-// Sample code for detecting motion in an area with multiple motion sensors.
+// Sample code for detecting motion in an area with multiple motion sensors:
+// This code is designed to work with the existing sample code. 
+// To test this end to end, make the following changes:
+// 1) In the provisionSample.yaml, change the "script" key to point to this file (multiplemotionsensors.js).
+// 2) In the provisionSample.yaml, add a couple more motion sensors. For example, the sample "sensors" node could look like this:
+//        sensors:
+//        - dataType: Motion
+//          hardwareId: SAMPLE_SENSOR_MOTION_ONE
+//        - dataType: CarbonDioxide
+//          hardwareId: SAMPLE_SENSOR_CARBONDIOXIDE
+//        - dataType: Motion
+//          hardwareId: SAMPLE_SENSOR_MOTION_TWO
+//        - dataType: Motion
+//          hardwareId: SAMPLE_SENSOR_MOTION_THREE
+// 3) Add these additional motion sensors to the device-connectivity project's appSettings.json. For example:
+//    "Sensors": [{
+//      "DataType": "Motion",
+//      "HardwareId": "SAMPLE_SENSOR_MOTION_ONE"
+//    },{
+//      "DataType": "CarbonDioxide",
+//      "HardwareId": "SAMPLE_SENSOR_CARBONDIOXIDE"
+//    },{
+//      "DataType": "Motion",
+//      "HardwareId": "SAMPLE_SENSOR_MOTION_TWO"
+//    },{
+//      "DataType": "Motion",
+//      "HardwareId": "SAMPLE_SENSOR_MOTION_THREE"
+//    }]
+// 
+// 
+
 
 var motionType = "Motion";
 var spaceAvailFresh = "AvailableAndFresh";
@@ -51,7 +81,9 @@ function process(telemetry, executionContext) {
          // No motion detected by any sensor
          log(`${empty}. Motion Not Detected: ${motionDetected}. Sensors: ${motionSensors}.`);
          setSpaceValue(parentSpace.Id, spaceAvailFresh, empty);
-         parentSpace.Notify(JSON.stringify(empty));
+         // You could try creating a Logic App mail notification in case none of the motion sensors
+         // detect anything. In that case, uncomment the following line:
+         //  parentSpace.Notify(JSON.stringify(empty));
        }
    }
    catch (error)
@@ -60,10 +92,4 @@ function process(telemetry, executionContext) {
       log(errormsg);
       setSpaceValue(parentSpace.Id, spaceAvailFresh, errormsg);
    }
-}
-function getFloatValue(str) {
-   if(!str) {
-       return null;
-   }
-   return parseFloat(str);
 }
