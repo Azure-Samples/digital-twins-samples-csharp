@@ -34,7 +34,7 @@
 
 
 var motionType = "Motion";
-var spaceAvailFresh = "AvailableAndFresh";
+var occupancyStatus = "AvailableAndFresh";
 
 function process(telemetry, executionContext) {
     try {
@@ -75,12 +75,12 @@ function process(telemetry, executionContext) {
        {
          // Motion is detected by at least one sensor
          log(`${occupied}. Motion Detected: ${motionDetected}. Sensors: ${motionSensors}.`);
-         setSpaceValue(parentSpace.Id, spaceAvailFresh, occupied);
+         setSpaceValue(parentSpace.Id, occupancyStatus, occupied);
        }
        else {
          // No motion detected by any sensor
          log(`${empty}. Motion Not Detected: ${motionDetected}. Sensors: ${motionSensors}.`);
-         setSpaceValue(parentSpace.Id, spaceAvailFresh, empty);
+         setSpaceValue(parentSpace.Id, occupancyStatus, empty);
          // You could try creating a Logic App mail notification in case none of the motion sensors
          // detect anything. In that case, uncomment the following line:
          //  parentSpace.Notify(JSON.stringify(empty));
@@ -90,6 +90,6 @@ function process(telemetry, executionContext) {
    {
       var errormsg = `An error has occurred processing the UDF Error: ${error.name} Message ${error.message}.`;
       log(errormsg);
-      setSpaceValue(parentSpace.Id, spaceAvailFresh, errormsg);
+      setSpaceValue(parentSpace.Id, occupancyStatus, errormsg);
    }
 }
