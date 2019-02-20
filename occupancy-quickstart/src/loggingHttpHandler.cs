@@ -45,11 +45,20 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         {
             const int maxContentLength = 200;
             var content = await response.Content?.ReadAsStringAsync();
-            var contentMaxLength = content == null || content.Length < maxContentLength
-                ? content
-                : content.Substring(0, maxContentLength - 3) + "...";
-            var contentDisplay = contentMaxLength == null ? "" : $", {contentMaxLength}";
-            logger.LogTrace($"Response Status: {(int)response.StatusCode}, {response.StatusCode} {contentDisplay}");
+
+            var statusCode = (int)response.StatusCode;
+
+            // Truncate responses if they are successful.
+            if (statusCode < 400)
+            {
+                var contentMaxLength = content == null || content.Length < maxContentLength
+                    ? content
+                    : content.Substring(0, maxContentLength - 3) + "...";
+
+                content = contentMaxLength == null ? "" : $", {contentMaxLength}";
+            }
+
+            logger.LogTrace($"Response Status: {(int)response.StatusCode}, {response.StatusCode} {content}");
 
             // Enable to get more details:
             // logger.LogTrace($"Full Response: {Serialize(response)}");
