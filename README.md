@@ -2,9 +2,11 @@
 page_type: sample
 languages:
 - csharp
+- javascript
 products:
 - azure
-- digital-twins
+description: "This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform."
+urlFragment: digital-twins-samples-csharp
 ---
 
 # Digital Twins Samples
