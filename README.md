@@ -4,7 +4,8 @@ languages:
 - csharp
 products:
 - azure
-- digital-twins
+- azure-digital-twins
+description: "This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app."
 ---
 
 # Digital Twins Samples
