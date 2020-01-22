@@ -4,7 +4,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 using System.Net.Http;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
@@ -20,6 +20,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             var accessToken = ReadAccessTokenFromFile(accessTokenFilename);
             if (accessToken == null || !(await TryRequestWithAccessToken(new Uri(appSettings.BaseUrl), accessToken)))
             {
+
                 accessToken = await Authentication.GetNewToken(logger, appSettings);
                 System.IO.File.WriteAllText(accessTokenFilename, accessToken);
             }
@@ -47,18 +48,27 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         private static async Task<string> GetNewToken(
             ILogger logger,
             AppSettings appSettings)
-        {
-            var authContext = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(appSettings.Authority);
-            return (await GetResultsUsingDeviceCode(authContext, appSettings)).AccessToken;
+        {   
+            return await GetResultsUsingMsal(appSettings);
         }
 
-        // This prompts the user to open a browser and input a unique key to authenticate their app
-        // This allows dotnet core apps to authorize an application through user credentials without displaying UI.
-        private static async Task<AuthenticationResult> GetResultsUsingDeviceCode(AuthenticationContext authContext, AppSettings appSettings)
+        // MSAL.NET configuration. Review the product documentation for more information about MSAL.NET authentication options.
+        // https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/
+        private static async Task<string> GetResultsUsingMsal(AppSettings appSettings)
         {
-            var codeResult = await authContext.AcquireDeviceCodeAsync(appSettings.Resource, appSettings.ClientId);
-            Console.WriteLine(codeResult.Message);
-            return await authContext.AcquireTokenByDeviceCodeAsync(codeResult);
+            IPublicClientApplication app = PublicClientApplicationBuilder
+                .Create(appSettings.ClientId)
+                .WithRedirectUri(appSettings.AadRedirectUri)
+                .WithAuthority(appSettings.Authority)
+                .Build();
+
+            AuthenticationResult result = await app
+                .AcquireTokenInteractive(appSettings.Scopes)
+                .ExecuteAsync();
+
+            Console.WriteLine("MSAL Authentication Token Acquired: {0}", result.AccessToken);
+            Console.WriteLine("");
+            return result.AccessToken;
         }
     }
 }

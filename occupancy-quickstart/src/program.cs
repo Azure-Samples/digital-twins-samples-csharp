@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
 {
@@ -85,9 +85,22 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 BaseAddress = new Uri(appSettings.BaseUrl),
             };
-            var accessToken = (await Authentication.GetToken(logger, appSettings));
+            
+            // MSAL.NET configuration. Review the product documentation for more information about MSAL.NET authentication options.
+            // https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/
+            IPublicClientApplication app = PublicClientApplicationBuilder
+                .Create(appSettings.ClientId)
+                .WithRedirectUri(appSettings.AadRedirectUri)
+                .WithAuthority(appSettings.Authority)
+                .Build();
 
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+            AuthenticationResult result = await app
+                .AcquireTokenInteractive(appSettings.Scopes)
+                .ExecuteAsync();
+
+            Console.WriteLine("MSAL Authentication Token Acquired: {0}", result.AccessToken);
+            Console.WriteLine("");
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + result.AccessToken);
             return httpClient;
         }
     }
