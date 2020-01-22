@@ -16,8 +16,8 @@ This repo contains .NET Core samples that demonstrate how to use the Azure Digit
 
 See the `README.md` in each sub-folder for specific details about each app:
 
-* [Occupancy sample](./occupancy-quickstart/README.md)
-* [Device Connectivity sample](./device-connectivity/README.md)
+* [Occupancy sample](https://github.com/Azure-Samples/digital-twins-samples-csharp/tree/master/occupancy-quickstart/README.md)
+* [Device Connectivity sample](https://github.com/Azure-Samples/digital-twins-samples-csharp/tree/master/device-connectivity/README.md)
 
 ## Get Started
 
@@ -31,8 +31,8 @@ cd digital-twins-samples-csharp
 
 The repo contains several standalone projects:
 
-* The [Occupancy](./occupancy-quickstart/README.md) sample is suggested as a first example to gain familiarity with Digital Twins.
-* The [Device Connectivity](./device-connectivity/README.md) sample demonstrates how to connect a device to Digital Twins and submit sensory data.
+* The [Occupancy](https://github.com/Azure-Samples/digital-twins-samples-csharp/tree/master/occupancy-quickstart/README.md) sample is suggested as a first example to gain familiarity with Digital Twins.
+* The [Device Connectivity](https://github.com/Azure-Samples/digital-twins-samples-csharp/tree/master/device-connectivity/README.md) sample demonstrates how to connect a device to Digital Twins and submit sensory data.
 
 For corresponding documentation, please see the project `README's` above.
 
@@ -45,3 +45,8 @@ Alternatively, each app can be opened individually.
 ## Licensing and Use
 
 Azure Digital Twins Samples are [MIT Licensed](./LICENSE.md).
+
+## See also
+
+1. Azure Digital Twins [product documentation](https://docs.microsoft.com/azure/digital-twins/)
+1. Azure Digital Twins [User-defined functions client library reference](https://docs.microsoft.com/eazure/digital-twins/reference-user-defined-functions-client-library)
