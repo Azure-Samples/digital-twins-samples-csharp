@@ -48,5 +48,6 @@ Azure Digital Twins Samples are [MIT Licensed](./LICENSE.md).
 
 ## See also
 
-1. Azure Digital Twins [product documentation](https://docs.microsoft.com/azure/digital-twins/)
-1. Azure Digital Twins [User-defined functions client library reference](https://docs.microsoft.com/eazure/digital-twins/reference-user-defined-functions-client-library)
+* Azure Digital Twins [product documentation](https://docs.microsoft.com/azure/digital-twins/)
+
+* Azure Digital Twins [User-defined functions client library reference](https://docs.microsoft.com/eazure/digital-twins/reference-user-defined-functions-client-library)
