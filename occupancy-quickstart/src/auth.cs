@@ -14,14 +14,14 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         // Gets an access token
         // First tries (by making a request) using a cached token and if that
         // fails we generated a new one using device login and cache it.
-        internal static async Task<string> GetToken(ILogger logger, AppSettings appSettings)
+        internal static async Task<string> GetToken(AppSettings appSettings)
         {
             var accessTokenFilename = ".accesstoken";
             var accessToken = ReadAccessTokenFromFile(accessTokenFilename);
             if (accessToken == null || !(await TryRequestWithAccessToken(new Uri(appSettings.BaseUrl), accessToken)))
             {
 
-                accessToken = await Authentication.GetNewToken(logger, appSettings);
+                accessToken = await GetResultsUsingMsal(appSettings);
                 System.IO.File.WriteAllText(accessTokenFilename, accessToken);
             }
 
@@ -66,6 +66,7 @@ namespace Microsoft.Azure.DigitalTwins.Samples
                 .AcquireTokenInteractive(appSettings.Scopes)
                 .ExecuteAsync();
 
+            Console.WriteLine("");
             Console.WriteLine("MSAL Authentication Token Acquired: {0}", result.AccessToken);
             Console.WriteLine("");
             return result.AccessToken;
