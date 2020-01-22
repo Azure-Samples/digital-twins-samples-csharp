@@ -15,6 +15,7 @@ Below are some details on how to get up and running.  For a more detailed walkth
 - `ClientId`: The **application ID** of a native Azure Active Directory app that has permissions to call the Azure Digital Twins service.
 - `Tenant`: The **directory ID** of a your Azure Active Directory.
 - `BaseUrl`: The management api url to your Digital Twins instance (see `appSetting.json` for what this should look like).
+- `AadRedirectUri`: A valid **Redirect URI** configured for your Azure Active Directory app.
 
 ### Use a shell
 
