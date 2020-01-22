@@ -20,7 +20,6 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             var accessToken = ReadAccessTokenFromFile(accessTokenFilename);
             if (accessToken == null || !(await TryRequestWithAccessToken(new Uri(appSettings.BaseUrl), accessToken)))
             {
-
                 accessToken = await GetResultsUsingMsal(appSettings);
                 System.IO.File.WriteAllText(accessTokenFilename, accessToken);
             }
