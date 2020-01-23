@@ -10,7 +10,7 @@ description: "This repo contains .NET Core samples that demonstrate how to use t
 
 # Digital Twins Samples
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Contribute](https://img.shields.io/badge/PR%27s-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Contribute](https://img.shields.io/badge/PR%27s-welcome-brightgreen.svg)](https://github.com/Azure-Samples/digital-twins-samples-csharp/blob/master/CONTRIBUTING.md)
 
 This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app.  
 
@@ -50,4 +50,4 @@ Azure Digital Twins Samples are [MIT Licensed](https://github.com/Azure-Samples/
 
 * Azure Digital Twins [product documentation](https://docs.microsoft.com/azure/digital-twins/)
 
-* Azure Digital Twins [User-defined functions client library reference](https://docs.microsoft.com/eazure/digital-twins/reference-user-defined-functions-client-library)
+* Azure Digital Twins [User-defined functions client library reference](https://docs.microsoft.com/azure/digital-twins/reference-user-defined-functions-client-library)
