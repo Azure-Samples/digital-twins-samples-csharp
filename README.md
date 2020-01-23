@@ -44,7 +44,7 @@ Alternatively, each app can be opened individually.
 
 ## Licensing and Use
 
-Azure Digital Twins Samples are [MIT Licensed](./LICENSE.md).
+Azure Digital Twins Samples are [MIT Licensed](https://github.com/Azure-Samples/digital-twins-samples-csharp/blob/master/LICENSE.md).
 
 ## See also
 
