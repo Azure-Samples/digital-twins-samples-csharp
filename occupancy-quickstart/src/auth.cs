@@ -44,12 +44,9 @@ namespace Microsoft.Azure.DigitalTwins.Samples
         private static string ReadAccessTokenFromFile(string filename)
             => System.IO.File.Exists(filename) ? System.IO.File.ReadAllText(filename) : null;
 
-        private static async Task<string> GetNewToken(AppSettings appSettings)
-            => await GetResultsUsingMsal(appSettings);
-
         // MSAL.NET configuration. Review the product documentation for more information about MSAL.NET authentication options.
         // https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/
-        private static async Task<string> GetResultsUsingMsal(AppSettings appSettings)
+        private static async Task<string> GetNewToken(AppSettings appSettings)
         {
             IPublicClientApplication app = PublicClientApplicationBuilder
                 .Create(appSettings.ClientId)
