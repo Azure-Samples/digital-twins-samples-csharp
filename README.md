@@ -38,7 +38,7 @@ For corresponding documentation, please see the project `README's` above.
 
 ## Visual Studio Code
 
-A [workspace file](./digital-twins-samples.code-workspace) containing all the apps is included for [Visual Studio Code](https://code.visualstudio.com/) users.
+A [workspace file](https://github.com/Azure-Samples/digital-twins-samples-csharp/blob/master/digital-twins-samples.code-workspace) containing all the apps is included for [Visual Studio Code](https://code.visualstudio.com/) users.
 
 Alternatively, each app can be opened individually.
 
