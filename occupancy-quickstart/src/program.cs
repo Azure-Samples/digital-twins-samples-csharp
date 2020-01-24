@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 
 namespace Microsoft.Azure.DigitalTwins.Samples
 {
@@ -85,8 +85,8 @@ namespace Microsoft.Azure.DigitalTwins.Samples
             {
                 BaseAddress = new Uri(appSettings.BaseUrl),
             };
-            var accessToken = (await Authentication.GetToken(logger, appSettings));
-
+            
+            var accessToken = await Authentication.GetToken(appSettings);
             httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
             return httpClient;
         }
