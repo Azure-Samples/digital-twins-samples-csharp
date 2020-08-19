@@ -5,10 +5,11 @@ languages:
 products:
 - azure
 - azure-digital-twins
-description: "This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app."
+title: Digital Twins Samples [ARCHIVED]
+description: "For the older version of Azure Digital Twins: This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app."
 ---
 
-# Digital Twins Samples
+# Digital Twins Samples [ARCHIVED]
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
