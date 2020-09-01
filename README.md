@@ -5,18 +5,18 @@ languages:
 products:
 - azure
 - azure-digital-twins
-name: Digital Twins Samples [ARCHIVED]
+name: Digital Twins Samples (ARCHIVED)
 description: "For the older version of Azure Digital Twins: This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app."
 ---
 
-# Digital Twins Samples [ARCHIVED]
+# Digital Twins Samples (ARCHIVED)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **************************************************
-**NOTE (July 2020): A new version of the Azure Digital Twins service has been released, with new features and new implementation details. This sample repository corresponds to the previous set of documentation, which has now been [archived](https://docs.microsoft.com/en-us/previous-versions/azure/digital-twins/about-digital-twins). It no longer reflects the current Azure Digital Twins best practices and is no longer being maintained.**
+**NOTE (July 2020): A new version of the Azure Digital Twins service has been released, with new features and new implementation details. This sample repository corresponds to the previous set of documentation, which has now been [archived](https://docs.microsoft.com/previous-versions/azure/digital-twins/about-digital-twins). It no longer reflects the current Azure Digital Twins best practices and is no longer being maintained.**
 
-**To view the latest information for the new service, visit the active [Azure Digital Twins Preview Documentation](https://docs.microsoft.com/en-us/azure/digital-twins/) and its [samples](https://docs.microsoft.com/samples/azure-samples/digital-twins-samples/digital-twins-samples/).**
+**To view the latest information for the new service, visit the active [Azure Digital Twins Preview Documentation](https://docs.microsoft.com/azure/digital-twins/) and its [samples](https://docs.microsoft.com/samples/azure-samples/digital-twins-samples/digital-twins-samples/).**
 **************************************************
 
 This repo contains .NET Core samples that demonstrate how to use the Azure Digital Twins platform. Each folder contains a separate .NET Core app.  
